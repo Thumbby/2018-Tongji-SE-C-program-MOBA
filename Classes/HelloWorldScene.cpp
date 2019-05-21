@@ -1,238 +1,89 @@
+/****************************************************************************
+ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ 
+ http://www.cocos2d-x.org
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+#include "SecondScene.h"
 #include "HelloWorldScene.h"
-#include "cocostudio/CocoStudio.h"
-#include "ui/CocosGUI.h"
+#include "SimpleAudioEngine.h"
 
 USING_NS_CC;
-
-using namespace cocostudio::timeline;
-
+using namespace CocosDenshion;
 Scene* HelloWorld::createScene()
 {
-	// 'scene' is an autorelease object
-	auto scene = Scene::create();
+    return HelloWorld::create();
+}
 
-	// 'layer' is an autorelease object
-	auto layer = HelloWorld::create();
-
-	// add layer as a child to scene
-	scene->addChild(layer);
-
-	// return the scene
-	return scene;
+// Print useful error message instead of segfaulting when files are not there.
+static void problemLoading(const char* filename)
+{
+    printf("Error while loading: %s\n", filename);
+    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
 // on "init" you need to initialize your instance
-bool HelloWorld::init()
-{
-	//////////////////////////////
-	// 1. super init first
-	if (!Layer::init())
-	{
+bool HelloWorld::init() { 
+	if (!Scene::init()) 
+    {
 		return false;
-	}
-	image = new Image();//新建地图
-	image->initWithImageFile("gf.png");
-	CCLOG("%d，%d", image->getHeight(), image->getWidth());
+	}    
+	SimpleAudioEngine::getInstance()->playBackgroundMusic("backgroundmusic.mp3", true);
+auto visibleSize = Director::getInstance()->getVisibleSize(); 
 
-	background = Sprite::create("background2.jpg");
-	background->setPosition(0, 0);
-	background->setAnchorPoint(Vec2(0, 0));
-	this->addChild(background, 0, 200);
-	//background[1] = Sprite::create("background3.png");
-	//background[1]->setOpacity(150);
-	//background[1]->setPosition(-600, -550);
-	//background[1]->setAnchorPoint(Vec2(0, 0));
-	//this->addChild(background[1],1 ,201);
+Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	hero = Hero::createHeroSprite(Vec2(320, 180), 2, "stand");
-	addChild(hero);
-	monster = Monster::createMonsterSprite(Vec2(1050, 950), 2, "stand");
-	addChild(monster);
-	monster2 = Monster::createMonsterSprite(Vec2(320, 180), 4, "run");
-	addChild(monster2);
-	scheduleUpdate();
-	//delete image;
-	return true;
-}
-void HelloWorld::update(float dt)
-{
-	if (monster2->isAlive)
-	{
-		if (monster2->isAttacked)
-		{
-			monster2->runAttack(monster2);
-			monster2->isAttacked = 0;
-		}
-		else
-		{
-			monster2->setPosition(monster2->getPositionX() + 0.5, monster2->getPositionY() + 0.5);
-		}
-	}
-	auto listener = EventListenerTouchOneByOne::create();
-	listener->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan, this);
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-	Point temp;
-	temp.x = pos.x;
-	temp.y = pos.y;
-	if ((temp.x - hero->position.x) * (temp.x - hero->position.x) + (temp.y - hero->position.y) * (temp.y - hero->position.y) <= 1)
-	{
-		hero->isRun = false;
-		hero->setAction(hero->direction, "stand", 7);
-		return;
-	}
-	else if (temp.x - hero->position.x > 0 && temp.y - hero->position.y > 0)
-		hero->direction = RIGHT_UP;
-	else if (temp.x - hero->position.x < 0 && temp.y - hero->position.y > 0)
-		hero->direction = LEFT_UP;
-	else if (temp.x - hero->position.x > 0 && temp.y - hero->position.y < 0)
-		hero->direction = RIGHT_DOWN;
-	else if (temp.x - hero->position.x < 0 && temp.y - hero->position.y < 0)
-		hero->direction = LEFT_DOWN;
-	else if (temp.x - hero->position.x == 0 && temp.y - hero->position.y > 0)
-		hero->direction = UP;
-	else if (temp.x - hero->position.x == 0 && temp.y - hero->position.y < 0)
-		hero->direction = DOWN;
-	else if (temp.x - hero->position.x < 0 && temp.y - hero->position.y == 0)
-		hero->direction = LEFT;
-	else if (temp.x - hero->position.x > 0 && temp.y - hero->position.y == 0)
-		hero->direction = RIGHT;
+Label* start = Label::create("Start", "Arial", 30);
+start->setColor(Color3B(150, 150, 150));
+auto nextItem = MenuItemLabel::create(start, CC_CALLBACK_1(HelloWorld::menuCloseCallback, this)); 
 
-	CCLOG("%f  %f", temp.x - hero->position.x, temp.y - hero->position.y);
-	if (pos == Point::ZERO)
-	{
-		hero->isRun = false;
-		hero->setAction(hero->direction, "stand", 7);
-		return;
-	}
+nextItem->setPosition(Vec2(origin.x + visibleSize.width/2 , origin.y +visibleSize.height/2 ));  
 
-	if (hero->isRun == false)
-	{
-		hero->isRun = true;
-		nowDirection = hero->direction;
-		hero->setAction(hero->direction, "run", 8);
-	}
-	else if (hero->isRun == true)
-	{
-		if (nowDirection != hero->direction)
-		{
-			nowDirection = hero->direction;
-			hero->setAction(hero->direction, "run", 8);
-		}
-	}
-	float r = sqrt(((temp.x - hero->position.x) * (temp.x - hero->position.x)) + ((temp.y - hero->position.y) * (temp.y - hero->position.y)));
-	//CCLOG("hhh%f", r);
-	float x = 0;
-	float y = 0;
-	float w = 0;
-	if (r != 0)
-	{
-		float w = 1 / r;
-		float x = (temp.x - hero->position.x) / r;
-		float y = (temp.y - hero->position.y) / r;
-	}
-	//CCLOG("%f", w);
-	//CCLOG("%f,%f", rocker->dx / r, rocker->dy / r);
-	//CCLOG("%f,%f", x, y);
-	//Point position = background[1]->getPosition();
-	float m = background->getPositionX();
-	float n = background->getPositionY();
-	float monsterX = monster->getPositionX();
-	float monsterY = monster->getPositionY();
-	float monster2X = monster2->getPositionX();
-	float monster2Y = monster2->getPositionY();
-	// CCLOG("%f,%f", m, n);
-	/* auto pix = 320 - (int)m;
-	 auto piy = 180 - (int)n;
-	 //
-	 if (x > 0)
-	 {
-		 pix = pix - 3;
-	 }
-	 else
-	 {
-		 pix = pix + 3;
-	 }
-	 if (y > 0)
-	 {
-		 piy += 3;
-	 }
-	 else
-	 {
-		 piy -= 3;
-	 }*/
-	 //if (getColor(pix, piy).a == 255)
+auto menu = Menu::create(nextItem, NULL); 
 
-	if (r != 0)
-	{
-		auto sp1 = this->getChildByTag(200);
-		//sp1->setPosition((m - x)*dt, (n - y)*dt);
-		//sp1->setPosition(m - x, n - y);
-		sp1->setPosition(m - (temp.x - hero->position.x) / r, n - (temp.y - hero->position.y) / r);
-		monster->setPosition(monsterX - (temp.x - hero->position.x) / r, monsterY - (temp.y - hero->position.y) / r);
-		monster2->setPosition(monster2X - (temp.x - hero->position.x) / r, monster2Y - (temp.y - hero->position.y) / r);
-		pos.x = pos.x - (temp.x - hero->position.x) / r;
-		pos.y = pos.y - (temp.y - hero->position.y) / r;
-	}
+menu->setPosition(Vec2::ZERO);   
 
-	if (monster->isAttacked)
-	{
-		monster->runAttack(monster);
-		monster->isAttacked = 0;
-	}
-	else
-	{
-		monster->waiting();
-	}
-}
-Color4B HelloWorld::getColor(int x, int y)
-{
-	//Image * image = new Image();
-	//image->initWithImageFile("background1.jpg");
-	y = image->getHeight() - y;
-	//y = 1690 - y;
-	unsigned char* m_pData = image->getData();
+this->addChild(menu, 1);   
 
-	//int x = (int)posx;
-	//int y = (int)posy;
-	Color4B c = { 0, 0, 0, 0 };
-	unsigned int* pixel = (unsigned int*)m_pData;
-	//int width = image->getWidth();
-	pixel = pixel + y * 2998 + x;        //480 是图片的宽
-	c.r = *pixel & 0xff;
-	c.g = (*pixel >> 8) & 0xff;
-	c.b = (*pixel >> 16) & 0xff;
-	c.a = (*pixel >> 24) & 0xff;
-	CCLOG("color r:%d g:%d b:%d a:%d ", c.r, c.g, c.b, c.a);
-	return c;
+auto sprite = Sprite::create("entrance1.jpg");
+auto spriteSize = sprite->getContentSize();
+sprite->setScaleX(visibleSize.height * 1.0 / spriteSize.height);
+sprite->setScaleY(visibleSize.width * 1.0 / spriteSize.width);
+sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 
+this->addChild(sprite, 0); 
+
+return true;
 }
 
-/*getColor(int x, int y)
+
+
+void HelloWorld::menuCloseCallback(Ref* pSender)
 {
-	ccColor4B c = { 0, 0, 0, 0 };
-	//cocos2dx使用的是openGL坐标系，y坐标是从下到上递增的。
-	//libpng读取png图片时是从上到下逐行读取的，因此这里的纵坐标需要处理下。
-	y = image->getHeight() - y;
-	int width = image->getWidth();
-	unsigned char *data_ = image->getData();
-	unsigned int *pixel = (unsigned int *)data_;//以unsigned int来处理
-	pixel = pixel + (y * width) + x;//跳到指定的像素点。
-	c.a = (*pixel >> 24) & 0xff;
-	float scale = (c.a + 1.0f) / 256;
-	c.r = *pixel & 0xff;
-	c.r = c.r / scale;
-	c.g = (*pixel >> 8) & 0xff;
-	c.g = c.g / scale;
-	c.b = (*pixel >> 16) & 0xff;
-	c.b = c.b / scale;
-	//CCLOG("%d,%d==%d,%d,%d,%d", x, y, c.r, c.g, c.b, c.a);
-	return c;
-}*/
-bool HelloWorld::onTouchBegan(Touch * touch, Event * unused_event)
-{
-	//获取触屏位置（坐标）
-	pos = touch->getLocation();
-	log("TouchBegan");
-	flag = 1;
-	return true;
+	SimpleAudioEngine::getInstance()->playEffect("click.mp3");
+    //Close the cocos2d-x game scene and quit the application
+    Director::getInstance()->replaceScene(TransitionFade::create(3.0f, SecondScene::createScene()));
+    /*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()->end() as given above,instead trigger a custom event created in RootViewController.mm as below*/
+
+    //EventCustom customEndEvent("game_scene_close_event");
+    //_eventDispatcher->dispatchEvent(&customEndEvent);
+
+
 }
