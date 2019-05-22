@@ -26,13 +26,13 @@ void Monster::monsterInit(Point position, int direction, const char* action)
 	this->direction = direction;
 	auto* m_frameCache = SpriteFrameCache::getInstance();
 	m_frameCache->addSpriteFramesWithFile("monster.plist", "monster.png");
-	sprite = Sprite::createWithSpriteFrameName(String::createWithFormat("%s%d1.png",action,direction)->getCString());
+	sprite = Sprite::createWithSpriteFrameName(String::createWithFormat("%s%d1.png", action, direction)->getCString());
 	sprite->setPosition(position);
 	addChild(sprite);
-	auto* animate = createAnimate(direction, action, 8,-1);
+	auto* animate = createAnimate(direction, action, 8, -1);
 	sprite->runAction(animate);
 }
-Animate* Monster::createAnimate(int direction, const char *action, int num,int time)
+Animate* Monster::createAnimate(int direction, const char *action, int num, int time)
 {
 	auto* m_frameCache = SpriteFrameCache::getInstance();
 	m_frameCache->addSpriteFramesWithFile("monster.plist", "monster.png");
@@ -58,10 +58,10 @@ void Monster::runAttack(Monster* enemy)
 	}
 	else
 	{
-		target = Vec2(enemy->position.x + 20, enemy->position.y+10);
+		target = Vec2(enemy->position.x + 20, enemy->position.y + 10);
 	}
 	auto* moveto = MoveTo::create(0.5f, target);
-	auto* run = createAnimate(direction, "run", 5,1);
+	auto* run = createAnimate(direction, "run", 5, 1);
 	auto* spawn = Spawn::create(moveto, run, NULL);
 	auto* callFunc = CallFunc::create(CC_CALLBACK_0(Monster::doAttack, this));
 	auto* sequence = Sequence::create(spawn, callFunc, NULL);

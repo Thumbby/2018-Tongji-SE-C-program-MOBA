@@ -48,8 +48,6 @@ bool HelloWorld::init()
 	addChild(hero);
 	monster = Monster::createMonsterSprite(Vec2(1050, 950), 2, "stand");
 	addChild(monster);
-	monster2 = Monster::createMonsterSprite(Vec2(320, 180), 4, "run");
-	addChild(monster2);
 	scheduleUpdate();
 	//delete image;
 	Sprite *mouse = Sprite::create("mouse.png");
@@ -91,49 +89,64 @@ bool HelloWorld::init()
 }
 void HelloWorld::update(float dt)
 {
-	if (monster2->isAlive)
-	{
-		if (monster2->isAttacked)
-		{
-			monster2->runAttack(monster2);
-			monster2->isAttacked = 0;
-		}
-		else
-		{
-			monster2->setPosition(monster2->getPositionX() + 0.5, monster2->getPositionY() + 0.5);
-		}
-	}
 	Point temp;
 	temp.x = pos.x;
 	temp.y = pos.y;
 	 if ((temp.x - hero->position.x)*(temp.x - hero->position.x) + (temp.y - hero->position.y)*(temp.y - hero->position.y) <= 1)
 	{
 	hero->isRun = false;
-	hero->setAction(hero->direction, "stand", 7);
+	hero->setAction(hero->direction, "stand", 2);
 	return;
 	}
-	else if (temp.x - hero->position.x > 0 && temp.y - hero->position.y > 0)
-		hero->direction = RIGHT_UP;
-	else if (temp.x - hero->position.x < 0 && temp.y - hero->position.y > 0)
-		hero->direction = LEFT_UP;
-	else if (temp.x - hero->position.x > 0 && temp.y - hero->position.y < 0)
-		hero->direction = RIGHT_DOWN;
-	else if (temp.x - hero->position.x < 0 && temp.y - hero->position.y < 0)
-		hero->direction = LEFT_DOWN;
 	else if (temp.x - hero->position.x == 0 && temp.y - hero->position.y > 0)
-		hero->direction = UP;
+		hero->direction = BACK;
 	else if (temp.x - hero->position.x == 0 && temp.y - hero->position.y < 0)
-		hero->direction = DOWN;
+		hero->direction = FRONT;
 	else if (temp.x - hero->position.x < 0 && temp.y - hero->position.y == 0)
 		hero->direction = LEFT;
 	else if (temp.x - hero->position.x > 0 && temp.y - hero->position.y == 0)
 		hero->direction = RIGHT;
-	
+	else if (temp.x - hero->position.x > 0 && temp.y - hero->position.y > 0) {
+		 if (temp.x-hero->position.x>=temp.y-hero->position.y)
+		 {
+			 hero->direction = RIGHT;
+		 }
+		 else {
+			 hero->direction = BACK;
+		 }
+	 }
+	else if (temp.x - hero->position.x < 0 && temp.y - hero->position.y < 0) {
+		 if (temp.x - hero->position.x <= temp.y - hero->position.y)
+		 {
+			 hero->direction = LEFT;
+		 }
+		 else {
+			 hero->direction = FRONT;
+		 }
+	 }
+	else if (temp.x - hero->position.x > 0 && temp.y - hero->position.y < 0) {
+		 if (temp.x - hero->position.x >=(-(temp.y - hero->position.y)))
+		 {
+			 hero->direction = RIGHT;
+		 }
+		 else {
+			 hero->direction = FRONT;
+		 }
+	 }
+	else if (temp.x - hero->position.x < 0 && temp.y - hero->position.y > 0) {
+		 if ((-(temp.x - hero->position.x ))>= temp.y - hero->position.y)
+		 {
+			 hero->direction = LEFT;
+		 }
+		 else {
+			 hero->direction = BACK;
+		 }
+	 }
 	CCLOG("%f  %f", temp.x - hero->position.x, temp.y - hero->position.y);
 	if (pos == Point::ZERO)
 	{
 		hero->isRun = false;
-		hero->setAction(hero->direction, "stand", 7);
+		hero->setAction(hero->direction, "stand", 2);
 		return;
 	}
 
@@ -141,14 +154,14 @@ void HelloWorld::update(float dt)
 		{
 			hero->isRun = true;
 			nowDirection = hero->direction;
-			hero->setAction(hero->direction, "run", 8);
+			hero->setAction(hero->direction, "run", 2);
 		}
 		else if (hero->isRun == true)
 		{
 			if(nowDirection != hero->direction)
 			{
 				nowDirection = hero->direction;
-				hero->setAction(hero->direction, "run", 8);
+				hero->setAction(hero->direction, "run", 2);
 			}
 		}
 		float r = sqrt(((temp.x-hero->position.x)*(temp.x - hero->position.x)) + ((temp.y - hero->position.y)*(temp.y - hero->position.y)));
@@ -170,8 +183,6 @@ void HelloWorld::update(float dt)
 		float n = background->getPositionY();
 		float monsterX = monster->getPositionX();
 		float monsterY = monster->getPositionY();
-		float monster2X = monster2->getPositionX();
-		float monster2Y = monster2->getPositionY();
 		// CCLOG("%f,%f", m, n);
 		/* auto pix = 320 - (int)m;
 		 auto piy = 180 - (int)n;
@@ -201,7 +212,6 @@ void HelloWorld::update(float dt)
 			//sp1->setPosition(m - x, n - y);
 			sp1->setPosition(m - (temp.x - hero->position.x) / r, n - (temp.y - hero->position.y) / r);
 			monster->setPosition(monsterX - (temp.x - hero->position.x) / r, monsterY - (temp.y - hero->position.y) / r);
-			monster2->setPosition(monster2X - (temp.x - hero->position.x) / r, monster2Y - (temp.y - hero->position.y) / r);
 			pos.x = pos.x - (temp.x - hero->position.x) / r;
 			pos.y=pos.y- (temp.y - hero->position.y) / r;
 		}
