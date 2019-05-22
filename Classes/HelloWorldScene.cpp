@@ -48,6 +48,8 @@ bool HelloWorld::init()
 	addChild(hero);
 	monster = Monster::createMonsterSprite(Vec2(1050, 950), 2, "stand");
 	addChild(monster);
+	monster2 = Monster::createMonsterSprite(Vec2(320, 180), 4, "run");
+	addChild(monster2);
 	scheduleUpdate();
 	//delete image;
 	Sprite *mouse = Sprite::create("mouse.png");
@@ -89,6 +91,18 @@ bool HelloWorld::init()
 }
 void HelloWorld::update(float dt)
 {
+	if (monster2->isAlive)
+	{
+		if (monster2->isAttacked)
+		{
+			monster2->runAttack(monster2);
+			monster2->isAttacked = 0;
+		}
+		else
+		{
+			monster2->setPosition(monster2->getPositionX() + 0.5, monster2->getPositionY() + 0.5);
+		}
+	}
 	Point temp;
 	temp.x = pos.x;
 	temp.y = pos.y;
@@ -156,6 +170,8 @@ void HelloWorld::update(float dt)
 		float n = background->getPositionY();
 		float monsterX = monster->getPositionX();
 		float monsterY = monster->getPositionY();
+		float monster2X = monster2->getPositionX();
+		float monster2Y = monster2->getPositionY();
 		// CCLOG("%f,%f", m, n);
 		/* auto pix = 320 - (int)m;
 		 auto piy = 180 - (int)n;
@@ -185,6 +201,7 @@ void HelloWorld::update(float dt)
 			//sp1->setPosition(m - x, n - y);
 			sp1->setPosition(m - (temp.x - hero->position.x) / r, n - (temp.y - hero->position.y) / r);
 			monster->setPosition(monsterX - (temp.x - hero->position.x) / r, monsterY - (temp.y - hero->position.y) / r);
+			monster2->setPosition(monster2X - (temp.x - hero->position.x) / r, monster2Y - (temp.y - hero->position.y) / r);
 			pos.x = pos.x - (temp.x - hero->position.x) / r;
 			pos.y=pos.y- (temp.y - hero->position.y) / r;
 		}
