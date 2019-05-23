@@ -1,6 +1,7 @@
 #include "ModeScene.h"
 #include "cocos2d.h"
 #include "SimpleAudioEngine.h"
+#include "HeroSelectScene.h"
 using namespace cocos2d;
 using namespace CocosDenshion;
 Scene* ModeScene::createScene()
@@ -47,10 +48,10 @@ void ModeScene::menuMultiplayer5(cocos2d::Ref * pSender)
 void ModeScene::menuSingle1(cocos2d::Ref * pSender)
 {
 	SimpleAudioEngine::getInstance()->playEffect("click.mp3");
-	Director::getInstance()->end();
+	Director::getInstance()->replaceScene(TransitionFade::create(3.0f, HeroSelectScene::createScene()));
 }
 void ModeScene::menuSingle2(cocos2d::Ref * pSender)
 {
 	SimpleAudioEngine::getInstance()->playEffect("click.mp3");
-	Director::getInstance()->end();
+	Director::getInstance()->replaceScene(TransitionFade::create(3.0f, ModeScene::createScene()));
 }
