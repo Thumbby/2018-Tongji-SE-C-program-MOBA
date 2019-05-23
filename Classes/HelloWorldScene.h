@@ -18,6 +18,7 @@ public:
 	//Sprite* background2;
 	Hero* hero;
 	Monster* monster;
+	Monster* monster2;
 	static cocos2d::Scene* createScene();
 	virtual bool init();
 	virtual void update(float dt);
