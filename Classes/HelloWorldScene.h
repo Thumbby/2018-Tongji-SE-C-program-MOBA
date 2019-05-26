@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include"Hero.h"
 #include "Monster.h"
+#include "TimeCounter.h"
 USING_NS_CC;
 
 class HelloWorld : public cocos2d::Layer
@@ -14,17 +15,18 @@ private:Sprite* background,mouse;
 		int flag = 0;
 public:
 	Image* image;
-
 	//Sprite* background2;
 	Hero* hero;
+	int counter = 0;
 	Monster* monster;
-	Monster* monster2;
+	Monster* solider;
+	Vector<Monster*> m_soliderManager;
+	TimeCounter* m_timeCounter;
 	static cocos2d::Scene* createScene();
 	virtual bool init();
 	virtual void update(float dt);
 	virtual bool onTouchBegan(Touch *touch, Event *unused_event);
 	cocos2d::Color4B getColor(int x, int y);
-
 	CREATE_FUNC(HelloWorld);
 };
 

@@ -43,13 +43,13 @@ bool HelloWorld::init()
 	//background[1]->setPosition(-600, -550);
 	//background[1]->setAnchorPoint(Vec2(0, 0));
 	//this->addChild(background[1],1 ,201);
-
+	m_timeCounter = TimeCounter::create();
+	this->addChild(m_timeCounter);
+	m_timeCounter->start();
 	hero = Hero::createHeroSprite(Vec2(320, 180), 2, "stand");
 	addChild(hero);
 	monster = Monster::createMonsterSprite(Vec2(1050, 950), 2, "stand");
 	addChild(monster);
-	monster2 = Monster::createMonsterSprite(Vec2(320, 180), 2, "stand");
-	addChild(monster2);
 	scheduleUpdate();
 	//delete image;
 	Sprite *mouse = Sprite::create("mouse.png");
@@ -91,28 +91,15 @@ bool HelloWorld::init()
 }
 void HelloWorld::update(float dt)
 {
-	if (monster2->isAlive)
-	{
-		if (monster2->isAttacked)
-		{
-			monster2->runAttack(monster2);
-			monster2->isAttacked = 0;
-		}
-		else
-		{
-			monster2->setPosition(monster2->getPositionX() + 0.5, monster2->getPositionY() + 0.35);
-		}
-	}
 	Point temp;
 	temp.x = pos.x;
 	temp.y = pos.y;
-	 if ((temp.x - hero->position.x)*(temp.x - hero->position.x) + (temp.y - hero->position.y)*(temp.y - hero->position.y) <= 1)
+	if ((temp.x - hero->position.x)*(temp.x - hero->position.x) + (temp.y - hero->position.y)*(temp.y - hero->position.y) <= 1)
 	{
 	hero->isRun = false;
 	hero->setAction(hero->direction, "stand", 2);
-	return;
 	}
-	else if (temp.x - hero->position.x == 0 && temp.y - hero->position.y > 0)
+    else if (temp.x - hero->position.x == 0 && temp.y - hero->position.y > 0)
 		hero->direction = BACK;
 	else if (temp.x - hero->position.x == 0 && temp.y - hero->position.y < 0)
 		hero->direction = FRONT;
@@ -193,12 +180,43 @@ void HelloWorld::update(float dt)
 		//CCLOG("%f,%f", rocker->dx / r, rocker->dy / r);
 		//CCLOG("%f,%f", x, y);
 		//Point position = background[1]->getPosition();
+		if (m_timeCounter->getfCurTime() >= 15)
+		{
+			if (m_timeCounter->getfCurTime() - 15 >= counter)
+			{
+				solider = Monster::createMonsterSprite(Vec2(320+background->getPositionX(), 180+background->getPositionY()), 2, "stand");
+				this->addChild(solider);
+				m_soliderManager.pushBack(solider);
+				counter++;
+			}
+			if (counter >= 5)
+			{
+				counter = 0;
+				m_timeCounter->start();
+			}
+		}
+		if (m_soliderManager.size())
+		{
+			for (auto solider : m_soliderManager)
+			{
+				if (solider->isAlive)
+				{
+					if (solider->isAttacked)
+					{
+						solider->runAttack(solider);
+						solider->isAttacked = 0;
+					}
+					else
+					{
+						solider->setPosition(solider->getPositionX() + 0.5, solider->getPositionY() + 0.5);
+					}
+				}
+			}
+		}
 		float m = background->getPositionX();
 		float n = background->getPositionY();
 		float monsterX = monster->getPositionX();
 		float monsterY = monster->getPositionY();
-		float monster2X = monster2->getPositionX();
-		float monster2Y = monster2->getPositionY();
 		// CCLOG("%f,%f", m, n);
 		/* auto pix = 320 - (int)m;
 		 auto piy = 180 - (int)n;
@@ -228,7 +246,10 @@ void HelloWorld::update(float dt)
 			//sp1->setPosition(m - x, n - y);
 			sp1->setPosition(m - (temp.x - hero->position.x) / r, n - (temp.y - hero->position.y) / r);
 			monster->setPosition(monsterX - (temp.x - hero->position.x) / r, monsterY - (temp.y - hero->position.y) / r);
-			monster2->setPosition(monster2X - (temp.x - hero->position.x) / r, monster2Y - (temp.y - hero->position.y) / r);
+			for (auto solider : m_soliderManager)
+			{
+				solider->setPosition(solider->getPositionX() - (temp.x - hero->position.x) / r, solider->getPositionY() - (temp.y - hero->position.y) / r);
+			}
 			pos.x = pos.x - (temp.x - hero->position.x) / r;
 			pos.y=pos.y- (temp.y - hero->position.y) / r;
 		}
