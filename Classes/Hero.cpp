@@ -7,6 +7,7 @@ Hero* Hero::createHeroSprite(Point position, int direction, const char* name)
 	{
 		hero->autorelease();
 		hero->heroInit(position, direction, name);
+		hero->setScale(0.7f);
 		return hero;
 	}
 	CC_SAFE_DELETE(hero);
@@ -31,7 +32,7 @@ void Hero::heroInit(Point position, int direction, const char* name)
 	action->setTag(100);
 	sprite->runAction(action);
 }
-Animate* Hero::createAnimate(int direction, const char *action, int num)
+Animate* Hero::createAnimate(int direction, const char* action, int num)
 {
 	auto* m_frameCache = SpriteFrameCache::getInstance();
 	m_frameCache->addSpriteFramesWithFile("leiyi.plist", "leiyi.png");
@@ -43,12 +44,12 @@ Animate* Hero::createAnimate(int direction, const char *action, int num)
 	}
 	Animation* animation = Animation::createWithSpriteFrames(frameArray);
 	animation->setLoops(-1);//表示无限循环播放
-	animation->setDelayPerUnit(0.3f);//每两张图片的时间隔，图片数目越少，间隔最小就越小
+	animation->setDelayPerUnit(0.2f);//每两张图片的时间隔，图片数目越少，间隔最小就越小
 
 	//将动画包装成一个动作
 	return Animate::create(animation);
 }
-void Hero::setAction(int direction, const char *action, int num)
+void Hero::setAction(int direction, const char* action, int num)
 {
 	sprite->stopActionByTag(100);
 	auto* animate = createAnimate(direction, action, num);
@@ -57,8 +58,14 @@ void Hero::setAction(int direction, const char *action, int num)
 }
 void Hero::moveTo(float x, float y)
 {
-	float r = sqrt(x*x + y * y);
+	float r = sqrt(x * x + y * y);
 	position.x += x / r;
 	position.y += y / r;
 	sprite->setPosition(position);
+}
+void Hero::HP_Reduce(int Damage) {
+	HP = HP - Damage;
+	if (HP <= 0) {
+		this->setVisible(false);
+	}
 }

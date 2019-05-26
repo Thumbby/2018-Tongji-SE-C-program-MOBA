@@ -9,9 +9,9 @@ USING_NS_CC;
 
 class HelloWorld : public cocos2d::Layer
 {
-private:Sprite* background,mouse;
+private:Sprite* background, mouse;
 		Point pos;
-		int nowDirection=0;
+		int nowDirection = 0;
 		int flag = 0;
 public:
 	Image* image;
@@ -25,7 +25,7 @@ public:
 	static cocos2d::Scene* createScene();
 	virtual bool init();
 	virtual void update(float dt);
-	virtual bool onTouchBegan(Touch *touch, Event *unused_event);
+	virtual bool onTouchBegan(Touch* touch, Event* unused_event);
 	cocos2d::Color4B getColor(int x, int y);
 	CREATE_FUNC(HelloWorld);
 };
