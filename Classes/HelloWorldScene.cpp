@@ -47,15 +47,38 @@ bool HelloWorld::init()
 	this->addChild(m_timeCounter);
 	m_timeCounter->start();
 	hero = Hero::createHeroSprite(Vec2(320, 180), 2, "stand");
+	hero->MaxHP = 100;
+	hero->HP = 100;
 	addChild(hero);
 	monster = Monster::createMonsterSprite(Vec2(1050, 950), 2, "stand");
 	addChild(monster);
 	scheduleUpdate();
 	//delete image;
+
+	return true;
+}
+void HelloWorld::update(float dt)
+{
+	ProgressTimer* Blood_Bar = ProgressTimer::create(CCSprite::create("bar.png"));
+	Blood_Bar->setPosition(Point(hero->position.x - 60, hero->position.y + 80));
+	Blood_Bar->setAnchorPoint(Point(0, 0));
+	Blood_Bar->setPercentage(100);
+	Blood_Bar->setScale(0.2f);
+	ProgressTimer* Blood = ProgressTimer::create(CCSprite::create("blood.png"));
+	Blood->setScale(0.2f);
+	Blood->setPosition(Point(hero->position.x - 60, hero->position.y + 80));
+	Blood->setType(kCCProgressTimerTypeBar);
+	Blood->setAnchorPoint(Point(0, 0));
+	Blood->setPercentage(((float)hero->HP / hero->MaxHP) * 100);
+	Blood->setMidpoint(Point(0,0));
+	Blood->setBarChangeRate(Point(0, 0));
+	hero->addChild(Blood_Bar);
+	hero->addChild(Blood);
+	hero->HP--;
+	log("%d", hero->HP);
 	Sprite* mouse = Sprite::create("mouse.png");
 	mouse->setScale(0.5f);
 	this->addChild(mouse);
-
 	//创建事件监听器，监听键盘事件
 	auto myKeyListener = EventListenerKeyboard::create();
 	//当键盘被按下时响应
@@ -87,14 +110,10 @@ bool HelloWorld::init()
 	//将事件监听器与场景绑定
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(myKeyListener, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(myMouseListener, this);
-	return true;
-}
-void HelloWorld::update(float dt)
-{
 	Point temp;
 	temp.x = pos.x;
 	temp.y = pos.y;
-	if ((temp.x - hero->position.x) * (temp.x - hero->position.x) + (temp.y - hero->position.y) * (temp.y - hero->position.y) <= (1/hero->speed))
+	if ((temp.x - hero->position.x) * (temp.x - hero->position.x) + (temp.y - hero->position.y) * (temp.y - hero->position.y) <= (1 / hero->speed))
 	{
 		hero->isRun = false;
 		hero->setAction(hero->direction, "stand", 2);
@@ -165,7 +184,7 @@ void HelloWorld::update(float dt)
 			hero->setAction(hero->direction, "run", 2);
 		}
 	}
-	float r = (sqrt(((temp.x - hero->position.x) * (temp.x - hero->position.x)) + ((temp.y - hero->position.y) * (temp.y - hero->position.y))))/(hero->speed);
+	float r = (sqrt(((temp.x - hero->position.x) * (temp.x - hero->position.x)) + ((temp.y - hero->position.y) * (temp.y - hero->position.y)))) / (hero->speed);
 	float r1 = sqrt(((temp.x - hero->position.x) * (temp.x - hero->position.x)) + ((temp.y - hero->position.y) * (temp.y - hero->position.y)));
 	//CCLOG("hhh%f", r);
 	float x = 0;
