@@ -63,8 +63,7 @@ void Hero::moveTo(float x, float y)
 	position.y += y / r;
 	sprite->setPosition(position);
 }
-void Hero::HP_Reduce(int Damage) {
-	HP = HP - Damage;
+void Hero::Death(){
 	if (HP <= 0) {
 		this->setVisible(false);
 	}

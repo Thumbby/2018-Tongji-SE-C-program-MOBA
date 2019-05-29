@@ -1,6 +1,7 @@
 #ifndef __HERO_SCENE_H__
 #define __HERO_SCENE_H__
 #include "cocos2d.h"
+#include "Timecounter.h"
 #include <map>
 USING_NS_CC;
 enum hero_direction
@@ -29,17 +30,23 @@ public:
 		Money_Num = Money_Num + Money;
 		Exp_Num = Exp_Num + Exp;
 	}
-	void HP_Reduce(int Damage);
+	void Death();
+	void Reborn();
 	std::map<int,int>Weapon;
 	CREATE_FUNC(Hero);
 private:
 	int ID;
 	String name;
 	int Money,Money_Num;
-	int HP, MP, HP_Recover, MP_Recover,Max_HP,Max_MP;
+	int HP, MP, HP_Recover, MP_Recover;
+	int MaxHP=100;
+	int MaxMP=100;
 	int Attack, Skill_Enhance, Defense, Resistance;
 	int  Attack_Speed, Attack_Range;
 	int Exp, Exp_Num, Level,Max_Exp;
+	int Critical_Rate;
 	float speed =3;
+	float DeadTime;
+	float RebornTime;
 };
 #endif
