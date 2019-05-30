@@ -46,12 +46,39 @@ bool HelloWorld::init()
 	m_timeCounter = TimeCounter::create();
 	this->addChild(m_timeCounter);
 	m_timeCounter->start();
+	HeroTimeCounter = TimeCounter::create();
+	this->addChild(HeroTimeCounter);
 	hero = Hero::createHeroSprite(Vec2(320, 180), 2, "stand");
 	hero->HP = hero->MaxHP;
 	hero->MP = hero->MaxMP;
 	addChild(hero);
 	monster = Monster::createMonsterSprite(Vec2(1050, 950), 2, "stand");
 	addChild(monster);
+
+	sprBar = Sprite::create("bar.png");
+	sprBar->setScale(0.15f);
+	hero->addChild(sprBar);
+
+	sprBar2 = Sprite::create("bar.png");
+	sprBar2->setScale(0.15f);
+	hero->addChild(sprBar2);
+
+	sprBlood = Sprite::create("blood.png");
+	progress = ProgressTimer::create(sprBlood);
+	progress->setType(ProgressTimer::Type::BAR);
+	progress->setScale(0.15f);
+	progress->setMidpoint(Point(0, 0.5));
+	progress->setBarChangeRate(Point(1, 0));
+	hero->addChild(progress);
+
+	auto sprMagic = Sprite::create("magic.png");
+	progress2 = ProgressTimer::create(sprMagic);
+	progress2->setType(ProgressTimer::Type::BAR);
+	progress2->setScale(0.15f);
+	progress2->setMidpoint(Point(0, 0.5));
+	progress2->setBarChangeRate(Point(1, 0));
+	hero->addChild(progress2);
+
 	scheduleUpdate();
 	//delete image;
 
@@ -59,46 +86,20 @@ bool HelloWorld::init()
 }
 void HelloWorld::update(float dt)
 {
-	auto sprBar = Sprite::create("bar.png");
-	sprBar->setScale(0.15f);
 	sprBar->setPosition(Point(hero->position.x, hero->position.y + 80));
-	hero->addChild(sprBar);
-
-	auto sprBar2 = Sprite::create("bar.png");
-	sprBar2->setScale(0.15f);
 	sprBar2->setPosition(Point(hero->position.x, hero->position.y + 73));
-	hero->addChild(sprBar2);
-
-	auto sprBlood = Sprite::create("blood.png");
-	ProgressTimer* progress = ProgressTimer::create(sprBlood);
-	progress->setType(ProgressTimer::Type::BAR);
 	progress->setPosition(Point(hero->position.x, hero->position.y + 80));
-	progress->setScale(0.15f);
-	progress->setMidpoint(Point(0, 0.5));
-	progress->setBarChangeRate(Point(1, 0));
 	progress->setPercentage((((float)hero->HP) / hero->MaxHP) * 100);
-	hero->addChild(progress);
-
-	auto sprMagic = Sprite::create("magic.png");
-	ProgressTimer* progress2 = ProgressTimer::create(sprMagic);
-	progress2->setType(ProgressTimer::Type::BAR);
 	progress2->setPosition(Point(hero->position.x, hero->position.y + 73));
-	progress2->setScale(0.15f);
-	progress2->setMidpoint(Point(0, 0.5));
-	progress2->setBarChangeRate(Point(1, 0));
 	progress2->setPercentage((((float)hero->MP) / hero->MaxMP) * 100);
-	hero->addChild(progress2);
 
-	TimeCounter* HeroTimeCounter;
-	HeroTimeCounter = TimeCounter::create();
 	hero->Death();
 	if (hero->HP == 0) {
 		hero->DeadTime = 0;
-		hero->RebornTime = 0;
+		HeroTimeCounter->start();
 	}
 	if (hero->HP < 0) {
-		hero->RebornTime += dt;
-		if ((hero->RebornTime - hero->DeadTime) >= 5) {
+		if ((HeroTimeCounter->getfCurTime() - hero->DeadTime) >= 5) {
 			hero->setVisible(true);
 			background->setPosition(0, 0);
 			hero->HP = hero->MaxHP;
@@ -211,7 +212,7 @@ void HelloWorld::update(float dt)
 		}
 	}
 	float r = (sqrt(((temp.x - hero->position.x) * (temp.x - hero->position.x)) + ((temp.y - hero->position.y) * (temp.y - hero->position.y)))) / (hero->speed);
-	float r1 = sqrt(((temp.x - hero->position.x) * (temp.x - hero->position.x)) + ((temp.y - hero->position.y) * (temp.y - hero->position.y)));
+	float r1 = sqrt(((temp.x - hero->position.x) * (temp.x - hero->position.x)) + ((temp.y - hero->position.y) * (temp.y - hero->position.y))) / (hero->speed);;
 	//CCLOG("hhh%f", r);
 	float x = 0;
 	float y = 0;
