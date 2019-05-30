@@ -7,7 +7,7 @@ Hero* Hero::createHeroSprite(Point position, int direction, const char* name)
 	{
 		hero->autorelease();
 		hero->heroInit(position, direction, name);
-		hero->setScale(0.7f);
+		hero->setScale(1.2f);
 		return hero;
 	}
 	CC_SAFE_DELETE(hero);

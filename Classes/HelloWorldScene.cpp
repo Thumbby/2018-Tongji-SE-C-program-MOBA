@@ -43,9 +43,9 @@ bool HelloWorld::init()
 	//background[1]->setPosition(-600, -550);
 	//background[1]->setAnchorPoint(Vec2(0, 0));
 	//this->addChild(background[1],1 ,201);
-	m_timeCounter = TimeCounter::create();
-	this->addChild(m_timeCounter);
-	m_timeCounter->start();
+	soliderTimeCounter = TimeCounter::create();
+	this->addChild(soliderTimeCounter);
+	soliderTimeCounter->start();
 	HeroTimeCounter = TimeCounter::create();
 	this->addChild(HeroTimeCounter);
 	hero = Hero::createHeroSprite(Vec2(320, 180), 2, "stand");
@@ -101,6 +101,13 @@ void HelloWorld::update(float dt)
 	if (hero->HP < 0) {
 		if ((HeroTimeCounter->getfCurTime() - hero->DeadTime) >= 5) {
 			hero->setVisible(true);
+			for (auto solider : m_soliderManager)
+			{
+				if (solider->isAlive)
+				{
+						solider->setPosition(solider->getPositionX() - background->getPositionX(), solider->getPositionY() - background->getPositionY());
+				}
+			}
 			background->setPosition(0, 0);
 			hero->HP = hero->MaxHP;
 			hero->MP = hero->MaxMP;
@@ -227,9 +234,9 @@ void HelloWorld::update(float dt)
 	//CCLOG("%f,%f", rocker->dx / r, rocker->dy / r);
 	//CCLOG("%f,%f", x, y);
 	//Point position = background[1]->getPosition();
-	if (m_timeCounter->getfCurTime() >= 15)
+	if (soliderTimeCounter->getfCurTime() >= 15)
 	{
-		if (m_timeCounter->getfCurTime() - 15 >= counter)
+		if (soliderTimeCounter->getfCurTime() - 15 >= counter)
 		{
 			solider = Monster::createMonsterSprite(Vec2(320 + background->getPositionX(), 180 + background->getPositionY()), 2, "stand");
 			this->addChild(solider);
@@ -239,7 +246,7 @@ void HelloWorld::update(float dt)
 		if (counter >= 5)
 		{
 			counter = 0;
-			m_timeCounter->start();
+			soliderTimeCounter->start();
 		}
 	}
 	if (m_soliderManager.size())
@@ -295,7 +302,7 @@ void HelloWorld::update(float dt)
 		monster->setPosition(monsterX - (temp.x - hero->position.x) / r1, monsterY - (temp.y - hero->position.y) / r1);
 		for (auto solider : m_soliderManager)
 		{
-			solider->setPosition(solider->getPositionX() - (temp.x - hero->position.x) / r1, solider->getPositionY() - (temp.y - hero->position.y) / r1);
+			solider->setPosition(solider->getPositionX() - (temp.x - hero->position.x) / r1, solider->getPositionY() - (temp.y - hero->position.y) /r1);
 		}
 
 		pos.x = pos.x - (temp.x - hero->position.x) / r;
