@@ -43,6 +43,37 @@ bool HelloWorld::init()
 	//background[1]->setPosition(-600, -550);
 	//background[1]->setAnchorPoint(Vec2(0, 0));
 	//this->addChild(background[1],1 ,201);
+	Sprite* mouse = Sprite::create("mouse.png");
+	mouse->setScale(0.5f);
+	this->addChild(mouse);
+	//创建事件监听器，监听键盘事件
+	auto myKeyListener = EventListenerKeyboard::create();
+	//当键盘被按下时响应
+	myKeyListener->onKeyPressed = [](EventKeyboard::KeyCode keycode, cocos2d::Event* event)
+	{
+		CCLOG("key is pressed,keycode is %d", keycode);
+	};
+
+	//创建事件监听器，监听鼠标事件
+	auto myMouseListener = EventListenerMouse::create();
+	//鼠标移动
+	myMouseListener->onMouseMove = [=](Event* event)
+	{
+		EventMouse* e = (EventMouse*)event;
+		mouse->setPosition(e->getCursorX(), e->getCursorY());
+	};
+	//当鼠标被按下
+	myMouseListener->onMouseDown = [=](Event* event)
+	{
+		EventMouse* e = (EventMouse*)event;
+		pos.x = e->getCursorX();
+		pos.y = e->getCursorY();
+	};
+	//将事件监听器与场景绑定
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(myKeyListener, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(myMouseListener, this);
+
+
 	soliderTimeCounter = TimeCounter::create();
 	this->addChild(soliderTimeCounter);
 	soliderTimeCounter->start();
@@ -51,6 +82,7 @@ bool HelloWorld::init()
 	hero = Hero::createHeroSprite(Vec2(320, 180), 2, "stand");
 	hero->HP = hero->MaxHP;
 	hero->MP = hero->MaxMP;
+	hero->setScale(0.8f);
 	addChild(hero);
 	monster = Monster::createMonsterSprite(Vec2(1050, 950), 2, "stand");
 	addChild(monster);
@@ -105,7 +137,7 @@ void HelloWorld::update(float dt)
 			{
 				if (solider->isAlive)
 				{
-						solider->setPosition(solider->getPositionX() - background->getPositionX(), solider->getPositionY() - background->getPositionY());
+					solider->setPosition(solider->getPositionX() - background->getPositionX(), solider->getPositionY() - background->getPositionY());
 				}
 			}
 			background->setPosition(0, 0);
@@ -115,39 +147,10 @@ void HelloWorld::update(float dt)
 	}
 	hero->HP--;
 	hero->MP--;
-	Sprite* mouse = Sprite::create("mouse.png");
-	mouse->setScale(0.5f);
-	this->addChild(mouse);
-	//创建事件监听器，监听键盘事件
-	auto myKeyListener = EventListenerKeyboard::create();
-	//当键盘被按下时响应
-	myKeyListener->onKeyPressed = [](EventKeyboard::KeyCode keycode, cocos2d::Event* event)
-	{
-		CCLOG("key is pressed,keycode is %d", keycode);
-	};
-
-	//创建事件监听器，监听鼠标事件
-	auto myMouseListener = EventListenerMouse::create();
-	//鼠标移动
-	myMouseListener->onMouseMove = [=](Event* event)
-	{
-		EventMouse* e = (EventMouse*)event;
-		mouse->setPosition(e->getCursorX(), e->getCursorY());
-	};
-	//当鼠标被按下
-	myMouseListener->onMouseDown = [=](Event* event)
-	{
-		EventMouse* e = (EventMouse*)event;
-		pos.x = e->getCursorX();
-		pos.y = e->getCursorY();
-	};
-	//将事件监听器与场景绑定
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(myKeyListener, this);
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(myMouseListener, this);
 	Point temp;
 	temp.x = pos.x;
 	temp.y = pos.y;
-	if ((temp.x - hero->position.x) * (temp.x - hero->position.x) + (temp.y - hero->position.y) * (temp.y - hero->position.y) <= (1 / hero->speed)*(1/hero->speed))
+	if ((temp.x - hero->position.x) * (temp.x - hero->position.x) + (temp.y - hero->position.y) * (temp.y - hero->position.y) <= (1 / hero->speed) * (1 / hero->speed))
 	{
 		hero->isRun = false;
 		hero->setAction(hero->direction, "stand", 2);
@@ -302,7 +305,7 @@ void HelloWorld::update(float dt)
 		monster->setPosition(monsterX - (temp.x - hero->position.x) / r1, monsterY - (temp.y - hero->position.y) / r1);
 		for (auto solider : m_soliderManager)
 		{
-			solider->setPosition(solider->getPositionX() - (temp.x - hero->position.x) / r1, solider->getPositionY() - (temp.y - hero->position.y) /r1);
+			solider->setPosition(solider->getPositionX() - (temp.x - hero->position.x) / r1, solider->getPositionY() - (temp.y - hero->position.y) / r1);
 		}
 
 		pos.x = pos.x - (temp.x - hero->position.x) / r;
