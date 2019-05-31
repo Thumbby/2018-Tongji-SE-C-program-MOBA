@@ -21,7 +21,7 @@ public:
 	Monster* monster;
 	Monster* solider;
 	Vector<Monster*> m_soliderManager;
-	TimeCounter* m_timeCounter;
+	TimeCounter* solidertimeCounter;
 	TimeCounter* HeroTimeCounter;
 	Sprite* sprBar;
 	Sprite* sprBar2;
