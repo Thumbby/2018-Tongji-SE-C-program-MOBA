@@ -43,6 +43,39 @@ bool HelloWorld::init()
 	//background[1]->setPosition(-600, -550);
 	//background[1]->setAnchorPoint(Vec2(0, 0));
 	//this->addChild(background[1],1 ,201);
+	m_timeCounter = TimeCounter::create();
+	this->addChild(m_timeCounter);
+	m_timeCounter->start();
+	hero = Hero::createHeroSprite(Vec2(320, 180), 2, "stand");
+	hero->MaxHP = 100;
+	hero->HP = 100;
+	addChild(hero);
+	monster = Monster::createMonsterSprite(Vec2(1050, 950), 2, "stand");
+	addChild(monster);
+	scheduleUpdate();
+	//delete image;
+
+	return true;
+}
+void HelloWorld::update(float dt)
+{
+	ProgressTimer* Blood_Bar = ProgressTimer::create(CCSprite::create("bar.png"));
+	Blood_Bar->setPosition(Point(hero->position.x - 60, hero->position.y + 80));
+	Blood_Bar->setAnchorPoint(Point(0, 0));
+	Blood_Bar->setPercentage(100);
+	Blood_Bar->setScale(0.2f);
+	ProgressTimer* Blood = ProgressTimer::create(CCSprite::create("blood.png"));
+	Blood->setScale(0.2f);
+	Blood->setPosition(Point(hero->position.x - 60, hero->position.y + 80));
+	Blood->setType(kCCProgressTimerTypeBar);
+	Blood->setAnchorPoint(Point(0, 0));
+	Blood->setPercentage(((float)hero->HP / hero->MaxHP) * 100);
+	Blood->setMidpoint(Point(0,0));
+	Blood->setBarChangeRate(Point(0, 0));
+	hero->addChild(Blood_Bar);
+	hero->addChild(Blood);
+	hero->HP--;
+	log("%d", hero->HP);
 	Sprite* mouse = Sprite::create("mouse.png");
 	mouse->setScale(0.5f);
 	this->addChild(mouse);
@@ -52,6 +85,11 @@ bool HelloWorld::init()
 	myKeyListener->onKeyPressed = [](EventKeyboard::KeyCode keycode, cocos2d::Event* event)
 	{
 		CCLOG("key is pressed,keycode is %d", keycode);
+	};
+	//当键盘按键弹回时响应
+	myKeyListener->onKeyReleased = [](EventKeyboard::KeyCode keycode, cocos2d::Event* event)
+	{
+		CCLOG("key is released,keycode is %d", keycode);
 	};
 
 	//创建事件监听器，监听鼠标事件
@@ -72,85 +110,10 @@ bool HelloWorld::init()
 	//将事件监听器与场景绑定
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(myKeyListener, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(myMouseListener, this);
-
-
-	soliderTimeCounter = TimeCounter::create();
-	this->addChild(soliderTimeCounter);
-	soliderTimeCounter->start();
-	HeroTimeCounter = TimeCounter::create();
-	this->addChild(HeroTimeCounter);
-	hero = Hero::createHeroSprite(Vec2(320, 180), 2, "stand");
-	hero->HP = hero->MaxHP;
-	hero->MP = hero->MaxMP;
-	hero->setScale(0.8f);
-	addChild(hero);
-	monster = Monster::createMonsterSprite(Vec2(1050, 950), 2, "stand");
-	addChild(monster);
-
-	sprBar = Sprite::create("bar.png");
-	sprBar->setScale(0.15f);
-	hero->addChild(sprBar);
-
-	sprBar2 = Sprite::create("bar.png");
-	sprBar2->setScale(0.15f);
-	hero->addChild(sprBar2);
-
-	sprBlood = Sprite::create("blood.png");
-	progress = ProgressTimer::create(sprBlood);
-	progress->setType(ProgressTimer::Type::BAR);
-	progress->setScale(0.15f);
-	progress->setMidpoint(Point(0, 0.5));
-	progress->setBarChangeRate(Point(1, 0));
-	hero->addChild(progress);
-
-	auto sprMagic = Sprite::create("magic.png");
-	progress2 = ProgressTimer::create(sprMagic);
-	progress2->setType(ProgressTimer::Type::BAR);
-	progress2->setScale(0.15f);
-	progress2->setMidpoint(Point(0, 0.5));
-	progress2->setBarChangeRate(Point(1, 0));
-	hero->addChild(progress2);
-
-	scheduleUpdate();
-	//delete image;
-
-	return true;
-}
-void HelloWorld::update(float dt)
-{
-	sprBar->setPosition(Point(hero->position.x, hero->position.y + 80));
-	sprBar2->setPosition(Point(hero->position.x, hero->position.y + 73));
-	progress->setPosition(Point(hero->position.x, hero->position.y + 80));
-	progress->setPercentage((((float)hero->HP) / hero->MaxHP) * 100);
-	progress2->setPosition(Point(hero->position.x, hero->position.y + 73));
-	progress2->setPercentage((((float)hero->MP) / hero->MaxMP) * 100);
-
-	hero->Death();
-	if (hero->HP == 0) {
-		hero->DeadTime = 0;
-		HeroTimeCounter->start();
-	}
-	if (hero->HP < 0) {
-		if ((HeroTimeCounter->getfCurTime() - hero->DeadTime) >= 5) {
-			hero->setVisible(true);
-			for (auto solider : m_soliderManager)
-			{
-				if (solider->isAlive)
-				{
-					solider->setPosition(solider->getPositionX() - background->getPositionX(), solider->getPositionY() - background->getPositionY());
-				}
-			}
-			background->setPosition(0, 0);
-			hero->HP = hero->MaxHP;
-			hero->MP = hero->MaxMP;
-		}
-	}
-	hero->HP--;
-	hero->MP--;
 	Point temp;
 	temp.x = pos.x;
 	temp.y = pos.y;
-	if ((temp.x - hero->position.x) * (temp.x - hero->position.x) + (temp.y - hero->position.y) * (temp.y - hero->position.y) <= (1 / hero->speed) * (1 / hero->speed))
+	if ((temp.x - hero->position.x) * (temp.x - hero->position.x) + (temp.y - hero->position.y) * (temp.y - hero->position.y) <= (1 / hero->speed))
 	{
 		hero->isRun = false;
 		hero->setAction(hero->direction, "stand", 2);
@@ -222,7 +185,7 @@ void HelloWorld::update(float dt)
 		}
 	}
 	float r = (sqrt(((temp.x - hero->position.x) * (temp.x - hero->position.x)) + ((temp.y - hero->position.y) * (temp.y - hero->position.y)))) / (hero->speed);
-	float r1 = sqrt(((temp.x - hero->position.x) * (temp.x - hero->position.x)) + ((temp.y - hero->position.y) * (temp.y - hero->position.y))) / (hero->speed);;
+	float r1 = sqrt(((temp.x - hero->position.x) * (temp.x - hero->position.x)) + ((temp.y - hero->position.y) * (temp.y - hero->position.y)));
 	//CCLOG("hhh%f", r);
 	float x = 0;
 	float y = 0;
@@ -237,9 +200,9 @@ void HelloWorld::update(float dt)
 	//CCLOG("%f,%f", rocker->dx / r, rocker->dy / r);
 	//CCLOG("%f,%f", x, y);
 	//Point position = background[1]->getPosition();
-	if (soliderTimeCounter->getfCurTime() >= 15)
+	if (m_timeCounter->getfCurTime() >= 15)
 	{
-		if (soliderTimeCounter->getfCurTime() - 15 >= counter)
+		if (m_timeCounter->getfCurTime() - 15 >= counter)
 		{
 			solider = Monster::createMonsterSprite(Vec2(320 + background->getPositionX(), 180 + background->getPositionY()), 2, "stand");
 			this->addChild(solider);
@@ -249,7 +212,7 @@ void HelloWorld::update(float dt)
 		if (counter >= 5)
 		{
 			counter = 0;
-			soliderTimeCounter->start();
+			m_timeCounter->start();
 		}
 	}
 	if (m_soliderManager.size())
@@ -307,7 +270,6 @@ void HelloWorld::update(float dt)
 		{
 			solider->setPosition(solider->getPositionX() - (temp.x - hero->position.x) / r1, solider->getPositionY() - (temp.y - hero->position.y) / r1);
 		}
-
 		pos.x = pos.x - (temp.x - hero->position.x) / r;
 		pos.y = pos.y - (temp.y - hero->position.y) / r;
 	}
@@ -321,6 +283,7 @@ void HelloWorld::update(float dt)
 	{
 		monster->waiting();
 	}
+
 }
 Color4B HelloWorld::getColor(int x, int y)
 {

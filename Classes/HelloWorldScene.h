@@ -21,13 +21,7 @@ public:
 	Monster* monster;
 	Monster* solider;
 	Vector<Monster*> m_soliderManager;
-	TimeCounter* solidertimeCounter;
-	TimeCounter* HeroTimeCounter;
-	Sprite* sprBar;
-	Sprite* sprBar2;
-	Sprite* sprBlood;
-	ProgressTimer* progress;
-	ProgressTimer* progress2;
+	TimeCounter* m_timeCounter;
 	static cocos2d::Scene* createScene();
 	virtual bool init();
 	virtual void update(float dt);
