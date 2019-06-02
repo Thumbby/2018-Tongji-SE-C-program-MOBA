@@ -57,18 +57,6 @@ bool HelloWorld::init()
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
-	CCTMXTiledMap *map = CCTMXTiledMap::create("background.tmx");
-
-	this->addChild(map);
-
-	image = new Image();//新建地图
-
-	image->initWithImageFile("gf.png");
-
-	CCLOG("%d，%d", image->getHeight(), image->getWidth());
-
-
-
 	background = Sprite::create("background.png");
 
 	background->setPosition(0, 0);
@@ -76,16 +64,6 @@ bool HelloWorld::init()
 	background->setAnchorPoint(Vec2(0, 0));
 
 	this->addChild(background, 0, 200);
-
-	//background[1] = Sprite::create("background3.png");
-
-	//background[1]->setOpacity(150);
-
-	//background[1]->setPosition(-600, -550);
-
-	//background[1]->setAnchorPoint(Vec2(0, 0));
-
-	//this->addChild(background[1],1 ,201);
 
 	Sprite* mouse = Sprite::create("mouse.png");
 
@@ -115,6 +93,8 @@ bool HelloWorld::init()
 
 	//鼠标移动
 	auto touchListener = EventListenerTouchOneByOne::create();
+
+	this->setTouchEnabled(true);
 
 	touchListener->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan, this);
 
@@ -153,7 +133,7 @@ bool HelloWorld::init()
 
 	this->addChild(HeroTimeCounter);
 
-	hero = Hero::createHeroSprite(Vec2(320, 180), 2, "stand");
+	hero = Hero::createHeroSprite(Point(320, 180), 2, "stand");
 
 	hero->HP = hero->MaxHP;
 
@@ -269,16 +249,14 @@ bool HelloWorld::init()
 
 	//delete image;
 
-
-
 	return true;
 
 }
 
 void HelloWorld::update(float dt)
-
 {
-	//log("dt");
+
+
 	sprBar->setPosition(Point(hero->position.x, hero->position.y + 80));
 
 	sprBar2->setPosition(Point(hero->position.x, hero->position.y + 73));
@@ -365,14 +343,15 @@ void HelloWorld::update(float dt)
 
 	temp.y = pos.y;
 
-	if ((temp.x - hero->position.x) * (temp.x - hero->position.x) + (temp.y - hero->position.y) * (temp.y - hero->position.y) <= (1 / hero->speed) * (1 / hero->speed))
+	log("temp %d %d", temp.x, temp.y);
+	log("hero %d %d", hero->position.x, hero->position.y);
+
+	if ((temp.x - hero->position.x) * (temp.x - hero->position.x) + (temp.y - hero->position.y) * (temp.y - hero->position.y) <= 1)
 
 	{
-
 		hero->isRun = false;
 
 		hero->setAction(hero->direction, "stand", 2);
-
 	}
 
 	else if (temp.x - hero->position.x == 0 && temp.y - hero->position.y > 0)
@@ -606,11 +585,10 @@ void HelloWorld::update(float dt)
 
 	float monsterY = monster->getPositionY();
 
-
-
 	if (r != 0)
 
 	{
+
 		auto visibleSize = Director::getInstance()->getVisibleSize();
 
 		auto sp1 = this->getChildByTag(200);
@@ -621,9 +599,16 @@ void HelloWorld::update(float dt)
 
 		bgPoint = Point(bgPoint.x - (temp.x - hero->position.x) / r, bgPoint.y - (temp.y - hero->position.y) / r);
 
-		if (bgPoint.y <= 0 && bgPoint.x <= 0 && bgPoint.x + bgSize.width >= visibleSize.width&&bgPoint.y + bgSize.height >= visibleSize.height)
+		if ((temp.x - hero->position.x)*(temp.x - hero->position.x) + (temp.y - hero->position.y)*(temp.y - hero->position.y) <= hero->speed)
+		{
+			temp = hero->position;
+		}
+
+		else if (bgPoint.y <= 0 && bgPoint.x <= 0 && bgPoint.x + bgSize.width >= visibleSize.width&&bgPoint.y + bgSize.height >= visibleSize.height)
 
 			sp1->setPosition(bgPoint);
+
+
 
 		monster->setPosition(monsterX - (temp.x - hero->position.x) / r1, monsterY - (temp.y - hero->position.y) / r1);
 
@@ -634,8 +619,6 @@ void HelloWorld::update(float dt)
 			solider->setPosition(solider->getPositionX() - (temp.x - hero->position.x) / r1, solider->getPositionY() - (temp.y - hero->position.y) / r1);
 
 		}
-
-
 
 		pos.x = pos.x - (temp.x - hero->position.x) / r;
 
@@ -662,50 +645,6 @@ void HelloWorld::update(float dt)
 		monster->waiting();
 
 	}
-
-}
-
-Color4B HelloWorld::getColor(int x, int y)
-
-{
-
-	//Image * image = new Image();
-
-	//image->initWithImageFile("background1.jpg");
-
-	y = image->getHeight() - y;
-
-	//y = 1690 - y;
-
-	unsigned char* m_pData = image->getData();
-
-
-
-	//int x = (int)posx;
-
-	//int y = (int)posy;
-
-	Color4B c = { 0, 0, 0, 0 };
-
-	unsigned int* pixel = (unsigned int*)m_pData;
-
-	//int width = image->getWidth();
-
-	pixel = pixel + y * 2998 + x;        //480 是图片的宽
-
-	c.r = *pixel & 0xff;
-
-	c.g = (*pixel >> 8) & 0xff;
-
-	c.b = (*pixel >> 16) & 0xff;
-
-	c.a = (*pixel >> 24) & 0xff;
-
-	CCLOG("color r:%d g:%d b:%d a:%d ", c.r, c.g, c.b, c.a);
-
-	return c;
-
-
 
 }
 
@@ -738,7 +677,7 @@ bool HelloWorld::onTouchBegan(Touch* touch, Event* unused_event)
 	//获取触屏位置（坐标）
 	log("TouchBegan");
 	pos = touch->getLocation();
-
+	log("temp2 %d %d", pos.x, pos.y);
 	flag = 1;
 
 	Point touchLocation = convertTouchToNodeSpace(touch);
