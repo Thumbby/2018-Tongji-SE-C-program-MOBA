@@ -52,11 +52,17 @@ public:
 
 	TimeCounter* HeroTimeCounter;
 
+	TimeCounter* skillTimeCounter;
+
+	TimeCounter* Skill_Q;
+
 	Sprite* sprBar;
 
 	Sprite* sprBar2;
 
 	Sprite* sprBlood;
+
+	Sprite* Effect_Q;
 
 	ProgressTimer* progress;
 
@@ -74,9 +80,9 @@ public:
 
 	CREATE_FUNC(HelloWorld);
 
-	virtual void onKeyPressed(EventKeyboard::KeyCode keycode, Event *event);
+	virtual void onKeyPressed(EventKeyboard::KeyCode keycode, Event* event);
 
-	virtual void onKeyReleased(EventKeyboard::KeyCode keycode, Event *event);
+	virtual void onKeyReleased(EventKeyboard::KeyCode keycode, Event* event);
 
 	virtual bool onContactBegin(const PhysicsContact& contact);
 

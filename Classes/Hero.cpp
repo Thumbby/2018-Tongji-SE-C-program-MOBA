@@ -63,8 +63,34 @@ void Hero::moveTo(float x, float y)
 	position.y += y / r;
 	sprite->setPosition(position);
 }
-void Hero::Death(){
+void Hero::Death() {
 	if (HP <= 0) {
 		this->setVisible(false);
 	}
+}
+int Hero::Max_Exp(int level) {
+	int max_exp;
+	max_exp = 300 + (level - 1) * 50;
+	return max_exp;
+}
+void Hero::Experience_System(int exp,int Level_Exp) {
+	Exp = Exp + exp;
+	if (Exp >= Level_Exp) {
+		Level++;
+		Exp = Exp - Level_Exp;
+		Attack += 5;
+		MaxHP += 20;
+		MaxMP += 10;
+		Defense += 5;
+	}
+	if (Level > 18) {
+		Level = 18;
+		Exp = 0;
+	}
+}
+void Hero::Money_System(int money) {
+	Money = Money + money;
+}
+void Hero::Get_Attack(int damage) {
+	HP = HP - damage;
 }

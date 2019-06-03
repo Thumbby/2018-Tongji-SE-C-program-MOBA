@@ -1,4 +1,3 @@
-
 #include "HelloWorldScene.h"
 
 #include "cocostudio/CocoStudio.h"
@@ -57,6 +56,18 @@ bool HelloWorld::init()
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
+	//CCTMXTiledMap* map = CCTMXTiledMap::create("background.tmx");
+
+	//this->addChild(map);
+
+	image = new Image();//新建地图
+
+	image->initWithImageFile("gf.png");
+
+	CCLOG("%d，%d", image->getHeight(), image->getWidth());
+
+
+
 	background = Sprite::create("background.png");
 
 	background->setPosition(0, 0);
@@ -64,6 +75,16 @@ bool HelloWorld::init()
 	background->setAnchorPoint(Vec2(0, 0));
 
 	this->addChild(background, 0, 200);
+
+	//background[1] = Sprite::create("background3.png");
+
+	//background[1]->setOpacity(150);
+
+	//background[1]->setPosition(-600, -550);
+
+	//background[1]->setAnchorPoint(Vec2(0, 0));
+
+	//this->addChild(background[1],1 ,201);
 
 	Sprite* mouse = Sprite::create("mouse.png");
 
@@ -94,8 +115,6 @@ bool HelloWorld::init()
 	//鼠标移动
 	auto touchListener = EventListenerTouchOneByOne::create();
 
-	this->setTouchEnabled(true);
-
 	touchListener->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan, this);
 
 
@@ -109,9 +128,6 @@ bool HelloWorld::init()
 
 	};
 
-	//当鼠标被按下
-
-
 
 	//将事件监听器与场景绑定
 
@@ -121,6 +137,10 @@ bool HelloWorld::init()
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
+
+	skillTimeCounter = TimeCounter::create();
+	
+	this->addChild(skillTimeCounter);
 
 
 	soliderTimeCounter = TimeCounter::create();
@@ -133,13 +153,39 @@ bool HelloWorld::init()
 
 	this->addChild(HeroTimeCounter);
 
-	hero = Hero::createHeroSprite(Point(320, 180), 2, "stand");
+	hero = Hero::createHeroSprite(Vec2(320, 180), 2, "stand");
 
-	hero->HP = hero->MaxHP;
+	Skill_Q = TimeCounter::create();
 
-	hero->MP = hero->MaxMP;
+	this->addChild(Skill_Q);
 
-	hero->setScale(0.8f);
+	hero->setScale(0.5f);
+
+	hero->Skill_Q_On_Release = 0;
+
+	hero->Skill_W_On_Release = 0;
+
+	hero->Level = 1;
+
+	hero->Money = 0;
+
+	hero->HP = 100;
+
+	hero->MP = 100;
+	
+	hero->Attack = 70;
+
+	hero->Skill_Enhance = 0;
+
+	hero->Critical_Rate = 0;
+
+	hero->Defense = 50;
+
+	hero->Resistance = 30;
+
+	hero->HP_Recover = 1;
+
+	hero->MP_Recover = 0.2;
 
 	addChild(hero);
 
@@ -151,7 +197,7 @@ bool HelloWorld::init()
 
 	sprBar = Sprite::create("bar.png");
 
-	sprBar->setScale(0.15f);
+	sprBar->setScale(0.3f);
 
 	hero->addChild(sprBar);
 
@@ -159,7 +205,7 @@ bool HelloWorld::init()
 
 	sprBar2 = Sprite::create("bar.png");
 
-	sprBar2->setScale(0.15f);
+	sprBar2->setScale(0.3f);
 
 	hero->addChild(sprBar2);
 
@@ -171,7 +217,7 @@ bool HelloWorld::init()
 
 	progress->setType(ProgressTimer::Type::BAR);
 
-	progress->setScale(0.15f);
+	progress->setScale(0.3f);
 
 	progress->setMidpoint(Point(0, 0.5));
 
@@ -187,7 +233,7 @@ bool HelloWorld::init()
 
 	progress2->setType(ProgressTimer::Type::BAR);
 
-	progress2->setScale(0.15f);
+	progress2->setScale(0.3f);
 
 	progress2->setMidpoint(Point(0, 0.5));
 
@@ -197,7 +243,7 @@ bool HelloWorld::init()
 	//靶子
 	auto aim1 = Sprite::create("rocker.png");
 
-	aim1->setPosition(Point(visibleSize.width / 4, visibleSize.height / 4));
+	aim1->setPosition(Point(visibleSize.width,visibleSize.height));
 
 	this->addChild(aim1);
 
@@ -234,8 +280,9 @@ bool HelloWorld::init()
 	aim2Body->setCollisionBitmask(0x01);
 
 	aim2->setPhysicsBody(aim2Body);
+	
 	//键盘监听
-	auto *dispatcher = Director::getInstance()->getEventDispatcher();
+	auto* dispatcher = Director::getInstance()->getEventDispatcher();
 
 	auto* keyListener = EventListenerKeyboard::create();
 
@@ -254,30 +301,28 @@ bool HelloWorld::init()
 }
 
 void HelloWorld::update(float dt)
+
 {
-
-
+	//log("dt");
 	sprBar->setPosition(Point(hero->position.x, hero->position.y + 80));
 
-	sprBar2->setPosition(Point(hero->position.x, hero->position.y + 73));
+	sprBar2->setPosition(Point(hero->position.x, hero->position.y + 70));
 
 	progress->setPosition(Point(hero->position.x, hero->position.y + 80));
 
 	progress->setPercentage((((float)hero->HP) / hero->MaxHP) * 100);
 
-	progress2->setPosition(Point(hero->position.x, hero->position.y + 73));
+	progress2->setPosition(Point(hero->position.x, hero->position.y + 70));
 
 	progress2->setPercentage((((float)hero->MP) / hero->MaxMP) * 100);
 
-
-
 	hero->Death();
+
+
 
 	//auto aim1 = this->getChildByTag(20);
 
 	//aim1->setPosition(Point(aim1->getPosition().x + 1, aim1->getPosition().y));
-
-	//auto aim2 = this->getChildByTag(21);
 
 	//aim2->setPosition(Point(aim2->getPosition().x + 1, aim2->getPosition().y));
 
@@ -289,7 +334,7 @@ void HelloWorld::update(float dt)
 			if (aim == NULL)break;
 			Point pos1 = (*it)->getPosition();
 
-			float r2 = sqrt((pos1.x - aim->getPosition().x)*(pos1.x - aim->getPosition().x) + (pos1.y - aim->getPosition().y)*(pos1.y - aim->getPosition().y));
+			float r2 = sqrt((pos1.x - aim->getPosition().x) * (pos1.x - aim->getPosition().x) + (pos1.y - aim->getPosition().y) * (pos1.y - aim->getPosition().y));
 
 			(*it)->setPosition(Point(pos1.x + 3 * (aim->getPosition().x - pos1.x) / r2, pos1.y + 3 * (aim->getPosition().y - pos1.y) / r2));
 		}
@@ -332,10 +377,69 @@ void HelloWorld::update(float dt)
 		}
 
 	}
+	switch (hero->Skill_Q_On_Release)
+	{
+	case 1: {
+		Skill_Q->start();
 
-	//hero->HP--;
+		hero->Skill_Q_On_Release = 2;
 
-	//hero->MP--;
+		break;
+	}
+
+	case 2: {
+		float time1 = Skill_Q->getfCurTime();
+
+		if (time1 >= 5) {
+
+			hero->Skill_Q_On_Release = -1;
+
+			this->removeChild(Effect_Q);
+		}
+
+		break;
+	}
+
+	case -1: {
+		float time2 = Skill_Q->getfCurTime();
+
+		if (time2 >= hero->Skil_Q_Cool_Down) {
+
+			hero->Skill_Q_On_Release = 0;
+
+		}
+		break;
+	}
+	}
+
+
+	if (hero->Skill_W_On_Release == 1 && hero->MP >= 0) {
+
+		hero->MP--;
+
+	}
+
+	if (hero->Skill_W_On_Release==1&&hero->MP<0)
+	{
+		hero->Skill_W_On_Release = 0;
+
+		hero->speed = hero->speed / 2;
+
+		hero->Attack = hero->Attack / 2;
+	}
+	if (hero->HP <= hero->MaxHP) {
+		hero->HP = hero->HP + hero->HP_Recover;
+		if (hero->HP > hero->MaxHP) {
+			hero->HP = hero->MaxHP;
+		}
+	}
+	if (hero->MP <= hero->MaxMP) {
+		hero->MP = hero->MP + hero->MP_Recover;
+		if (hero->MP > hero->MaxMP) {
+			hero->MP = hero->MaxMP;
+		}
+	}
+	hero->Money++;
 
 	Point temp;
 
@@ -343,15 +447,14 @@ void HelloWorld::update(float dt)
 
 	temp.y = pos.y;
 
-	log("temp %d %d", temp.x, temp.y);
-	log("hero %d %d", hero->position.x, hero->position.y);
-
-	if ((temp.x - hero->position.x) * (temp.x - hero->position.x) + (temp.y - hero->position.y) * (temp.y - hero->position.y) <= 1)
+	if ((temp.x - hero->position.x) * (temp.x - hero->position.x) + (temp.y - hero->position.y) * (temp.y - hero->position.y) <= (1 / hero->speed) * (1 / hero->speed))
 
 	{
+
 		hero->isRun = false;
 
 		hero->setAction(hero->direction, "stand", 2);
+
 	}
 
 	else if (temp.x - hero->position.x == 0 && temp.y - hero->position.y > 0)
@@ -585,10 +688,11 @@ void HelloWorld::update(float dt)
 
 	float monsterY = monster->getPositionY();
 
+
+
 	if (r != 0)
 
 	{
-
 		auto visibleSize = Director::getInstance()->getVisibleSize();
 
 		auto sp1 = this->getChildByTag(200);
@@ -599,16 +703,12 @@ void HelloWorld::update(float dt)
 
 		bgPoint = Point(bgPoint.x - (temp.x - hero->position.x) / r, bgPoint.y - (temp.y - hero->position.y) / r);
 
-		if ((temp.x - hero->position.x)*(temp.x - hero->position.x) + (temp.y - hero->position.y)*(temp.y - hero->position.y) <= hero->speed)
-		{
+		if ((temp.x - hero->position.x) * (temp.x - hero->position.x) + (temp.y - hero->position.y) * (temp.y - hero->position.y) <= hero->speed)
 			temp = hero->position;
-		}
 
-		else if (bgPoint.y <= 0 && bgPoint.x <= 0 && bgPoint.x + bgSize.width >= visibleSize.width&&bgPoint.y + bgSize.height >= visibleSize.height)
+		else if (bgPoint.y <= 0 && bgPoint.x <= 0 && bgPoint.x + bgSize.width >= visibleSize.width && bgPoint.y + bgSize.height >= visibleSize.height)
 
 			sp1->setPosition(bgPoint);
-
-
 
 		monster->setPosition(monsterX - (temp.x - hero->position.x) / r1, monsterY - (temp.y - hero->position.y) / r1);
 
@@ -619,6 +719,8 @@ void HelloWorld::update(float dt)
 			solider->setPosition(solider->getPositionX() - (temp.x - hero->position.x) / r1, solider->getPositionY() - (temp.y - hero->position.y) / r1);
 
 		}
+
+
 
 		pos.x = pos.x - (temp.x - hero->position.x) / r;
 
@@ -644,7 +746,51 @@ void HelloWorld::update(float dt)
 
 		monster->waiting();
 
-	}
+	}log("%d");
+
+}
+
+Color4B HelloWorld::getColor(int x, int y)
+
+{
+
+	//Image * image = new Image();
+
+	//image->initWithImageFile("background1.jpg");
+
+	y = image->getHeight() - y;
+
+	//y = 1690 - y;
+
+	unsigned char* m_pData = image->getData();
+
+
+
+	//int x = (int)posx;
+
+	//int y = (int)posy;
+
+	Color4B c = { 0, 0, 0, 0 };
+
+	unsigned int* pixel = (unsigned int*)m_pData;
+
+	//int width = image->getWidth();
+
+	pixel = pixel + y * 2998 + x;        //480 是图片的宽
+
+	c.r = *pixel & 0xff;
+
+	c.g = (*pixel >> 8) & 0xff;
+
+	c.b = (*pixel >> 16) & 0xff;
+
+	c.a = (*pixel >> 24) & 0xff;
+
+	CCLOG("color r:%d g:%d b:%d a:%d ", c.r, c.g, c.b, c.a);
+
+	return c;
+
+
 
 }
 
@@ -662,10 +808,10 @@ static CCRect getRect(CCNode* pNode)
 		= pNode->getContentSize();
 
 	rc.origin.x
-		-= rc.size.width*0.5;
+		-= rc.size.width * 0.5;
 
 	rc.origin.y
-		-= rc.size.height*0.5;
+		-= rc.size.height * 0.5;
 
 	return rc;
 
@@ -677,7 +823,7 @@ bool HelloWorld::onTouchBegan(Touch* touch, Event* unused_event)
 	//获取触屏位置（坐标）
 	log("TouchBegan");
 	pos = touch->getLocation();
-	log("temp2 %d %d", pos.x, pos.y);
+
 	flag = 1;
 
 	Point touchLocation = convertTouchToNodeSpace(touch);
@@ -700,36 +846,91 @@ bool HelloWorld::onTouchBegan(Touch* touch, Event* unused_event)
 	return true;
 
 }
-void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keycode, Event *event)
+void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keycode, Event* event)
 {
 
 }
-void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event *event)
+void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 {
-	auto visibleSize = Director::getInstance()->getVisibleSize();
+	switch (keycode)
+	{
+	case EventKeyboard::KeyCode::KEY_A:
+	{
+		auto visibleSize = Director::getInstance()->getVisibleSize();
 
-	auto bullet0 = Sprite::create("bullet.png");
+		auto bullet0 = Sprite::create("bullet.png");
 
-	PhysicsBody* bulletBody = PhysicsBody::createBox(bullet0->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT);
+		PhysicsBody* bulletBody = PhysicsBody::createBox(bullet0->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT);
 
-	bulletBody->setGravityEnable(false);
+		bulletBody->setGravityEnable(false);
 
-	bulletBody->setCategoryBitmask(0x01);
+		bulletBody->setCategoryBitmask(0x01);
 
-	bulletBody->setContactTestBitmask(0x01);
+		bulletBody->setContactTestBitmask(0x01);
 
 
-	bulletBody->setCollisionBitmask(0x01);
+		bulletBody->setCollisionBitmask(0x01);
 
-	bullet0->setPhysicsBody(bulletBody);
+		bullet0->setPhysicsBody(bulletBody);
 
-	bullet0->setPosition(Point(hero->position.x, hero->position.y));
+		bullet0->setPosition(Point(hero->position.x, hero->position.y));
 
-	this->addChild(bullet0);
+		this->addChild(bullet0);
 
-	bullet0->setTag(1);
+		bullet0->setTag(1);
 
-	bullet.push_back(bullet0);
+		bullet.push_back(bullet0);
+
+		break;
+	}
+	
+	case EventKeyboard::KeyCode::KEY_Q: {
+		if (hero->MP >= 20&&hero->Skill_Q_On_Release==0) {
+
+			hero->MP -= 20;
+
+			Effect_Q = Sprite::create("Huaji.png");
+
+			Effect_Q->setPosition(Point(pos.x, pos.y));
+
+			Effect_Q->setScale(0.2f);
+
+			this->addChild(Effect_Q);
+
+			hero->Skill_Q_On_Release = 1;
+		}
+
+		break;
+	}
+	case EventKeyboard::KeyCode::KEY_W: {
+
+		if (hero->Skill_W_On_Release==0&&hero->HP>=10)
+		{
+			hero->HP -= 10;
+
+			hero->Attack = hero->Attack * 2;
+
+			hero->speed = hero->speed * 2;
+
+			hero->Skill_W_On_Release = 1;
+
+		}
+		else if (hero->Skill_W_On_Release == 1) {
+
+			if (hero->MP > 0) {
+
+				hero->Attack = hero->Attack / 2;
+
+				hero->speed = hero->speed / 2;
+
+				hero->Skill_W_On_Release = 0;
+			}
+
+		}
+		
+		break;
+	}
+	}
 
 }
 bool HelloWorld::onContactBegin(const PhysicsContact& contact)
