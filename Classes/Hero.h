@@ -50,7 +50,9 @@ private:
 	float RebornTime;
 	int Reward_Money, Reward_Exp;
 	int Skill_Q_On_Release;
-	float Skil_Q_Cool_Down = 10;
+	float Skill_Q_Cool_Down = 10;
 	int Skill_W_On_Release;
+	float Skill_E_Cool_Down = 10;
+	int Skill_E_On_Release; 
 };
 #endif

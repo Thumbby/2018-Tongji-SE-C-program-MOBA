@@ -64,6 +64,8 @@ public:
 
 	Sprite* Effect_Q;
 
+	Label* label;
+
 	ProgressTimer* progress;
 
 	ProgressTimer* progress2;

@@ -35,7 +35,7 @@ void Hero::heroInit(Point position, int direction, const char* name)
 Animate* Hero::createAnimate(int direction, const char* action, int num)
 {
 	auto* m_frameCache = SpriteFrameCache::getInstance();
-	m_frameCache->addSpriteFramesWithFile("leiyi.plist", "leiyi.png");
+	m_frameCache->addSpriteFramesWithFile("Demon.plist", "Demon.png");
 	Vector<SpriteFrame*> frameArray;
 	for (int i = 1; i <= num; i++)
 	{
@@ -43,7 +43,14 @@ Animate* Hero::createAnimate(int direction, const char* action, int num)
 		frameArray.pushBack(frame);
 	}
 	Animation* animation = Animation::createWithSpriteFrames(frameArray);
-	animation->setLoops(-1);//表示无限循环播放
+	if (action=="stand"||action=="run")
+	{
+		animation->setLoops(-1);
+	}
+	else if(action=="attack"||action=="skill")
+	{
+		animation->setLoops(1);
+	}
 	animation->setDelayPerUnit(0.2f);//每两张图片的时间隔，图片数目越少，间隔最小就越小
 
 	//将动画包装成一个动作

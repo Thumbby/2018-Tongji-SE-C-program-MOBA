@@ -155,91 +155,259 @@ bool HelloWorld::init()
 
 	hero = Hero::createHeroSprite(Vec2(320, 180), 2, "stand");
 
-	Skill_Q = TimeCounter::create();
 
-	this->addChild(Skill_Q);
+	hero->ID = 3;
 
-	hero->setScale(0.5f);
+	if (hero->ID == 1) {
 
-	hero->Skill_Q_On_Release = 0;
+		Skill_Q = TimeCounter::create();
 
-	hero->Skill_W_On_Release = 0;
+		this->addChild(Skill_Q);
 
-	hero->Level = 1;
+		hero->setScale(0.5f);
 
-	hero->Money = 0;
+		hero->Skill_Q_On_Release = 0;
 
-	hero->HP = 100;
+		hero->Skill_W_On_Release = 0;
 
-	hero->MP = 100;
-	
-	hero->Attack = 70;
+		hero->Level = 1;
 
-	hero->Skill_Enhance = 0;
+		hero->Money = 0;
 
-	hero->Critical_Rate = 0;
+		hero->HP = 100;
 
-	hero->Defense = 50;
+		hero->MP = 100;
 
-	hero->Resistance = 30;
+		hero->Attack = 70;
 
-	hero->HP_Recover = 1;
+		hero->Skill_Enhance = 0;
 
-	hero->MP_Recover = 0.2;
+		hero->Critical_Rate = 0;
 
-	addChild(hero);
+		hero->Defense = 50;
+
+		hero->Resistance = 30;
+
+		hero->HP_Recover = 1;
+
+		hero->MP_Recover = 0.2;
+
+		this->addChild(hero);
+
+		sprBar = Sprite::create("bar.png");
+
+		sprBar->setScale(0.3f);
+
+		hero->addChild(sprBar);
+
+
+
+		sprBar2 = Sprite::create("bar.png");
+
+		sprBar2->setScale(0.3f);
+
+		hero->addChild(sprBar2);
+
+
+
+		sprBlood = Sprite::create("blood.png");
+
+		progress = ProgressTimer::create(sprBlood);
+
+		progress->setType(ProgressTimer::Type::BAR);
+
+		progress->setScale(0.3f);
+
+		progress->setMidpoint(Point(0, 0.5));
+
+		progress->setBarChangeRate(Point(1, 0));
+
+		hero->addChild(progress);
+
+
+
+		auto sprMagic = Sprite::create("magic.png");
+
+		progress2 = ProgressTimer::create(sprMagic);
+
+		progress2->setType(ProgressTimer::Type::BAR);
+
+		progress2->setScale(0.3f);
+
+		progress2->setMidpoint(Point(0, 0.5));
+
+		progress2->setBarChangeRate(Point(1, 0));
+
+		hero->addChild(progress2);
+	}
+	if (hero->ID == 2) {
+
+		Skill_Q = TimeCounter::create();
+
+		this->addChild(Skill_Q);
+
+		hero->setScale(0.5f);
+
+		hero->Skill_Q_On_Release = 0;
+
+		hero->Skill_W_On_Release = 0;
+
+		hero->Level = 1;
+
+		hero->Money = 0;
+
+		hero->HP = 100;
+
+		hero->MP = 100;
+
+		hero->Attack = 70;
+
+		hero->Skill_Enhance = 0;
+
+		hero->Critical_Rate = 0;
+
+		hero->Defense = 50;
+
+		hero->Resistance = 30;
+
+		hero->HP_Recover = 1;
+
+		hero->MP_Recover = 0.2;
+
+		this->addChild(hero);
+
+		sprBar = Sprite::create("bar.png");
+
+		sprBar->setScale(0.3f);
+
+		hero->addChild(sprBar);
+
+
+
+		sprBar2 = Sprite::create("bar.png");
+
+		sprBar2->setScale(0.3f);
+
+		hero->addChild(sprBar2);
+
+
+
+		sprBlood = Sprite::create("blood.png");
+
+		progress = ProgressTimer::create(sprBlood);
+
+		progress->setType(ProgressTimer::Type::BAR);
+
+		progress->setScale(0.3f);
+
+		progress->setMidpoint(Point(0, 0.5));
+
+		progress->setBarChangeRate(Point(1, 0));
+
+		hero->addChild(progress);
+
+
+
+		auto sprMagic = Sprite::create("magic.png");
+
+		progress2 = ProgressTimer::create(sprMagic);
+
+		progress2->setType(ProgressTimer::Type::BAR);
+
+		progress2->setScale(0.3f);
+
+		progress2->setMidpoint(Point(0, 0.5));
+
+		progress2->setBarChangeRate(Point(1, 0));
+
+		hero->addChild(progress2);
+	}
+	if (hero->ID == 3) {
+
+		Skill_Q = TimeCounter::create();
+
+		this->addChild(Skill_Q);
+
+		hero->setScale(0.5f);
+
+		hero->Skill_Q_On_Release = 0;
+
+		hero->Skill_W_On_Release = 0;
+
+		hero->Level = 1;
+
+		hero->Money = 0;
+
+		hero->HP = 100;
+
+		hero->MP = 100;
+
+		hero->Attack = 70;
+
+		hero->Skill_Enhance = 0;
+
+		hero->Critical_Rate = 0;
+
+		hero->Defense = 50;
+
+		hero->Resistance = 30;
+
+		hero->HP_Recover = 1;
+
+		hero->MP_Recover = 0.2;
+
+		this->addChild(hero);
+
+		sprBar = Sprite::create("bar.png");
+
+		sprBar->setScale(0.3f);
+
+		hero->addChild(sprBar);
+
+
+
+		sprBar2 = Sprite::create("bar.png");
+
+		sprBar2->setScale(0.3f);
+
+		hero->addChild(sprBar2);
+
+
+
+		sprBlood = Sprite::create("blood.png");
+
+		progress = ProgressTimer::create(sprBlood);
+
+		progress->setType(ProgressTimer::Type::BAR);
+
+		progress->setScale(0.3f);
+
+		progress->setMidpoint(Point(0, 0.5));
+
+		progress->setBarChangeRate(Point(1, 0));
+
+		hero->addChild(progress);
+
+
+
+		auto sprMagic = Sprite::create("magic.png");
+
+		progress2 = ProgressTimer::create(sprMagic);
+
+		progress2->setType(ProgressTimer::Type::BAR);
+
+		progress2->setScale(0.3f);
+
+		progress2->setMidpoint(Point(0, 0.5));
+
+		progress2->setBarChangeRate(Point(1, 0));
+
+		hero->addChild(progress2);
+	}
 
 	monster = Monster::createMonsterSprite(Vec2(1050, 950), 2, "stand");
 
 	addChild(monster);
-
-
-
-	sprBar = Sprite::create("bar.png");
-
-	sprBar->setScale(0.3f);
-
-	hero->addChild(sprBar);
-
-
-
-	sprBar2 = Sprite::create("bar.png");
-
-	sprBar2->setScale(0.3f);
-
-	hero->addChild(sprBar2);
-
-
-
-	sprBlood = Sprite::create("blood.png");
-
-	progress = ProgressTimer::create(sprBlood);
-
-	progress->setType(ProgressTimer::Type::BAR);
-
-	progress->setScale(0.3f);
-
-	progress->setMidpoint(Point(0, 0.5));
-
-	progress->setBarChangeRate(Point(1, 0));
-
-	hero->addChild(progress);
-
-
-
-	auto sprMagic = Sprite::create("magic.png");
-
-	progress2 = ProgressTimer::create(sprMagic);
-
-	progress2->setType(ProgressTimer::Type::BAR);
-
-	progress2->setScale(0.3f);
-
-	progress2->setMidpoint(Point(0, 0.5));
-
-	progress2->setBarChangeRate(Point(1, 0));
-
-	hero->addChild(progress2);
 	//靶子
 	auto aim1 = Sprite::create("rocker.png");
 
@@ -303,28 +471,11 @@ bool HelloWorld::init()
 void HelloWorld::update(float dt)
 
 {
-	//log("dt");
-	sprBar->setPosition(Point(hero->position.x, hero->position.y + 80));
-
-	sprBar2->setPosition(Point(hero->position.x, hero->position.y + 70));
-
-	progress->setPosition(Point(hero->position.x, hero->position.y + 80));
-
-	progress->setPercentage((((float)hero->HP) / hero->MaxHP) * 100);
-
-	progress2->setPosition(Point(hero->position.x, hero->position.y + 70));
-
-	progress2->setPercentage((((float)hero->MP) / hero->MaxMP) * 100);
-
-	hero->Death();
-
-
-
 	//auto aim1 = this->getChildByTag(20);
 
-	//aim1->setPosition(Point(aim1->getPosition().x + 1, aim1->getPosition().y));
+//aim1->setPosition(Point(aim1->getPosition().x + 1, aim1->getPosition().y));
 
-	//aim2->setPosition(Point(aim2->getPosition().x + 1, aim2->getPosition().y));
+//aim2->setPosition(Point(aim2->getPosition().x + 1, aim2->getPosition().y));
 
 	if (bullet.size() >= 1)
 	{
@@ -339,7 +490,29 @@ void HelloWorld::update(float dt)
 			(*it)->setPosition(Point(pos1.x + 3 * (aim->getPosition().x - pos1.x) / r2, pos1.y + 3 * (aim->getPosition().y - pos1.y) / r2));
 		}
 	}
+	sprBar->setPosition(Point(hero->position.x, hero->position.y + 80));
 
+	sprBar2->setPosition(Point(hero->position.x, hero->position.y + 70));
+
+	progress->setPosition(Point(hero->position.x, hero->position.y + 80));
+
+	progress->setPercentage((((float)hero->HP) / hero->MaxHP) * 100);
+
+	progress2->setPosition(Point(hero->position.x, hero->position.y + 70));
+
+	progress2->setPercentage((((float)hero->MP) / hero->MaxMP) * 100);
+
+	hero->Death();
+
+	string level = to_string(hero->Level);
+
+	label = Label::createWithTTF(level, "fonts/Marker Felt.ttf", 30);
+
+	label->setColor(Color3B(0, 0, 0));
+
+	label->setPosition(Point(hero->position.x - 110, hero->position.y + 75));
+
+	hero->addChild(label);
 	if (hero->HP == 0) {
 
 		hero->DeadTime = 0;
@@ -377,56 +550,6 @@ void HelloWorld::update(float dt)
 		}
 
 	}
-	switch (hero->Skill_Q_On_Release)
-	{
-	case 1: {
-		Skill_Q->start();
-
-		hero->Skill_Q_On_Release = 2;
-
-		break;
-	}
-
-	case 2: {
-		float time1 = Skill_Q->getfCurTime();
-
-		if (time1 >= 5) {
-
-			hero->Skill_Q_On_Release = -1;
-
-			this->removeChild(Effect_Q);
-		}
-
-		break;
-	}
-
-	case -1: {
-		float time2 = Skill_Q->getfCurTime();
-
-		if (time2 >= hero->Skil_Q_Cool_Down) {
-
-			hero->Skill_Q_On_Release = 0;
-
-		}
-		break;
-	}
-	}
-
-
-	if (hero->Skill_W_On_Release == 1 && hero->MP >= 0) {
-
-		hero->MP--;
-
-	}
-
-	if (hero->Skill_W_On_Release==1&&hero->MP<0)
-	{
-		hero->Skill_W_On_Release = 0;
-
-		hero->speed = hero->speed / 2;
-
-		hero->Attack = hero->Attack / 2;
-	}
 	if (hero->HP <= hero->MaxHP) {
 		hero->HP = hero->HP + hero->HP_Recover;
 		if (hero->HP > hero->MaxHP) {
@@ -439,6 +562,169 @@ void HelloWorld::update(float dt)
 			hero->MP = hero->MaxMP;
 		}
 	}
+	if(hero->ID==1){
+	
+		//英雄Q技能
+		switch (hero->Skill_Q_On_Release)
+		{
+		case 1: {
+			Skill_Q->start();
+
+			hero->Skill_Q_On_Release = 2;
+
+			break;
+		}
+
+		case 2: {
+			float time1 = Skill_Q->getfCurTime();
+
+			if (time1 >= 5) {
+
+				hero->Skill_Q_On_Release = -1;
+
+				this->removeChild(Effect_Q);
+			}
+
+			break;
+		}
+
+		case -1: {
+			float time2 = Skill_Q->getfCurTime();
+
+			if (time2 >= hero->Skill_Q_Cool_Down) {
+
+				hero->Skill_Q_On_Release = 0;
+
+			}
+			break;
+		}
+		}
+
+		//英雄W技能
+		if (hero->Skill_W_On_Release == 1 && hero->MP >= 0) {
+
+			hero->MP--;
+
+		}
+
+		if (hero->Skill_W_On_Release == 1 && hero->MP < 0)
+		{
+			hero->Skill_W_On_Release = 0;
+
+			hero->speed = hero->speed / 2;
+
+			hero->Attack_Speed = hero->Attack_Speed / 2;
+		}
+	}
+	if (hero->ID == 2) {
+
+		//英雄Q技能
+		switch (hero->Skill_Q_On_Release)
+		{
+		case 1: {
+			Skill_Q->start();
+
+			hero->Skill_Q_On_Release = 2;
+
+			break;
+		}
+
+		case 2: {
+			float time1 = Skill_Q->getfCurTime();
+
+			if (time1 >= 5) {
+
+				hero->Skill_Q_On_Release = -1;
+
+				this->removeChild(Effect_Q);
+			}
+
+			break;
+		}
+
+		case -1: {
+			float time2 = Skill_Q->getfCurTime();
+
+			if (time2 >= hero->Skill_Q_Cool_Down) {
+
+				hero->Skill_Q_On_Release = 0;
+
+			}
+			break;
+		}
+		}
+
+		//英雄W技能
+		if (hero->Skill_W_On_Release == 1 && hero->MP >= 0) {
+
+			hero->MP--;
+
+		}
+
+		if (hero->Skill_W_On_Release == 1 && hero->MP < 0)
+		{
+			hero->Skill_W_On_Release = 0;
+
+			//hero->speed = hero->speed / 2;
+
+			hero->Attack_Speed = hero->Attack_Speed / 2;
+		}
+	}
+	if (hero->ID == 3) {
+
+		//英雄Q技能
+		switch (hero->Skill_Q_On_Release)
+		{
+		case 1: {
+			Skill_Q->start();
+
+			hero->Skill_Q_On_Release = 2;
+
+			break;
+		}
+
+		case 2: {
+			float time1 = Skill_Q->getfCurTime();
+
+			if (time1 >= 5) {
+
+				hero->Skill_Q_On_Release = -1;
+
+				this->removeChild(Effect_Q);
+			}
+
+			break;
+		}
+
+		case -1: {
+			float time2 = Skill_Q->getfCurTime();
+
+			if (time2 >= hero->Skill_Q_Cool_Down) {
+
+				hero->Skill_Q_On_Release = 0;
+
+			}
+			break;
+		}
+		}
+
+		//英雄W技能
+		if (hero->Skill_W_On_Release == 1 && hero->MP >= 0) {
+
+			hero->MP--;
+
+		}
+
+		if (hero->Skill_W_On_Release == 1 && hero->MP < 0)
+		{
+			hero->Skill_W_On_Release = 0;
+
+			hero->speed = hero->speed *2;
+
+			hero->Attack_Speed = hero->Attack_Speed / 2;
+		}
+	}
+
 	hero->Money++;
 
 	Point temp;
@@ -453,7 +739,7 @@ void HelloWorld::update(float dt)
 
 		hero->isRun = false;
 
-		hero->setAction(hero->direction, "stand", 2);
+		hero->setAction(hero->direction, "stand", 4);
 
 	}
 
@@ -553,7 +839,7 @@ void HelloWorld::update(float dt)
 
 		hero->isRun = false;
 
-		hero->setAction(hero->direction, "stand", 2);
+		hero->setAction(hero->direction, "stand", 4);
 
 		return;
 
@@ -569,7 +855,7 @@ void HelloWorld::update(float dt)
 
 		nowDirection = hero->direction;
 
-		hero->setAction(hero->direction, "run", 2);
+		hero->setAction(hero->direction, "run", 4);
 
 	}
 
@@ -848,90 +1134,420 @@ bool HelloWorld::onTouchBegan(Touch* touch, Event* unused_event)
 }
 void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keycode, Event* event)
 {
+	if (hero->ID == 1)
+	{
+		switch (keycode)
+		{
+		case EventKeyboard::KeyCode::KEY_A:
+		{
+			hero->isRun == false;
 
+			hero->setAction(hero->direction, "attack", 4);
+
+			if (hero->Skill_E_On_Release == 1)
+			{
+				hero->setVisible(true);
+
+			}
+		}
+		case EventKeyboard::KeyCode::KEY_Q:
+		{
+			hero->setAction(hero->direction, "skill", 4);
+		}
+		case EventKeyboard::KeyCode::KEY_W:
+		{
+			hero->setAction(hero->direction, "skill", 4);
+		}
+		case EventKeyboard::KeyCode::KEY_E:
+		{
+			hero->setAction(hero->direction, "skill", 4);
+		}
+		case EventKeyboard::KeyCode::KEY_R:
+		{
+			hero->setAction(hero->direction, "skill", 4);
+
+		}
+		}
+	}
+	if (hero->ID == 2)
+	{
+		switch (keycode)
+		{
+		case EventKeyboard::KeyCode::KEY_A:
+		{
+			hero->isRun == false;
+
+			hero->setAction(hero->direction, "attack", 4);
+
+			if (hero->Skill_E_On_Release == 1)
+			{
+				hero->setVisible(true);
+
+			}
+		}
+		case EventKeyboard::KeyCode::KEY_Q:
+		{
+			hero->setAction(hero->direction, "skill", 4);
+		}
+		case EventKeyboard::KeyCode::KEY_W:
+		{
+			hero->setAction(hero->direction, "skill", 4);
+		}
+		case EventKeyboard::KeyCode::KEY_E:
+		{
+			hero->setAction(hero->direction, "skill", 4);
+		}
+		case EventKeyboard::KeyCode::KEY_R:
+		{
+			hero->setAction(hero->direction, "skill", 4);
+
+		}
+		}
+	}
+	if (hero->ID == 3)
+	{
+		switch (keycode)
+		{
+		case EventKeyboard::KeyCode::KEY_A:
+		{
+			hero->isRun == false;
+
+			hero->setAction(hero->direction, "attack", 4);
+
+			if (hero->Skill_E_On_Release == 1)
+			{
+				hero->setVisible(true);
+
+			}
+		}
+		case EventKeyboard::KeyCode::KEY_Q:
+		{
+			hero->setAction(hero->direction, "skill", 4);
+		}
+		case EventKeyboard::KeyCode::KEY_W:
+		{
+			hero->setAction(hero->direction, "skill", 4);
+		}
+		case EventKeyboard::KeyCode::KEY_E:
+		{
+			hero->setAction(hero->direction, "skill", 4);
+		}
+		case EventKeyboard::KeyCode::KEY_R:
+		{
+			hero->setAction(hero->direction, "skill", 4);
+
+		}
+		}
+	}
 }
 void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 {
-	switch (keycode)
-	{
-	case EventKeyboard::KeyCode::KEY_A:
-	{
-		auto visibleSize = Director::getInstance()->getVisibleSize();
-
-		auto bullet0 = Sprite::create("bullet.png");
-
-		PhysicsBody* bulletBody = PhysicsBody::createBox(bullet0->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT);
-
-		bulletBody->setGravityEnable(false);
-
-		bulletBody->setCategoryBitmask(0x01);
-
-		bulletBody->setContactTestBitmask(0x01);
-
-
-		bulletBody->setCollisionBitmask(0x01);
-
-		bullet0->setPhysicsBody(bulletBody);
-
-		bullet0->setPosition(Point(hero->position.x, hero->position.y));
-
-		this->addChild(bullet0);
-
-		bullet0->setTag(1);
-
-		bullet.push_back(bullet0);
-
-		break;
-	}
-	
-	case EventKeyboard::KeyCode::KEY_Q: {
-		if (hero->MP >= 20&&hero->Skill_Q_On_Release==0) {
-
-			hero->MP -= 20;
-
-			Effect_Q = Sprite::create("Huaji.png");
-
-			Effect_Q->setPosition(Point(pos.x, pos.y));
-
-			Effect_Q->setScale(0.2f);
-
-			this->addChild(Effect_Q);
-
-			hero->Skill_Q_On_Release = 1;
-		}
-
-		break;
-	}
-	case EventKeyboard::KeyCode::KEY_W: {
-
-		if (hero->Skill_W_On_Release==0&&hero->HP>=10)
+	if (hero->ID == 1) {
+		switch (keycode)
 		{
-			hero->HP -= 10;
+		case EventKeyboard::KeyCode::KEY_A:
+		{
+			if (hero->Skill_E_On_Release == 1)
+			{
+				hero->Critical_Rate = hero->Critical_Rate / 2;
 
-			hero->Attack = hero->Attack * 2;
+				hero->Skill_E_On_Release = 0;
 
-			hero->speed = hero->speed * 2;
+			}
+			auto visibleSize = Director::getInstance()->getVisibleSize();
 
-			hero->Skill_W_On_Release = 1;
+			auto bullet0 = Sprite::create("bullet.png");
 
+			PhysicsBody* bulletBody = PhysicsBody::createBox(bullet0->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT);
+
+			bulletBody->setGravityEnable(false);
+
+			bulletBody->setCategoryBitmask(0x01);
+
+			bulletBody->setContactTestBitmask(0x01);
+
+
+			bulletBody->setCollisionBitmask(0x01);
+
+			bullet0->setPhysicsBody(bulletBody);
+
+			bullet0->setPosition(Point(hero->position.x, hero->position.y));
+
+			this->addChild(bullet0);
+
+			bullet0->setTag(1);
+
+			bullet.push_back(bullet0);
+
+
+			break;
 		}
-		else if (hero->Skill_W_On_Release == 1) {
 
-			if (hero->MP > 0) {
+		case EventKeyboard::KeyCode::KEY_Q: {
+			if (hero->MP >= 20 && hero->Skill_Q_On_Release == 0) {
 
-				hero->Attack = hero->Attack / 2;
+				hero->MP -= 20;
+
+				Effect_Q = Sprite::create("Huaji.png");
+
+				Effect_Q->setPosition(Point(pos.x, pos.y));
+
+				Effect_Q->setScale(0.2f);
+
+				this->addChild(Effect_Q);
+
+				hero->Skill_Q_On_Release = 1;
+			}
+
+			break;
+		}
+		case EventKeyboard::KeyCode::KEY_W: {
+
+			if (hero->Skill_W_On_Release == 0 && hero->HP >= 10)
+			{
+				hero->HP -= 10;
+
+				hero->Attack = hero->Attack * 2;
+
+				hero->speed = hero->speed * 2;
+
+				hero->Skill_W_On_Release = 1;
+
+			}
+			else if (hero->Skill_W_On_Release == 1) {
+
+				if (hero->MP > 0) {
+
+					hero->Attack = hero->Attack / 2;
+
+					hero->speed = hero->speed / 2;
+
+					hero->Skill_W_On_Release = 0;
+				}
+
+			}
+
+			break;
+		}
+		case EventKeyboard::KeyCode::KEY_E: {
+			if (hero->MP > 70 && hero->Skill_E_On_Release == 0)
+			{
+				hero->MP -= 70;
+
+				hero->setVisible(false);
+
+				hero->Critical_Rate = hero->Critical_Rate * 10;
+
+				hero->Skill_E_On_Release = 1;
+			}
+			break;
+		}
+		}
+	}
+	if (hero->ID == 2) {
+		switch (keycode)
+		{
+		case EventKeyboard::KeyCode::KEY_A:
+		{
+			if (hero->Skill_E_On_Release == 1)
+			{
+				hero->Critical_Rate = hero->Critical_Rate / 2;
+
+				hero->Skill_E_On_Release = 0;
+
+			}
+			auto visibleSize = Director::getInstance()->getVisibleSize();
+
+			auto bullet0 = Sprite::create("bullet.png");
+
+			PhysicsBody* bulletBody = PhysicsBody::createBox(bullet0->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT);
+
+			bulletBody->setGravityEnable(false);
+
+			bulletBody->setCategoryBitmask(0x01);
+
+			bulletBody->setContactTestBitmask(0x01);
+
+
+			bulletBody->setCollisionBitmask(0x01);
+
+			bullet0->setPhysicsBody(bulletBody);
+
+			bullet0->setPosition(Point(hero->position.x, hero->position.y));
+
+			this->addChild(bullet0);
+
+			bullet0->setTag(1);
+
+			bullet.push_back(bullet0);
+
+
+			break;
+		}
+
+		case EventKeyboard::KeyCode::KEY_Q: {
+			if (hero->MP >= 20 && hero->Skill_Q_On_Release == 0) {
+
+				hero->MP -= 20;
+
+				Effect_Q = Sprite::create("Huaji.png");
+
+				Effect_Q->setPosition(Point(pos.x, pos.y));
+
+				Effect_Q->setScale(0.2f);
+
+				this->addChild(Effect_Q);
+
+				hero->Skill_Q_On_Release = 1;
+			}
+
+			break;
+		}
+		case EventKeyboard::KeyCode::KEY_W: {
+
+			if (hero->Skill_W_On_Release == 0 && hero->HP >= 10)
+			{
+				hero->HP -= 10;
+
+				hero->Attack = hero->Attack * 2;
+
+				//hero->speed = hero->speed * 2;
+
+				hero->Skill_W_On_Release = 1;
+
+			}
+			else if (hero->Skill_W_On_Release == 1) {
+
+				if (hero->MP > 0) {
+
+					hero->Attack = hero->Attack / 2;
+
+					//hero->speed = hero->speed / 2;
+
+					hero->Skill_W_On_Release = 0;
+				}
+
+			}
+
+			break;
+		}
+		case EventKeyboard::KeyCode::KEY_E: {
+			if (hero->MP > 70 && hero->Skill_E_On_Release == 0)
+			{
+				hero->MP -= 70;
+
+				hero->setVisible(false);
+
+				hero->Critical_Rate = hero->Critical_Rate * 10;
+
+				hero->Skill_E_On_Release = 1;
+			}
+			break;
+		}
+		}
+	}
+	if (hero->ID == 3) {
+		switch (keycode)
+		{
+		case EventKeyboard::KeyCode::KEY_A:
+		{
+			if (hero->Skill_E_On_Release == 1)
+			{
+				hero->Critical_Rate = hero->Critical_Rate / 2;
+
+				hero->Skill_E_On_Release = 0;
+
+			}
+			auto visibleSize = Director::getInstance()->getVisibleSize();
+
+			auto bullet0 = Sprite::create("bullet.png");
+
+			PhysicsBody* bulletBody = PhysicsBody::createBox(bullet0->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT);
+
+			bulletBody->setGravityEnable(false);
+
+			bulletBody->setCategoryBitmask(0x01);
+
+			bulletBody->setContactTestBitmask(0x01);
+
+
+			bulletBody->setCollisionBitmask(0x01);
+
+			bullet0->setPhysicsBody(bulletBody);
+
+			bullet0->setPosition(Point(hero->position.x, hero->position.y));
+
+			this->addChild(bullet0);
+
+			bullet0->setTag(1);
+
+			bullet.push_back(bullet0);
+
+
+			break;
+		}
+
+		case EventKeyboard::KeyCode::KEY_Q: {
+			if (hero->MP >= 20 && hero->Skill_Q_On_Release == 0) {
+
+				hero->MP -= 20;
+
+				Effect_Q = Sprite::create("Huaji.png");
+
+				Effect_Q->setPosition(Point(pos.x, pos.y));
+
+				Effect_Q->setScale(0.2f);
+
+				this->addChild(Effect_Q);
+
+				hero->Skill_Q_On_Release = 1;
+			}
+
+			break;
+		}
+		case EventKeyboard::KeyCode::KEY_W: {
+
+			if (hero->Skill_W_On_Release == 0 && hero->HP >= 10)
+			{
+				hero->HP -= 10;
+
+				hero->Attack = hero->Attack * 2;
 
 				hero->speed = hero->speed / 2;
 
-				hero->Skill_W_On_Release = 0;
+				hero->Skill_W_On_Release = 1;
+
+			}
+			else if (hero->Skill_W_On_Release == 1) {
+
+				if (hero->MP > 0) {
+
+					hero->Attack = hero->Attack / 2;
+
+					hero->speed = hero->speed * 2;
+
+					hero->Skill_W_On_Release = 0;
+				}
+
 			}
 
+			break;
 		}
-		
-		break;
-	}
-	}
+		case EventKeyboard::KeyCode::KEY_E: {
+			if (hero->MP > 70 && hero->Skill_E_On_Release == 0)
+			{
+				hero->MP -= 70;
 
+				hero->setVisible(false);
+
+				hero->Critical_Rate = hero->Critical_Rate * 10;
+
+				hero->Skill_E_On_Release = 1;
+			}
+			break;
+		}
+		}
+	}
 }
 bool HelloWorld::onContactBegin(const PhysicsContact& contact)
 {
