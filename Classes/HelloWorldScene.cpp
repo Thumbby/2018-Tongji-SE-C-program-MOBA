@@ -4,7 +4,9 @@
 
 #include "ui/CocosGUI.h"
 
+#include "ShopLayer.h"
 
+int ID1;
 
 USING_NS_CC;
 
@@ -14,10 +16,11 @@ using namespace cocostudio::timeline;
 
 
 
-Scene* HelloWorld::createScene()
-
+Scene* HelloWorld::createScene(int ID)
 {
 	auto scene = Scene::createWithPhysics();
+
+	ID1 = ID;
 
 	auto layer = HelloWorld::create();
 
@@ -36,9 +39,9 @@ Scene* HelloWorld::createScene()
 bool HelloWorld::init()
 
 {
-
+	
 	//////////////////////////////
-
+log("ID %d", ID1);
 	// 1. super init first
 
 	if (!Layer::init())
@@ -63,10 +66,16 @@ bool HelloWorld::init()
 	image = new Image();//ĞÂ½¨µØÍ¼
 
 	image->initWithImageFile("gf.png");
-
-	CCLOG("%d£¬%d", image->getHeight(), image->getWidth());
-
-
+	
+	outButton = MenuItemImage::create("MM01.png", "MM07.png", CC_CALLBACK_1(HelloWorld::Shop, this));
+	outButton->setTag(0);
+	
+	outButton->setRotation(90);
+	outButton->setPosition(visibleSize.width / 80, 2 * visibleSize.height / 3);
+	//this->addChild(outButton);
+	auto menu = Menu::create(outButton, NULL);
+	menu->setPosition(Point::ZERO);
+	this->addChild(menu, 1);
 
 	background = Sprite::create("background.png");
 
@@ -139,7 +148,7 @@ bool HelloWorld::init()
 
 
 	skillTimeCounter = TimeCounter::create();
-	
+
 	this->addChild(skillTimeCounter);
 
 
@@ -155,8 +164,21 @@ bool HelloWorld::init()
 
 	hero = Hero::createHeroSprite(Vec2(320, 180), 2, "stand");
 
+	hero->setName("hero");
+	//
+	hero->ID = ID1;
 
-	hero->ID = 3;
+	string level = to_string(hero->Level);
+
+	label = Label::createWithTTF(level, "fonts/Marker Felt.ttf", 30);
+
+	label->setColor(Color3B(0, 0, 0));
+
+	label->setPosition(Point(hero->position.x - 110, hero->position.y + 75));
+
+    hero->addChild(label);
+
+	log("%d", ID);
 
 	if (hero->ID == 1) {
 
@@ -411,7 +433,7 @@ bool HelloWorld::init()
 	//°Ğ×Ó
 	auto aim1 = Sprite::create("rocker.png");
 
-	aim1->setPosition(Point(visibleSize.width,visibleSize.height));
+	aim1->setPosition(Point(visibleSize.width, visibleSize.height));
 
 	this->addChild(aim1);
 
@@ -448,7 +470,7 @@ bool HelloWorld::init()
 	aim2Body->setCollisionBitmask(0x01);
 
 	aim2->setPhysicsBody(aim2Body);
-	
+
 	//¼üÅÌ¼àÌı
 	auto* dispatcher = Director::getInstance()->getEventDispatcher();
 
@@ -471,6 +493,7 @@ bool HelloWorld::init()
 void HelloWorld::update(float dt)
 
 {
+	//hero->addChild();
 	//auto aim1 = this->getChildByTag(20);
 
 //aim1->setPosition(Point(aim1->getPosition().x + 1, aim1->getPosition().y));
@@ -512,7 +535,7 @@ void HelloWorld::update(float dt)
 
 	label->setPosition(Point(hero->position.x - 110, hero->position.y + 75));
 
-	hero->addChild(label);
+	
 	if (hero->HP == 0) {
 
 		hero->DeadTime = 0;
@@ -562,8 +585,8 @@ void HelloWorld::update(float dt)
 			hero->MP = hero->MaxMP;
 		}
 	}
-	if(hero->ID==1){
-	
+	if (hero->ID == 1) {
+
 		//Ó¢ĞÛQ¼¼ÄÜ
 		switch (hero->Skill_Q_On_Release)
 		{
@@ -719,7 +742,7 @@ void HelloWorld::update(float dt)
 		{
 			hero->Skill_W_On_Release = 0;
 
-			hero->speed = hero->speed *2;
+			hero->speed = hero->speed * 2;
 
 			hero->Attack_Speed = hero->Attack_Speed / 2;
 		}
@@ -1552,6 +1575,7 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 bool HelloWorld::onContactBegin(const PhysicsContact& contact)
 {
 
+	
 	log("CONTACT");
 	Sprite* spriteA = (Sprite*)contact.getShapeA()->getBody()->getNode();
 	Sprite* spriteB = (Sprite*)contact.getShapeB()->getBody()->getNode();
@@ -1580,4 +1604,31 @@ bool HelloWorld::onContactBegin(const PhysicsContact& contact)
 		this->removeChild(spriteB);
 	}
 	return true;
+}
+void HelloWorld::Shop(Ref* psender)
+{
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	
+	if (outButton->getTag() == 0)
+	{
+		outButton->setRotation(270);
+		
+
+		Sprite* window = Sprite::create("window.png");
+		window->setPosition(visibleSize.width / 2, 2 * visibleSize.height / 3-50);
+		window->setScaleX(1.5);
+		this->addChild(window, 0);
+		ShopLayer * scrollView = ShopLayer::create();
+		window->setName("remove1");
+		scrollView->setName("remove2");
+		this->addChild(scrollView);
+		outButton->setTag(1);
+	}
+	else
+	{
+		outButton->setRotation(90);
+		this->removeChildByName("remove1");
+		this->removeChildByName("remove2");
+		outButton->setTag(0);
+	}
 }

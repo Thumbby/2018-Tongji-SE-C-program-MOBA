@@ -10,7 +10,7 @@ Scene* HeroSelectScene::createScene()
 }
 bool HeroSelectScene::init()
 {
-	auto sprite = Sprite::create("background2.jpg");
+	auto sprite = Sprite::create("entrance4.jpg");
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto spriteSize = sprite->getContentSize();
 	sprite->setScaleX(visibleSize.height * 1.0 / spriteSize.height);
@@ -40,13 +40,13 @@ bool HeroSelectScene::init()
 }
 void HeroSelectScene::warrierSelect(cocos2d::Ref* pSender)
 {
-
+	Director::getInstance()->replaceScene(TransitionFade::create(3.0f, HelloWorld::createScene(1)));
 }
 void HeroSelectScene::mageSelect(cocos2d::Ref* pSender)
 {
-
+	Director::getInstance()->replaceScene(TransitionFade::create(3.0f, HelloWorld::createScene(2)));
 }
 void HeroSelectScene::archerSelect(cocos2d::Ref* pSender)
 {
-
+	Director::getInstance()->replaceScene(TransitionFade::create(3.0f, HelloWorld::createScene(3)));
 }

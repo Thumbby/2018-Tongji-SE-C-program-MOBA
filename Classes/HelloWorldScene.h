@@ -31,6 +31,8 @@ private:Sprite* background, mouse;
 
 public:
 
+	int ID = 0;
+
 	Image* image;
 
 	//Sprite* background2;
@@ -66,11 +68,13 @@ public:
 
 	Label* label;
 
+	MenuItemImage* outButton;
+
 	ProgressTimer* progress;
 
 	ProgressTimer* progress2;
 
-	static cocos2d::Scene* createScene();
+	static cocos2d::Scene* createScene(int ID);
 
 	virtual bool init();
 
@@ -87,6 +91,8 @@ public:
 	virtual void onKeyReleased(EventKeyboard::KeyCode keycode, Event* event);
 
 	virtual bool onContactBegin(const PhysicsContact& contact);
+
+	void Shop(Ref* psender);
 
 	vector<Sprite*> bullet;
 
