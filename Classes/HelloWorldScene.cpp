@@ -65,7 +65,7 @@ log("ID %d", ID1);
 
 	image = new Image();//ÐÂ½¨µØÍ¼
 
-	image->initWithImageFile("gf.png");
+	image->initWithImageFile("image.png");
 	
 	outButton = MenuItemImage::create("MM01.png", "MM07.png", CC_CALLBACK_1(HelloWorld::Shop, this));
 	outButton->setTag(0);
@@ -856,6 +856,7 @@ void HelloWorld::update(float dt)
 
 	CCLOG("%f  %f", temp.x - hero->position.x, temp.y - hero->position.y);
 
+
 	if (pos == Point::ZERO)
 
 	{
@@ -867,7 +868,6 @@ void HelloWorld::update(float dt)
 		return;
 
 	}
-
 
 
 	if (hero->isRun == false)
@@ -898,11 +898,10 @@ void HelloWorld::update(float dt)
 
 	}
 
+
 	float r = (sqrt(((temp.x - hero->position.x) * (temp.x - hero->position.x)) + ((temp.y - hero->position.y) * (temp.y - hero->position.y)))) / (hero->speed);
 
-	float r1 = sqrt(((temp.x - hero->position.x) * (temp.x - hero->position.x)) + ((temp.y - hero->position.y) * (temp.y - hero->position.y))) / (hero->speed);;
-
-
+	float r1 = sqrt(((temp.x - hero->position.x) * (temp.x - hero->position.x)) + ((temp.y - hero->position.y) * (temp.y - hero->position.y))) / (hero->speed);
 
 	float x = 0;
 
@@ -931,7 +930,7 @@ void HelloWorld::update(float dt)
 
 		{
 
-			solider = Monster::createMonsterSprite(Vec2(320 + background->getPositionX(), 180 + background->getPositionY()), 2, "stand");
+			solider = Monster::createMonsterSprite(Vec2(720 + background->getPositionX(), 420 + background->getPositionY()), 2, "stand");
 
 			this->addChild(solider);
 
@@ -979,7 +978,7 @@ void HelloWorld::update(float dt)
 
 				{
 
-					solider->setPosition(solider->getPositionX() + 0.5, solider->getPositionY() + 0.5);
+					solider->setPosition(solider->getPositionX() + 0.5, solider->getPositionY() + 0.3);
 
 				}
 
