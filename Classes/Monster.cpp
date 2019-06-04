@@ -35,15 +35,15 @@ void Monster::monsterInit(Point position, int direction, const char* action)
 Animate* Monster::createAnimate(int direction, const char *action, int num, int time)
 {
 	auto* m_frameCache = SpriteFrameCache::getInstance();
-	m_frameCache->addSpriteFramesWithFile("monster.plist", "monster.png");
+	m_frameCache->addSpriteFramesWithFile("run.plist", "run.png");
 	Vector<SpriteFrame*> frameArray;
 	for (int i = 1; i <= num; i++)
 	{
-		auto* frame = m_frameCache->getSpriteFrameByName(String::createWithFormat("%s%d%d.png", action, direction, i)->getCString());
+		auto* frame = m_frameCache->getSpriteFrameByName(String::createWithFormat("run%d.png", i)->getCString());
 		frameArray.pushBack(frame);
 	}
 	Animation* animation = Animation::createWithSpriteFrames(frameArray);
-	animation->setLoops(time);//表示无限循环播放
+	animation->setLoops(-1);//表示无限循环播放
 	animation->setDelayPerUnit(0.1f);//每两张图片的时间隔，图片数目越少，间隔最小就越小
 	//将动画包装成一个动作
 	return Animate::create(animation);
