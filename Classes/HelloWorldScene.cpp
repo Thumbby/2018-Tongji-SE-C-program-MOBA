@@ -36,7 +36,6 @@ Scene* HelloWorld::createScene(int ID)
 
 
 // on "init" you need to initialize your instance
-Point Aim_Location;
 bool HelloWorld::init()
 
 {
@@ -163,12 +162,12 @@ bool HelloWorld::init()
 
 	this->addChild(HeroTimeCounter);
 
-	Atk = TimeCounter::create();
+	Atk=TimeCounter::create();
 
 	this->addChild(Atk);
 
 	//英雄
-	hero = Hero::createHeroSprite(Vec2(400, 200), 2, "stand", ID1);
+	hero = Hero::createHeroSprite(Vec2(400, 200), 2, "stand",ID1);
 
 	hero->setScale(1.0f);
 
@@ -290,20 +289,41 @@ bool HelloWorld::init()
 
 		this->addChild(Skill_Q);
 
+		Skill_W = TimeCounter::create();
+
+		this->addChild(Skill_W);
+
+		Skill_E = TimeCounter::create();
+
+		this->addChild(Skill_E);
+
+
+		hero->Skill_Q_Cool_Down = 4;
+
+		hero->Skill_W_Cool_Down = 10;
+
+		hero->Skill_E_Cool_Down = 20;
+
 		hero->Skill_Q_On_Release = 0;
 
 		hero->Skill_W_On_Release = 0;
 
+		hero->Skill_R_On_Release = 0;
 
-		hero->HP = 100;
+		hero->HP = 50;
 
-		hero->MP = 100;
+		hero->MP = 500;
 
 		hero->Attack = 70;
 
 		hero->Skill_Enhance = 0;
 
-		hero->Critical_Rate = 0;
+
+		hero->Critical_Rate = 10;
+
+		hero->Attack_Speed = 1;
+
+		hero->Attack_Range = 200;
 
 		hero->Defense = 50;
 
@@ -326,13 +346,25 @@ bool HelloWorld::init()
 
 		this->addChild(Skill_W);
 
+		Skill_E = TimeCounter::create();
+
+		this->addChild(Skill_E);
+
 		Skill_R = TimeCounter::create();
 
 		this->addChild(Skill_R);
 
+		hero->Skill_W_Cool_Down = 10;
+
+		hero->Skill_E_Cool_Down = 15;
+
+		hero->Skill_R_Cool_Down = 30;
+
 		hero->Skill_Q_On_Release = 0;
 
 		hero->Skill_W_On_Release = 0;
+
+		hero->Skill_E_On_Release = 0;
 
 		hero->Skill_R_On_Release = 0;
 
@@ -405,7 +437,7 @@ void HelloWorld::update(float dt)
 
 //aim2->setPosition(Point(aim2->getPosition().x + 1, aim2->getPosition().y));
 	hero->Attack_Cool_Down = 3 / (hero->Attack_Speed);
-
+	
 	progress->setPercentage((((float)hero->HP) / hero->MaxHP) * 100);
 
 	progress2->setPercentage((((float)hero->MP) / hero->MaxMP) * 100);
@@ -525,7 +557,27 @@ void HelloWorld::update(float dt)
 		}
 	}
 	if (hero->ID == 2) {
+		//英雄平A
+		switch (hero->Attack_Ready)
+		{
+		case 1: {
 
+			Atk->start();
+
+			hero->Attack_Ready = 2;
+
+			break;
+		}
+		case 2: {
+			float attack_time = Atk->getfCurTime();
+
+			if (attack_time >= hero->Attack_Cool_Down) {
+
+				hero->Attack_Ready = 0;
+			}
+			break;
+		}
+		}
 		//英雄Q技能
 		switch (hero->Skill_Q_On_Release)
 		{
@@ -536,46 +588,72 @@ void HelloWorld::update(float dt)
 
 			break;
 		}
-
 		case 2: {
-			float time1 = Skill_Q->getfCurTime();
-
-			if (time1 >= 5) {
-
-				hero->Skill_Q_On_Release = -1;
-
-				this->removeChild(Effect_Q);
-			}
-
-			break;
-		}
-
-		case -1: {
-			float time2 = Skill_Q->getfCurTime();
-
-			if (time2 >= hero->Skill_Q_Cool_Down) {
-
+			if (Skill_Q->getfCurTime() >= hero->Skill_Q_Cool_Down)
+			{
 				hero->Skill_Q_On_Release = 0;
-
 			}
 			break;
 		}
 		}
 
 		//英雄W技能
-		if (hero->Skill_W_On_Release == 1 && hero->MP >= 0) {
-
-			hero->MP--;
-
-		}
-
-		if (hero->Skill_W_On_Release == 1 && hero->MP < 0)
+		switch (hero->Skill_W_On_Release)
 		{
-			hero->Skill_W_On_Release = 0;
-
-			//hero->speed = hero->speed / 2;
-
-			hero->Attack_Speed = hero->Attack_Speed / 2;
+		case 1: {
+			Skill_W->start();
+			hero->Skill_W_On_Release = 2;
+			break;
+		}
+		case 2: {
+			if (Skill_W->getfCurTime() < 3) {
+				auto target = (Tower*)this->getChildByTag(1000);
+				if (target == NULL)break;
+				if (target->getPosition().x <= Effect_W->getPosition().x + 100 && target->getPosition().x >= Effect_W->getPosition().x - 100) {
+					if (target->getPosition().y <= Effect_W->getPosition().y + 100 && target->getPosition().y >= Effect_W->getPosition().y - 100) {
+						target->HP -= 100;
+					}
+				}
+			}
+			if (Skill_W->getfCurTime() >= 3)
+			{
+				this->removeChild(Effect_W, true);
+				hero->Skill_W_On_Release = 3;
+			}
+			break;
+		}
+		case 3: {
+			if (Skill_W->getfCurTime() >= hero->Skill_W_Cool_Down)
+			{
+				hero->Skill_W_On_Release = 0;
+			}
+		}
+		}
+		//英雄E技能
+		switch (hero->Skill_E_On_Release)
+		{
+		case 1: {
+			Skill_E->start();
+			hero->HP_Recover = 30;
+			hero->Skill_Enhance = 30l;
+			hero->Skill_E_On_Release = 2;
+			break;
+		}
+		case 2: {
+			if (Skill_E->getfCurTime() >= 5)
+			{
+				hero->HP_Recover = 1;
+				hero->Skill_Enhance = 10;
+				hero->Skill_E_On_Release = 3;
+			}
+			break;
+		}
+		case 3: {
+			if (Skill_E->getfCurTime() >= hero->Skill_E_Cool_Down) {
+				hero->Skill_E_On_Release = 0;
+			}
+			break;
+		}
 		}
 	}
 	if (hero->ID == 3) {
@@ -603,7 +681,7 @@ void HelloWorld::update(float dt)
 		//英雄Q技能
 		if (hero->Skill_Q_On_Release == 1 && hero->MP >= 8)
 		{
-			hero->Attack = 70 + (hero->Level*0.5);
+			hero->Attack = 70 + (hero->Level * 0.5);
 
 		}
 		if (hero->MP < 8)
@@ -635,6 +713,21 @@ void HelloWorld::update(float dt)
 			break;
 		}
 		}
+		//英雄E技能
+		switch (hero->Skill_E_On_Release)
+		{
+		case 2: {
+			Skill_E->start();
+			hero->Skill_E_On_Release = 3;
+			break;
+		}
+		case 3: {
+			if (Skill_E->getfCurTime() >= hero->Skill_E_Cool_Down) {
+				hero->Skill_E_On_Release = 0;
+				break;
+			}
+		}
+		}
 		//英雄R技能
 		switch (hero->Skill_R_On_Release)
 		{
@@ -650,6 +743,7 @@ void HelloWorld::update(float dt)
 			{
 				hero->Skill_R_On_Release = 0;
 			}
+			break;
 		}
 		}
 	}
@@ -913,11 +1007,15 @@ void HelloWorld::update(float dt)
 
 		auto sp1 = this->getChildByTag(200);
 
-
+		auto effect_w = this->getChildByName("explosion");
 
 		auto bgPoint = sp1->getPosition();
 
 		auto remPoint = bgPoint;
+
+		Point egPoint;
+		if (effect_w!=NULL)
+		 egPoint = effect_w->getPosition() - bgPoint;
 
 		auto bgSize = sp1->getContentSize();
 
@@ -930,12 +1028,15 @@ void HelloWorld::update(float dt)
 			bgPoint = remPoint;
 		}
 
-		if ((temp.x - hero->position.x) * (temp.x - hero->position.x) + (temp.y - hero->position.y) * (temp.y - hero->position.y) <= hero->speed)
+		if ((temp.x - hero->position.x) * (temp.x - hero->position.x) + (temp.y - hero->position.y) * (temp.y - hero->position.y) <= hero->speed*hero->speed)
 			temp = hero->position;
 
 		else if (bgPoint.y <= 0 && bgPoint.x <= 0 && bgPoint.x + bgSize.width >= visibleSize.width && bgPoint.y + bgSize.height >= visibleSize.height)
 
 			sp1->setPosition(bgPoint);
+
+		if (effect_w!=NULL)
+		effect_w->setPosition(sp1->getPosition() + egPoint);
 
 		auto tower = (Tower*)this->getChildByTag(1000);
 
@@ -987,11 +1088,20 @@ void HelloWorld::update(float dt)
 			if (aim == NULL)break;
 			Point pos1 = (*it)->getPosition();
 
-			Aim_Location = pos1;
-
-			(*it)->setRotation(360 - 180 / 3.14*atan2((aim->getPositionY() - (*it)->getPositionY()), (aim->getPositionX() - (*it)->getPositionX())));
+			(*it)->setRotation(360-180/3.14*atan2((aim->getPositionY() - (*it)->getPositionY()) , (aim->getPositionX() - (*it)->getPositionX())));
 
 			float r2 = sqrt((pos1.x - aim->getPosition().x) * (pos1.x - aim->getPosition().x) + (pos1.y - aim->getPosition().y) * (pos1.y - aim->getPosition().y));
+
+			float distance = (hero->getPosition().x - aim->getPosition().x) * (hero->getPosition().x - aim->getPosition().x) + (hero->getPosition().y - aim->getPosition().y) * (hero->getPosition().y - aim->getPosition().y);
+
+			if (distance<=(hero->Attack_Range*hero->Attack_Range))
+			{
+				hero->Able_To_Attack = 1;
+			}
+			else
+			{
+				hero->Able_To_Attack = 0;
+			}
 
 			(*it)->setPosition(Point(pos1.x + 20 * (aim->getPosition().x - pos1.x) / r2, pos1.y + 20 * (aim->getPosition().y - pos1.y) / r2));
 
@@ -999,12 +1109,12 @@ void HelloWorld::update(float dt)
 
 			if (r2 <= 10)
 			{
-				if ((*it)->getName() == "attack")
+				if ((*it)->getName()=="attack")
 				{
 					aim->HP -= hero->Attack;
 				}
-				else if ((*it)->getName() == "skill") {
-					aim->HP -= 1000;
+				else if ((*it)->getName()== "skill") {
+					aim->HP -=1000;
 				}
 				this->removeChild(*it);
 
@@ -1019,7 +1129,6 @@ void HelloWorld::update(float dt)
 }
 
 Color4B HelloWorld::getColor(int x, int y)
-
 {
 
 	//Image * image = new Image();
@@ -1041,8 +1150,6 @@ Color4B HelloWorld::getColor(int x, int y)
 	Color4B c = { 0, 0, 0, 0 };
 
 	unsigned int* pixel = (unsigned int*)m_pData;
-
-	//int width = image->getWidth();
 
 	pixel = pixel + y * 3000 + x;        //480 是图片的宽
 
@@ -1162,11 +1269,6 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keycode, Event* event)
 
 			hero->setAction(hero->direction, "attack", 4);
 
-			if (hero->Skill_E_On_Release == 1)
-			{
-				hero->setVisible(true);
-
-			}
 		}
 		case EventKeyboard::KeyCode::KEY_Q:
 		{
@@ -1202,6 +1304,8 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keycode, Event* event)
 				if (hero->Skill_E_On_Release == 1)
 				{
 					hero->setVisible(true);
+
+					hero->Skill_E_On_Release = 2;
 
 				}
 			}
@@ -1337,83 +1441,85 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 		{
 		case EventKeyboard::KeyCode::KEY_A:
 		{
-			if (hero->Skill_E_On_Release == 1)
-			{
-				hero->Critical_Rate = hero->Critical_Rate / 2;
+			if (hero->Attack_Ready == 0) {
 
-				hero->Skill_E_On_Release = 0;
 
+					auto bullet0 = Sprite::create("magicbullet.png");
+
+					bullet0->setPosition(Point(hero->position.x, hero->position.y));
+
+					this->addChild(bullet0);
+
+					bullet0->setName("attack");
+
+					bullet.push_back(bullet0);
+
+				    hero->Attack_Ready = 1;
 			}
-			auto visibleSize = Director::getInstance()->getVisibleSize();
-
-			auto bullet0 = Sprite::create("bullet.png");
-
-			PhysicsBody* bulletBody = PhysicsBody::createBox(bullet0->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT);
-
-			bulletBody->setGravityEnable(false);
-
-			bulletBody->setCategoryBitmask(0x01);
-
-			bulletBody->setContactTestBitmask(0x01);
-
-
-			bulletBody->setCollisionBitmask(0x01);
-
-			bullet0->setPhysicsBody(bulletBody);
-
-			bullet0->setPosition(Point(hero->position.x, hero->position.y));
-
-			this->addChild(bullet0);
-
-			bullet0->setName("attack");
-
-			bullet.push_back(bullet0);
-
-
 			break;
 		}
 
 		case EventKeyboard::KeyCode::KEY_Q: {
-			if (hero->MP >= 20 && hero->Skill_Q_On_Release == 0) {
+			if (hero->MP >= 75 &&hero->Skill_Q_On_Release==0)
+			{
+				hero->MP -= 75;
 
-				hero->MP -= 20;
+				auto visibleSize = Director::getInstance()->getVisibleSize();
 
-				Effect_Q = Sprite::create("Huaji.png");
+				auto bullet0 = Sprite::create("magicbomb.png");
 
-				Effect_Q->setPosition(Point(pos.x, pos.y));
+				bullet0->setPosition(Point(hero->position.x, hero->position.y));
 
-				Effect_Q->setScale(0.2f);
+				bullet0->setScale(0.5f);
 
-				this->addChild(Effect_Q);
+				this->addChild(bullet0);
+
+				bullet0->setName("magic");
+
+				bullet.push_back(bullet0);
 
 				hero->Skill_Q_On_Release = 1;
-			}
 
+			}
 			break;
 		}
 		case EventKeyboard::KeyCode::KEY_W: {
 
-			if (hero->MP >= 50 && hero->Skill_W_On_Release == 0)
+			if (hero->MP>=125&&hero->Skill_W_On_Release==0)
 			{
-				hero->MP -= 50;
+				hero->MP -= 125;
 
 				hero->Skill_W_On_Release = 1;
+
+				Effect_W = Sprite::create("explosion.png");
+
+				Effect_W->setPosition(Point(pos.x, pos.y));
+
+				Effect_W->setScale(0.6f);
+
+				Effect_W->setName("explosion");
+
+				this->addChild(Effect_W);
 			}
 
 			break;
 		}
 		case EventKeyboard::KeyCode::KEY_E: {
-			if (hero->MP > 70 && hero->Skill_E_On_Release == 0)
+			if (hero->MP > 100 && hero->Skill_E_On_Release == 0)
 			{
-				hero->MP -= 70;
-
-				hero->setVisible(false);
-
-				hero->Critical_Rate = hero->Critical_Rate * 10;
+				hero->MP -= 100;
 
 				hero->Skill_E_On_Release = 1;
 			}
 			break;
+		}
+		case EventKeyboard::KeyCode::KEY_R: {
+			if (hero->MP >= 200) {
+				hero->MP -= 200;
+				hero->Skill_Q_On_Release = 0;
+				hero->Skill_W_On_Release = 0;
+				hero->Skill_E_On_Release = 0;
+			}
 		}
 		}
 	}
@@ -1422,28 +1528,21 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 		{
 		case EventKeyboard::KeyCode::KEY_A:
 		{
-			float distance = (hero->getPosition().x - Aim_Location.x) * (hero->getPosition().x - Aim_Location.x) + (hero->getPosition().y - Aim_Location.y) * (hero->getPosition().y - Aim_Location.y);
-			if (hero->Attack_Ready == 0 && hero->Attack_Range >= distance) {
+			if (hero->Attack_Ready == 0){
 				if (hero->Skill_E_On_Release == 1)
 				{
 
 					hero->speed = hero->speed / 2;
 
-					hero->Skill_E_On_Release = 0;
-
 					hero->Critical_Rate = hero->Critical_Rate / 2;
 
-				}
-				if (hero->Skill_Q_On_Release == 1)
-				{
-					hero->MP -= 8;
-
-					auto bullet0 = Sprite::create("bullet.png");
 				}
 				auto visibleSize = Director::getInstance()->getVisibleSize();
 
 				if (hero->Skill_Q_On_Release == 1)
 				{
+					hero->MP -= 8;
+
 					auto bullet0 = Sprite::create("bullet.png");
 
 					bullet0->setPosition(Point(hero->position.x, hero->position.y));
@@ -1474,7 +1573,7 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 		}
 
 		case EventKeyboard::KeyCode::KEY_Q: {
-			if (hero->Skill_Q_On_Release == 0) {
+			if ( hero->Skill_Q_On_Release == 0) {
 				hero->Skill_Q_On_Release = 1;
 			}
 			else if (hero->Skill_Q_On_Release == 1) {
@@ -1483,7 +1582,7 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 			break;
 		}
 		case EventKeyboard::KeyCode::KEY_W: {
-			if (hero->MP >= 50 && hero->Skill_W_On_Release == 0)
+			if (hero->MP>=50&&hero->Skill_W_On_Release==0)
 			{
 				hero->Skill_W_On_Release = 1;
 
@@ -1508,7 +1607,7 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 			break;
 		}
 		case EventKeyboard::KeyCode::KEY_R: {
-			if (hero->MP >= 120 && hero->Skill_R_On_Release == 0)
+			if (hero->MP >= 120 &&hero->Skill_R_On_Release==0)
 			{
 				hero->MP -= 120;
 
@@ -1527,6 +1626,7 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 				hero->Skill_R_On_Release = 1;
 
 			}
+			break;
 		}
 		}
 	}
@@ -1571,7 +1671,7 @@ void HelloWorld::Shop(Ref* psender)
 	if (outButton->getTag() == 0)
 	{
 		outButton->setRotation(270);
-
+		
 
 		Sprite* window = Sprite::create("window.png");
 		window->setPosition(visibleSize.width / 2, 2 * visibleSize.height / 3 - 50);

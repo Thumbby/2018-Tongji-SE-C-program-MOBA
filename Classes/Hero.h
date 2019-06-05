@@ -52,12 +52,13 @@ private:
 	int Attack_Ready;
 	float Attack_Cool_Down ;
 	int Skill_Q_On_Release;
-	float Skill_Q_Cool_Down = 10;
+	float Skill_Q_Cool_Down;
 	int Skill_W_On_Release;
-	float Skill_W_Cool_Down = 15;
-	float Skill_E_Cool_Down = 10;
+	float Skill_W_Cool_Down;
+	float Skill_E_Cool_Down;
 	int Skill_E_On_Release;
 	int Skill_R_On_Release;
-	float Skill_R_Cool_Down = 10;
+	float Skill_R_Cool_Down;
+	int Able_To_Attack;
 };
 #endif

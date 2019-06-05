@@ -64,6 +64,8 @@ public:
 
 	TimeCounter* Skill_W;
 
+	TimeCounter* Skill_E;
+
 	TimeCounter* Skill_R;
 
 	Sprite* sprBar;
@@ -73,6 +75,8 @@ public:
 	Sprite* sprBlood;
 
 	Sprite* Effect_Q;
+
+	Sprite* Effect_W;
 
 	Tower* tower;
 
