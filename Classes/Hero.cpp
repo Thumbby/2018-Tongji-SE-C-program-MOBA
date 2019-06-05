@@ -1,7 +1,9 @@
 #include "Hero.h"
 USING_NS_CC;
-Hero* Hero::createHeroSprite(Point position, int direction, const char* name)
+int ID2;
+Hero* Hero::createHeroSprite(Point position, int direction, const char* name,int ID)
 {
+	ID2 = ID;
 	Hero* hero = new Hero();
 	if (hero && hero->init())
 	{
@@ -35,7 +37,18 @@ void Hero::heroInit(Point position, int direction, const char* name)
 Animate* Hero::createAnimate(int direction, const char* action, int num)
 {
 	auto* m_frameCache = SpriteFrameCache::getInstance();
-	m_frameCache->addSpriteFramesWithFile("Demon.plist", "Demon.png");
+	if (ID2==1)
+	{
+		m_frameCache->addSpriteFramesWithFile("guanyu.plist", "guanyu.png");
+	}
+	if (ID2 == 2)
+	{
+		m_frameCache->addSpriteFramesWithFile("zhugeliang.plist", "zhugeliang.png");
+	}
+	if (ID2 == 3)
+	{
+		m_frameCache->addSpriteFramesWithFile("huangzhong.plist", "huangzhong.png");
+	}
 	Vector<SpriteFrame*> frameArray;
 	for (int i = 1; i <= num; i++)
 	{
@@ -43,11 +56,11 @@ Animate* Hero::createAnimate(int direction, const char* action, int num)
 		frameArray.pushBack(frame);
 	}
 	Animation* animation = Animation::createWithSpriteFrames(frameArray);
-	if (action=="stand"||action=="run")
+	if (action == "stand" || action == "run")
 	{
 		animation->setLoops(-1);
 	}
-	else if(action=="attack"||action=="skill")
+	else if (action == "attack" || action == "skill")
 	{
 		animation->setLoops(1);
 	}
@@ -80,7 +93,7 @@ int Hero::Max_Exp(int level) {
 	max_exp = 300 + (level - 1) * 50;
 	return max_exp;
 }
-void Hero::Experience_System(int exp,int Level_Exp) {
+void Hero::Experience_System(int exp, int Level_Exp) {
 	Exp = Exp + exp;
 	if (Exp >= Level_Exp) {
 		Level++;

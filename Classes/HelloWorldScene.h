@@ -10,6 +10,8 @@
 
 #include "Monster.h"
 
+#include "Tower.h"
+
 #include "TimeCounter.h"
 
 #include <vector>
@@ -56,7 +58,13 @@ public:
 
 	TimeCounter* skillTimeCounter;
 
+	TimeCounter* Atk;
+
 	TimeCounter* Skill_Q;
+
+	TimeCounter* Skill_W;
+
+	TimeCounter* Skill_R;
 
 	Sprite* sprBar;
 
@@ -65,6 +73,8 @@ public:
 	Sprite* sprBlood;
 
 	Sprite* Effect_Q;
+
+	Tower* tower;
 
 	Label* label;
 
