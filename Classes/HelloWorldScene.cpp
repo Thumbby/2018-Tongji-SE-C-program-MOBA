@@ -163,12 +163,12 @@ bool HelloWorld::init()
 
 	this->addChild(HeroTimeCounter);
 
-	Atk=TimeCounter::create();
+	Atk = TimeCounter::create();
 
 	this->addChild(Atk);
 
 	//Ó¢ÐÛ
-	hero = Hero::createHeroSprite(Vec2(320, 180), 2, "stand",ID1);
+	hero = Hero::createHeroSprite(Vec2(400, 200), 2, "stand", ID1);
 
 	hero->setScale(1.0f);
 
@@ -405,7 +405,7 @@ void HelloWorld::update(float dt)
 
 //aim2->setPosition(Point(aim2->getPosition().x + 1, aim2->getPosition().y));
 	hero->Attack_Cool_Down = 3 / (hero->Attack_Speed);
-	
+
 	progress->setPercentage((((float)hero->HP) / hero->MaxHP) * 100);
 
 	progress2->setPercentage((((float)hero->MP) / hero->MaxMP) * 100);
@@ -601,12 +601,12 @@ void HelloWorld::update(float dt)
 		}
 		}
 		//Ó¢ÐÛQ¼¼ÄÜ
-		if (hero->Skill_Q_On_Release==1&&hero->MP>=8)
+		if (hero->Skill_Q_On_Release == 1 && hero->MP >= 8)
 		{
-			hero->Attack = 70+(hero->Level*0.5);
+			hero->Attack = 70 + (hero->Level*0.5);
 
 		}
-		if (hero->MP<8)
+		if (hero->MP < 8)
 		{
 			hero->Skill_Q_On_Release = 0;
 		}
@@ -616,19 +616,19 @@ void HelloWorld::update(float dt)
 		{
 		case 1: {
 			Skill_W->start();
-			hero->Attack_Speed = 10 ;
+			hero->Attack_Speed = 10;
 			hero->Skill_W_On_Release = 2;
 			break;
 		}
 		case 2: {
 			if (Skill_W->getfCurTime() >= 3) {
-				hero->Attack_Speed =3;
+				hero->Attack_Speed = 3;
 				hero->Skill_W_On_Release = 3;
 			}
 			break;
 		}
 		case 3: {
-			if (Skill_W->getfCurTime()>=hero->Skill_W_Cool_Down)
+			if (Skill_W->getfCurTime() >= hero->Skill_W_Cool_Down)
 			{
 				hero->Skill_W_On_Release = 0;
 			}
@@ -646,7 +646,7 @@ void HelloWorld::update(float dt)
 			break;
 		}
 		case 2: {
-			if (Skill_R->getfCurTime()>=hero->Skill_R_Cool_Down)
+			if (Skill_R->getfCurTime() >= hero->Skill_R_Cool_Down)
 			{
 				hero->Skill_R_On_Release = 0;
 			}
@@ -913,11 +913,22 @@ void HelloWorld::update(float dt)
 
 		auto sp1 = this->getChildByTag(200);
 
+
+
 		auto bgPoint = sp1->getPosition();
+
+		auto remPoint = bgPoint;
 
 		auto bgSize = sp1->getContentSize();
 
 		bgPoint = Point(bgPoint.x - (temp.x - hero->position.x) / r, bgPoint.y - (temp.y - hero->position.y) / r);
+
+		auto color = getColor(hero->position.x - (int)bgPoint.x, hero->position.y - (int)bgPoint.y);
+
+		if (color.r < 10 && color.g < 10 && color.b>250)
+		{
+			bgPoint = remPoint;
+		}
 
 		if ((temp.x - hero->position.x) * (temp.x - hero->position.x) + (temp.y - hero->position.y) * (temp.y - hero->position.y) <= hero->speed)
 			temp = hero->position;
@@ -978,7 +989,7 @@ void HelloWorld::update(float dt)
 
 			Aim_Location = pos1;
 
-			(*it)->setRotation(360-180/3.14*atan2((aim->getPositionY() - (*it)->getPositionY()) , (aim->getPositionX() - (*it)->getPositionX())));
+			(*it)->setRotation(360 - 180 / 3.14*atan2((aim->getPositionY() - (*it)->getPositionY()), (aim->getPositionX() - (*it)->getPositionX())));
 
 			float r2 = sqrt((pos1.x - aim->getPosition().x) * (pos1.x - aim->getPosition().x) + (pos1.y - aim->getPosition().y) * (pos1.y - aim->getPosition().y));
 
@@ -988,12 +999,12 @@ void HelloWorld::update(float dt)
 
 			if (r2 <= 10)
 			{
-				if ((*it)->getName()=="attack")
+				if ((*it)->getName() == "attack")
 				{
 					aim->HP -= hero->Attack;
 				}
-				else if ((*it)->getName()== "skill") {
-					aim->HP -=1000;
+				else if ((*it)->getName() == "skill") {
+					aim->HP -= 1000;
 				}
 				this->removeChild(*it);
 
@@ -1033,7 +1044,7 @@ Color4B HelloWorld::getColor(int x, int y)
 
 	//int width = image->getWidth();
 
-	pixel = pixel + y * 2998 + x;        //480 ÊÇÍ¼Æ¬µÄ¿í
+	pixel = pixel + y * 3000 + x;        //480 ÊÇÍ¼Æ¬µÄ¿í
 
 	c.r = *pixel & 0xff;
 
@@ -1382,7 +1393,7 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 		}
 		case EventKeyboard::KeyCode::KEY_W: {
 
-			if (hero->MP>=50&&hero->Skill_W_On_Release==0)
+			if (hero->MP >= 50 && hero->Skill_W_On_Release == 0)
 			{
 				hero->MP -= 50;
 
@@ -1412,7 +1423,7 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 		case EventKeyboard::KeyCode::KEY_A:
 		{
 			float distance = (hero->getPosition().x - Aim_Location.x) * (hero->getPosition().x - Aim_Location.x) + (hero->getPosition().y - Aim_Location.y) * (hero->getPosition().y - Aim_Location.y);
-			if (hero->Attack_Ready == 0&&hero->Attack_Range>=distance) {
+			if (hero->Attack_Ready == 0 && hero->Attack_Range >= distance) {
 				if (hero->Skill_E_On_Release == 1)
 				{
 
@@ -1463,7 +1474,7 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 		}
 
 		case EventKeyboard::KeyCode::KEY_Q: {
-			if ( hero->Skill_Q_On_Release == 0) {
+			if (hero->Skill_Q_On_Release == 0) {
 				hero->Skill_Q_On_Release = 1;
 			}
 			else if (hero->Skill_Q_On_Release == 1) {
@@ -1472,7 +1483,7 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 			break;
 		}
 		case EventKeyboard::KeyCode::KEY_W: {
-			if (hero->MP>=50&&hero->Skill_W_On_Release==0)
+			if (hero->MP >= 50 && hero->Skill_W_On_Release == 0)
 			{
 				hero->Skill_W_On_Release = 1;
 
@@ -1497,7 +1508,7 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 			break;
 		}
 		case EventKeyboard::KeyCode::KEY_R: {
-			if (hero->MP >= 120 &&hero->Skill_R_On_Release==0)
+			if (hero->MP >= 120 && hero->Skill_R_On_Release == 0)
 			{
 				hero->MP -= 120;
 
@@ -1560,7 +1571,7 @@ void HelloWorld::Shop(Ref* psender)
 	if (outButton->getTag() == 0)
 	{
 		outButton->setRotation(270);
-		
+
 
 		Sprite* window = Sprite::create("window.png");
 		window->setPosition(visibleSize.width / 2, 2 * visibleSize.height / 3 - 50);
