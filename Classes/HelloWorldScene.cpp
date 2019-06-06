@@ -479,16 +479,16 @@ void HelloWorld::update(float dt)
 
 		hero->life = 0;
 
-		if (hero->ID==1)
-		{
-			hero->Skill_E_On_Release = 0;
-		}
-
 	}
 
 	if (hero->life==0) {
 
 		hero->setVisible(false);
+
+		if (hero->ID == 1)
+		{
+			hero->Skill_E_On_Release = 0;
+		}
 
 		if ((DeadTime->getfCurTime()) >= 5) {
 
