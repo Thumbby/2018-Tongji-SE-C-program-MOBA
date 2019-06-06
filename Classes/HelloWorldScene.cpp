@@ -7,6 +7,7 @@
 #include "ShopLayer.h"
 
 #include <cmath>
+
 int ID1;
 
 USING_NS_CC;
@@ -185,6 +186,8 @@ bool HelloWorld::init()
 
 	hero->Money = 0;
 
+	hero->speed = 2;
+
 	hero->Exp = 0;
 
 	hero->Attack_Ready = 0;
@@ -275,7 +278,7 @@ bool HelloWorld::init()
 
 		hero->Skill_W_Cool_Down = 10;
 
-		hero->Skill_E_Cool_Down = 10;
+		hero->Skill_R_Cool_Down = 30;
 
 		hero->Skill_Q_On_Release = 0;
 
@@ -283,9 +286,15 @@ bool HelloWorld::init()
 
 		hero->Skill_E_On_Release = 0;
 
-		hero->HP = 100;
+		hero->Skill_R_On_Release = 0;
 
-		hero->MP = 500;
+		hero->MaxHP = 1000;
+
+		hero->MaxMP = 300;
+
+		hero->HP = 1000;
+
+		hero->MP = 300;
 
 		hero->Attack = 70;
 
@@ -295,13 +304,13 @@ bool HelloWorld::init()
 
 		hero->Skill_Enhance = 0;
 
-		hero->Critical_Rate = 0;
+		hero->Critical_Rate = 10;
 
-		hero->Defense = 50;
+		hero->Defense = 55;
 
-		hero->Resistance = 30;
+		hero->Resistance = 35;
 
-		hero->HP_Recover = 1;
+		hero->HP_Recover = 1.8;
 
 		hero->MP_Recover = 0.2;
 
@@ -335,14 +344,17 @@ bool HelloWorld::init()
 
 		hero->Skill_R_On_Release = 0;
 
-		hero->HP = 50;
+		hero->MaxHP = 600;
 
-		hero->MP = 500;
+		hero->MaxMP = 450;
 
-		hero->Attack = 70;
+		hero->HP = 600;
+
+		hero->MP = 450;
+
+		hero->Attack = 55;
 
 		hero->Skill_Enhance = 0;
-
 
 		hero->Critical_Rate = 10;
 
@@ -350,13 +362,13 @@ bool HelloWorld::init()
 
 		hero->Attack_Range = 200;
 
-		hero->Defense = 50;
+		hero->Defense = 30;
 
 		hero->Resistance = 30;
 
-		hero->HP_Recover = 1;
+		hero->HP_Recover = 1.2;
 
-		hero->MP_Recover = 0.2;
+		hero->MP_Recover = 0.8;
 
 		this->addChild(hero);
 
@@ -390,9 +402,13 @@ bool HelloWorld::init()
 
 		hero->Skill_R_On_Release = 0;
 
-		hero->HP = 500;
+		hero->MaxHP = 650;
 
-		hero->MP = 500;
+		hero->MaxMP = 300;
+
+		hero->HP = 650;
+
+		hero->MP = 300;
 
 		hero->Attack = 70;
 
@@ -404,13 +420,13 @@ bool HelloWorld::init()
 
 		hero->Attack_Range = 200;
 
-		hero->Defense = 50;
+		hero->Defense = 40;
 
-		hero->Resistance = 30;
+		hero->Resistance = 25;
 
-		hero->HP_Recover = 1;
+		hero->HP_Recover = 1.5;
 
-		hero->MP_Recover = 0.2;
+		hero->MP_Recover = 0.4;
 
 		this->addChild(hero);
 
@@ -452,8 +468,16 @@ bool HelloWorld::init()
 void HelloWorld::update(float dt)
 
 {
-
-	hero->Attack_Cool_Down = 3 / (hero->Attack_Speed);
+	float coin = rand() % 100 + 1;
+	if (coin<=hero->Critical_Rate)
+	{
+		hero->Critical = 1;
+	}
+	else
+	{
+		hero->Critical = 0;
+	}
+	hero->Attack_Cool_Down = 5 / (hero->Attack_Speed);
 	
 	progress->setPercentage((((float)hero->HP) / hero->MaxHP) * 100);
 
@@ -493,7 +517,7 @@ void HelloWorld::update(float dt)
 		if ((DeadTime->getfCurTime()) >= 5) {
 
 
-			/*for (auto solider : m_soliderManager)
+			for (auto solider : m_soliderManager)
 
 			{
 
@@ -505,7 +529,7 @@ void HelloWorld::update(float dt)
 
 				}
 
-			}*/
+			}
 
 			background->setPosition(0, 0);
 
@@ -568,18 +592,18 @@ void HelloWorld::update(float dt)
 		}
 
 		case 2: {
-			if (Skill_Q->getfCurTime()<2)
+			if (Skill_Q->getfCurTime()<0.5)
 			{
 				auto target = (Tower*)this->getChildByTag(1000);
 				if (target == NULL)break;
 				if (target->getPosition().x<=450&&target->getPosition().x>=250)
 				{
 					if (target->getPosition().y <=250 && target->getPosition().y >= 150) {
-						target->HP -= 40;
+						target->HP -= 2*(1+hero->Level+hero->Attack*0.45);
 					}
 				}
 			}
-			else if (Skill_Q->getfCurTime() >= 2) {
+			else if (Skill_Q->getfCurTime() >= 0.5) {
 				hero->Skill_Q_On_Release = 3;
 				this->removeChild(Effect_Q);
 			}
@@ -612,9 +636,9 @@ void HelloWorld::update(float dt)
 				if (target->getPosition().x <= 450 && target->getPosition().x >= 250)
 				{
 					if (target->getPosition().y <= 250 && target->getPosition().y >= 150) {
-						target->HP -= 40;
+						target->HP -= 5*(1+hero->Level+hero->Skill_Enhance*0.35);
 						if (hero->HP < hero->MaxHP) {
-							hero->HP += 10;
+							hero->HP += 5;
 						}
 					}
 				}
@@ -637,9 +661,8 @@ void HelloWorld::update(float dt)
 		switch (hero->Skill_E_On_Release)
 		{
 		case 1: {
-			hero->speed = 7;
 
-			hero->HP -= 5;
+			hero->HP -= 3;
 
 			break;
 		}
@@ -650,18 +673,23 @@ void HelloWorld::update(float dt)
 		case 1: {
 			Skill_R->start();
 			hero->Skill_R_On_Release = 2;
+			hero->HP_Recover += 20*(1+hero->Level/10);
+			hero->Defense += 70* (1 + hero->Level / 10);
+			hero->Resistance += 70* (1 + hero->Level / 10);
+			hero->Attack_Range += 200;
+			hero->Attack_Speed *= 1.75;
 			break;
 		}
 		case 2: {
-			if (Skill_R->getfCurTime() <= 10) {
-				hero->HP_Recover = 50;
-				hero->Defense = 100;
-				hero->Resistance = 100;
-				hero->Attack_Range = 400;
-				hero->Attack_Speed = 5;
-			}
-			else if (Skill_R->getfCurTime() >= 10) {
-				hero->Skill_R_On_Release = 3;
+
+              if (Skill_R->getfCurTime() >= 10) {
+				  hero->Skill_R_On_Release = 2;
+				  hero->HP_Recover -= 20 * (1 + hero->Level / 10);
+				  hero->Defense -= 70 * (1 + hero->Level / 10);
+				  hero->Resistance -= 70 * (1 + hero->Level / 10);
+				  hero->Attack_Range -= 20;
+				  hero->Attack_Speed /= hero->Attack * 1.75;
+				  hero->Skill_R_On_Release = 3;
 			}
 			break;
 		}
@@ -728,7 +756,7 @@ void HelloWorld::update(float dt)
 				if (target == NULL)break;
 				if (target->getPosition().x <= Effect_W->getPosition().x + 100 && target->getPosition().x >= Effect_W->getPosition().x - 100) {
 					if (target->getPosition().y <= Effect_W->getPosition().y + 100 && target->getPosition().y >= Effect_W->getPosition().y - 100) {
-						target->HP -= 100;
+						target->HP -= 50*(1+hero->Level+hero->Skill_Enhance/100);
 					}
 				}
 			}
@@ -751,16 +779,16 @@ void HelloWorld::update(float dt)
 		{
 		case 1: {
 			Skill_E->start();
-			hero->HP_Recover = 30;
-			hero->Skill_Enhance = 30l;
+			hero->HP_Recover += 15;
+			hero->Skill_Enhance += 300;
 			hero->Skill_E_On_Release = 2;
 			break;
 		}
 		case 2: {
 			if (Skill_E->getfCurTime() >= 5)
 			{
-				hero->HP_Recover = 1;
-				hero->Skill_Enhance = 10;
+				hero->HP_Recover -= 15;
+				hero->Skill_Enhance -= 300;
 				hero->Skill_E_On_Release = 3;
 			}
 			break;
@@ -811,13 +839,13 @@ void HelloWorld::update(float dt)
 		{
 		case 1: {
 			Skill_W->start();
-			hero->Attack_Speed = 10;
+			hero->Attack_Speed += 5;
 			hero->Skill_W_On_Release = 2;
 			break;
 		}
 		case 2: {
 			if (Skill_W->getfCurTime() >= 3) {
-				hero->Attack_Speed = 3;
+				hero->Attack_Speed -=5;
 				hero->Skill_W_On_Release = 3;
 			}
 			break;
@@ -833,12 +861,12 @@ void HelloWorld::update(float dt)
 		//Ó¢ÐÛE¼¼ÄÜ
 		switch (hero->Skill_E_On_Release)
 		{
-		case 2: {
+		case 1: {
 			Skill_E->start();
-			hero->Skill_E_On_Release = 3;
+			hero->Skill_E_On_Release = 2;
 			break;
 		}
-		case 3: {
+		case 2: {
 			if (Skill_E->getfCurTime() >= hero->Skill_E_Cool_Down) {
 				hero->Skill_E_On_Release = 0;
 				break;
@@ -1017,7 +1045,7 @@ void HelloWorld::update(float dt)
 
 	}
 
-	float r = (sqrt(((temp.x - hero->position.x) * (temp.x - hero->position.x)) + ((temp.y - hero->position.y) * (temp.y - hero->position.y)))) / (hero->speed);
+	float r = (sqrt(((temp.x - hero->position.x) * (temp.x - hero->position.x)) + ((temp.y - hero->position.y) * (temp.y - hero->position.y)))) / ((hero->speed)*5);
 
 	float r1 = sqrt(((temp.x - hero->position.x) * (temp.x - hero->position.x)) + ((temp.y - hero->position.y) * (temp.y - hero->position.y))) / (hero->speed);;
 
@@ -1228,10 +1256,19 @@ void HelloWorld::update(float dt)
 			{
 				if ((*it)->getName()=="attack")
 				{
-					aim->HP -= hero->Attack;
+					if (hero->Critical==1)
+					{
+						aim->HP -= hero->Attack*2;
+					}
+					else {
+						aim->HP -= hero->Attack;
+					}
 				}
 				else if ((*it)->getName()== "skill") {
-					aim->HP -=1000;
+					aim->HP -=300*(1+hero->Attack);
+				}
+				else if ((*it)->getName() == "magic") {
+					aim->HP -= 120*(1+hero->Skill_Enhance);
 				}
 				this->removeChild(*it);
 
@@ -1443,90 +1480,96 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keycode, Event* event)
 }
 void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 {
-	if (hero->ID == 1) {
-		switch (keycode)
-		{
-		case EventKeyboard::KeyCode::KEY_A:
-		{
-			if (hero->Attack_Ready == 0) {
-
-
-				auto bullet0 = Sprite::create("hack.png");
-
-				bullet0->setPosition(Point(hero->position.x, hero->position.y));
-
-				this->addChild(bullet0);
-
-				bullet0->setName("attack");
-
-				bullet0->setScale(0.4f);
-
-				bullet.push_back(bullet0);
-
-				hero->Attack_Ready = 1;
-			}
-			break;
-		}
-
-		case EventKeyboard::KeyCode::KEY_Q: {
-			if (hero->MP >= 50 && hero->Skill_Q_On_Release == 0) {
-
-				hero->MP -= 50;
-
-				Effect_Q = Sprite::create("slash.png");
-
-				Effect_Q->setScale(0.4f);
-
-				hero->Skill_Q_On_Release = 1;
-			}
-
-			break;
-		}
-		case EventKeyboard::KeyCode::KEY_W: {
-
-			if (hero->Skill_W_On_Release == 0 && hero->MP >= 75)
+	if (hero->life == 1)
+	{
+		if (hero->ID == 1) {
+			switch (keycode)
 			{
-				hero->MP -= 75;
-
-				Effect_W = Sprite::create("roar.png");
-
-				Effect_W->setScale(0.4f);
-
-				Effect_W->setPosition(400, 200);
-
-				this->addChild(Effect_W);
-
-				hero->Skill_W_On_Release = 1;
-
-			}
-			break;
-		}
-		case EventKeyboard::KeyCode::KEY_E: {
-			if (hero->MP > 25 && hero->Skill_E_On_Release == 0)
+			case EventKeyboard::KeyCode::KEY_A:
 			{
-				hero->MP -= 25;
+				if (hero->Attack_Ready == 0) {
 
-				hero->Skill_E_On_Release = 1;
+
+					auto bullet0 = Sprite::create("hack.png");
+
+					bullet0->setPosition(Point(hero->position.x, hero->position.y));
+
+					this->addChild(bullet0);
+
+					bullet0->setName("attack");
+
+					bullet0->setScale(0.4f);
+
+					bullet.push_back(bullet0);
+
+					hero->Attack_Ready = 1;
+				}
+				break;
 			}
-			else if (hero->Skill_E_On_Release == 1) {
-				hero->Skill_E_On_Release = 0;
+
+			case EventKeyboard::KeyCode::KEY_Q: {
+				if (hero->MP >= 50 && hero->Skill_Q_On_Release == 0) {
+
+					hero->MP -= 50;
+
+					Effect_Q = Sprite::create("slash.png");
+
+					Effect_Q->setScale(0.4f);
+
+					hero->Skill_Q_On_Release = 1;
+				}
+
+				break;
 			}
-			break;
-		}
-		case EventKeyboard::KeyCode::KEY_R: {
-			if (hero->MP >= 200 && hero->Level >= 6) {
-				hero->MP -= 200;
-				hero->Skill_R_On_Release = 1;
+			case EventKeyboard::KeyCode::KEY_W: {
+
+				if (hero->Skill_W_On_Release == 0 && hero->MP >= 75)
+				{
+					hero->MP -= 75;
+
+					Effect_W = Sprite::create("roar.png");
+
+					Effect_W->setScale(0.4f);
+
+					Effect_W->setPosition(400, 200);
+
+					this->addChild(Effect_W);
+
+					hero->Skill_W_On_Release = 1;
+
+				}
+				break;
+			}
+			case EventKeyboard::KeyCode::KEY_E: {
+				if (hero->MP > 25 && hero->Skill_E_On_Release == 0)
+				{
+					hero->MP -= 25;
+
+					hero->Skill_E_On_Release = 1;
+
+					hero->speed = hero->speed * (1 + 0.3);
+				}
+				else if (hero->Skill_E_On_Release == 1) {
+					hero->Skill_E_On_Release = 0;
+
+					hero->speed = hero->speed / 1.3;
+				}
+				break;
+			}
+			case EventKeyboard::KeyCode::KEY_R: {
+				if (hero->MP >= 200 && hero->Level >= 6) {
+					hero->MP -= 200;
+					hero->Skill_R_On_Release = 1;
+				}
+			}
 			}
 		}
-		}
-	}
-	if (hero->ID == 2) {
-		switch (keycode)
-		{
-		case EventKeyboard::KeyCode::KEY_A:
-		{
-			if (hero->Attack_Ready == 0) {
+		if (hero->ID == 2) {
+			switch (keycode)
+			{
+			case EventKeyboard::KeyCode::KEY_A:
+			{
+				if (hero->Attack_Ready == 0) {
 
 
 					auto bullet0 = Sprite::create("magicbullet.png");
@@ -1539,182 +1582,186 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 
 					bullet.push_back(bullet0);
 
-				    hero->Attack_Ready = 1;
-			}
-			break;
-		}
-
-		case EventKeyboard::KeyCode::KEY_Q: {
-			if (hero->MP >= 75 &&hero->Skill_Q_On_Release==0)
-			{
-				hero->MP -= 75;
-
-				auto visibleSize = Director::getInstance()->getVisibleSize();
-
-				auto bullet0 = Sprite::create("magicbomb.png");
-
-				bullet0->setPosition(Point(hero->position.x, hero->position.y));
-
-				bullet0->setScale(0.5f);
-
-				this->addChild(bullet0);
-
-				bullet0->setName("magic");
-
-				bullet.push_back(bullet0);
-
-				hero->Skill_Q_On_Release = 1;
-
-			}
-			break;
-		}
-		case EventKeyboard::KeyCode::KEY_W: {
-
-			if (hero->MP>=125&&hero->Skill_W_On_Release==0)
-			{
-				hero->MP -= 125;
-
-				hero->Skill_W_On_Release = 1;
-
-				Effect_W = Sprite::create("explosion.png");
-
-				Effect_W->setPosition(Point(pos.x, pos.y));
-
-				Effect_W->setScale(0.6f);
-
-				Effect_W->setName("explosion");
-
-				this->addChild(Effect_W);
-			}
-
-			break;
-		}
-		case EventKeyboard::KeyCode::KEY_E: {
-			if (hero->MP > 100 && hero->Skill_E_On_Release == 0)
-			{
-				hero->MP -= 100;
-
-				hero->Skill_E_On_Release = 1;
-			}
-			break;
-		}
-		case EventKeyboard::KeyCode::KEY_R: {
-			if (hero->MP >= 200&&hero->Level>=6) {
-				hero->MP -= 200;
-				hero->Skill_Q_On_Release = 0;
-				hero->Skill_W_On_Release = 0;
-				hero->Skill_E_On_Release = 0;
-			}
-		}
-		}
-	}
-	if (hero->ID == 3) {
-		switch (keycode)
-		{
-		case EventKeyboard::KeyCode::KEY_A:
-		{
-			if (hero->Attack_Ready == 0){
-				if (hero->Skill_E_On_Release == 1)
-				{
-
-					hero->speed = hero->speed / 2;
-
-					hero->Critical_Rate = hero->Critical_Rate / 2;
-
+					hero->Attack_Ready = 1;
 				}
-				auto visibleSize = Director::getInstance()->getVisibleSize();
+				break;
+			}
 
-				if (hero->Skill_Q_On_Release == 1)
+			case EventKeyboard::KeyCode::KEY_Q: {
+				if (hero->MP >= 75 && hero->Skill_Q_On_Release == 0)
 				{
-					hero->MP -= 8;
-
-					auto bullet0 = Sprite::create("bullet.png");
-
-					bullet0->setPosition(Point(hero->position.x, hero->position.y));
-
-					this->addChild(bullet0);
-
-					bullet0->setName("attack");
-
-					bullet.push_back(bullet0);
-
-				}
-				else if (hero->Skill_Q_On_Release == 0) {
-
-					auto bullet0 = Sprite::create("arrow.png");
-
-					bullet0->setPosition(Point(hero->position.x, hero->position.y));
-
-					this->addChild(bullet0);
-
-					bullet0->setName("attack");
-
-					bullet.push_back(bullet0);
-
-				}
-				hero->Attack_Ready = 1;
-			}
-			break;
-		}
-
-		case EventKeyboard::KeyCode::KEY_Q: {
-			if ( hero->Skill_Q_On_Release == 0) {
-				hero->Skill_Q_On_Release = 1;
-			}
-			else if (hero->Skill_Q_On_Release == 1) {
-				hero->Skill_Q_On_Release = 0;
-			}
-			break;
-		}
-		case EventKeyboard::KeyCode::KEY_W: {
-			if (hero->MP>=50&&hero->Skill_W_On_Release==0)
-			{
-				hero->Skill_W_On_Release = 1;
-
-				hero->MP -= 50;
-			}
-
-			break;
-		}
-		case EventKeyboard::KeyCode::KEY_E: {
-			if (hero->MP > 70 && hero->Skill_E_On_Release == 0)
-			{
-				hero->MP -= 70;
-
-				hero->setVisible(false);
-
-				hero->Critical_Rate = hero->Critical_Rate * 10;
-
-				hero->speed = hero->speed * 2;
-
-				hero->Skill_E_On_Release = 1;
-			}
-			break;
-		}
-		case EventKeyboard::KeyCode::KEY_R: {
-			if (hero->MP >= 120 &&hero->Skill_R_On_Release==0)
-			{
-				if (hero->Level >= 6)
-				{
-					hero->MP -= 120;
+					hero->MP -= 75;
 
 					auto visibleSize = Director::getInstance()->getVisibleSize();
 
-					auto bullet0 = Sprite::create("bomb.png");
+					auto bullet0 = Sprite::create("magicbomb.png");
 
 					bullet0->setPosition(Point(hero->position.x, hero->position.y));
 
+					bullet0->setScale(0.5f);
+
 					this->addChild(bullet0);
 
-					bullet0->setName("skill");
+					bullet0->setName("magic");
 
 					bullet.push_back(bullet0);
 
-					hero->Skill_R_On_Release = 1;
+					hero->Skill_Q_On_Release = 1;
+
+				}
+				break;
+			}
+			case EventKeyboard::KeyCode::KEY_W: {
+
+				if (hero->MP >= 125 && hero->Skill_W_On_Release == 0)
+				{
+					hero->MP -= 125;
+
+					hero->Skill_W_On_Release = 1;
+
+					Effect_W = Sprite::create("explosion.png");
+
+					Effect_W->setPosition(Point(pos.x, pos.y));
+
+					Effect_W->setScale(0.6f);
+
+					Effect_W->setName("explosion");
+
+					this->addChild(Effect_W);
+				}
+
+				break;
+			}
+			case EventKeyboard::KeyCode::KEY_E: {
+				if (hero->MP > 100 && hero->Skill_E_On_Release == 0)
+				{
+					hero->MP -= 100;
+
+					hero->Skill_E_On_Release = 1;
+				}
+				break;
+			}
+			case EventKeyboard::KeyCode::KEY_R: {
+				if (hero->MP >= 200 && hero->Level >= 6) {
+					hero->MP -= 200;
+					hero->Skill_Q_On_Release = 0;
+					hero->Skill_W_On_Release = 0;
+					hero->Skill_E_On_Release = 0;
 				}
 			}
-			break;
+			}
 		}
+		if (hero->ID == 3) {
+			switch (keycode)
+			{
+			case EventKeyboard::KeyCode::KEY_A:
+			{
+				if (hero->Attack_Ready == 0) {
+					if (hero->isVisible() == false)
+					{
+						hero->setVisible(true);
+
+						hero->speed = hero->speed / 2;
+
+						hero->Critical_Rate = hero->Critical_Rate / 2;
+
+					}
+					auto visibleSize = Director::getInstance()->getVisibleSize();
+
+					if (hero->Skill_Q_On_Release == 1)
+					{
+						hero->MP -= 8;
+
+						auto bullet0 = Sprite::create("bullet.png");
+
+						bullet0->setPosition(Point(hero->position.x, hero->position.y));
+
+						this->addChild(bullet0);
+
+						bullet0->setName("attack");
+
+						bullet.push_back(bullet0);
+
+					}
+					else if (hero->Skill_Q_On_Release == 0) {
+
+						auto bullet0 = Sprite::create("arrow.png");
+
+						bullet0->setPosition(Point(hero->position.x, hero->position.y));
+
+						this->addChild(bullet0);
+
+						bullet0->setName("attack");
+
+						bullet.push_back(bullet0);
+
+					}
+					hero->Attack_Ready = 1;
+				}
+				break;
+			}
+
+			case EventKeyboard::KeyCode::KEY_Q: {
+				if (hero->Skill_Q_On_Release == 0) {
+					hero->Skill_Q_On_Release = 1;
+				}
+				else if (hero->Skill_Q_On_Release == 1) {
+					hero->Skill_Q_On_Release = 0;
+				}
+				break;
+			}
+			case EventKeyboard::KeyCode::KEY_W: {
+				if (hero->MP >= 50 && hero->Skill_W_On_Release == 0)
+				{
+					hero->Skill_W_On_Release = 1;
+
+					hero->MP -= 50;
+				}
+
+				break;
+			}
+			case EventKeyboard::KeyCode::KEY_E: {
+				if (hero->MP > 70 && hero->Skill_E_On_Release == 0)
+				{
+					hero->MP -= 70;
+
+					hero->Critical_Rate = hero->Critical_Rate * 10;
+
+					hero->setVisible(false);
+
+					log("fuck%d",hero->isVisible());
+
+					hero->speed = hero->speed * 2;
+
+					hero->Skill_E_On_Release = 1;
+				}
+				break;
+			}
+			case EventKeyboard::KeyCode::KEY_R: {
+				if (hero->MP >= 120 && hero->Skill_R_On_Release == 0)
+				{
+					if (hero->Level >= 6)
+					{
+						hero->MP -= 120;
+
+						auto visibleSize = Director::getInstance()->getVisibleSize();
+
+						auto bullet0 = Sprite::create("bomb.png");
+
+						bullet0->setPosition(Point(hero->position.x, hero->position.y));
+
+						this->addChild(bullet0);
+
+						bullet0->setName("skill");
+
+						bullet.push_back(bullet0);
+
+						hero->Skill_R_On_Release = 1;
+					}
+				}
+				break;
+			}
+			}
 		}
 	}
 }
