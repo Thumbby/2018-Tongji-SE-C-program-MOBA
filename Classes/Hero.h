@@ -35,6 +35,7 @@ public:
 	CREATE_FUNC(Hero);
 private:
 	int ID;
+	int weaponCount=0;
 	String name;
 	int Money;
 	float HP, MP;
@@ -62,5 +63,6 @@ private:
 	float Skill_R_Cool_Down;
 	int Able_To_Attack;
 	int life;
+	int kill = 0, dead = 0, assist = 0;
 };
 #endif

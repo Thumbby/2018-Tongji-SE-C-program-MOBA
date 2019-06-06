@@ -165,9 +165,11 @@ void ShopLayer::shopMenuCallback(Ref* psender)
 	this->removeChildByTag(100);
 	this->removeChildByTag(200);
 	this->removeChildByName("menu");
+	this->removeChildByName("menu1");
 	Size winSize = Director::getInstance()->getWinSize();
 	auto itemSelect = (MenuItem*)psender;
 	int num = itemSelect->getTag(); 
+
 	Label* contents;
 	switch (num)
 	{
@@ -296,7 +298,17 @@ void ShopLayer::shopMenuCallback(Ref* psender)
 		price = 1800;
 		break;
 	}
-
+	if (hero->Weapon[num] >= 1)
+	{
+		Label* sell = Label::createWithSystemFont("Sell", "Arial", 20);
+		auto btn1 = MenuItemLabel::create(sell, CC_CALLBACK_1(ShopLayer::sellCallback, this, num,price));
+		btn1->setTag(num);
+		btn1->setPosition(75 * winSize.width / 100, 50 * winSize.height / 100);
+		Menu* menu1 = Menu::create(btn1, NULL);
+		menu1->setName("menu1");
+		menu1->setPosition(Vec2::ZERO);
+		this->addChild(menu1, 1);
+	}
 	contents->setTag(100);
 	contents->setPosition(70 * winSize.width / 100, 60 * winSize.height / 100);
 	this->addChild(contents);
@@ -314,6 +326,16 @@ void ShopLayer::shopMenuCallback(Ref* psender)
 	{
 		this->removeChildByTag(200);
 		Size winSize = Director::getInstance()->getWinSize();
+		if (hero->weaponCount == 6)
+		{
+			Label* label1 = Label::createWithSystemFont("No More Weapons", "Arial", 20);
+			label1->setPosition(75 * winSize.width / 100, 30 * winSize.height / 100 + 10);
+			label1->setTag(200);
+			this->addChild(label1);
+			return;
+	    }
+		hero->weaponCount++;
+		
 		if (hero->Money < price)
 		{
 			Label* label1 = Label::createWithSystemFont("More Money...", "Arial", 20);
@@ -331,115 +353,115 @@ void ShopLayer::shopMenuCallback(Ref* psender)
 		{
 		case 1:
 			hero->speed += 2;
-			hero->Weapon[1] = 1;
+			hero->Weapon[1]++;
 			break;
 		case 2:
 			hero->Attack += 20;
-			hero->Weapon[2] = 1;
+			hero->Weapon[2]++;
 			break;
 		case 3:
 			hero->Attack_Speed += 10;
-			hero->Weapon[3] = 1;
+			hero->Weapon[3]++;
 			break;
 		case 4:
 			hero->Critical_Rate += 10;
-			hero->Weapon[4] = 1;
+			hero->Weapon[4]++;
 			break;
 		case 5:
 			hero->Attack += 80;
-			hero->Weapon[5] = 1;
+			hero->Weapon[5]++;
 			break;
 		case 6:
 			hero->Attack_Speed += 25;
-			hero->Weapon[6] = 1;
+			hero->Weapon[6]++;
 			break;
 		case 7:
 			hero->Critical_Rate += 25;
-			hero->Weapon[7] = 1;
+			hero->Weapon[7]++;
 			break;
 		case 8:
 			hero->Attack += 160;
-			hero->Weapon[8] = 1;
+			hero->Weapon[8]++;
 			break;
 		case 9:
 			hero->Attack_Speed += 40;
-			hero->Weapon[9] = 1;
+			hero->Weapon[9]++;
 			break;
 		case 10:
 			hero->Critical_Rate += 50;
-			hero->Weapon[10] = 1;
+			hero->Weapon[10]++;
 			break;
 		case 11:
 			hero->Skill_Enhance += 5;
-			hero->Weapon[11] = 1;
+			hero->Weapon[11]++;
 			break;
 		case 12:
 			hero->MaxMP += 300;
-			hero->Weapon[12] = 1;
+			hero->Weapon[12]++;
 			break;
 		case 13:
 			hero->MP_Recover += 5;
-			hero->Weapon[13] = 1;
+			hero->Weapon[13]++;
 			break;
 		case 14:
 			hero->Skill_Enhance += 15;
-			hero->Weapon[14] = 1;
+			hero->Weapon[14]++;
 			break;
 		case 15:
 			hero->MaxMP += 400;
-			hero->Weapon[15] = 1;
+			hero->Weapon[15]++;
 			break;
 		case 16:
 			hero->MP_Recover += 15;
-			hero->Weapon[16] = 1;
+			hero->Weapon[16]++;
 			break;
 		case 17:
 			hero->Skill_Enhance += 50;
-			hero->Weapon[17] = 1;
+			hero->Weapon[17]++;
 			break;
 		case 18:
 			hero->MaxMP + 1000;
-			hero->Weapon[18] = 1;
+			hero->Weapon[18]++;
 			break;
 		case 19:
 			hero->MP_Recover += 40;
-			hero->Weapon[19] = 1;
+			hero->Weapon[19]++;
 			break;
 		case 20:
 			hero->MaxHP += 300;
-			hero->Weapon[20] = 1;
+			hero->Weapon[20]++;
 			break;
 		case 21:
 			hero->Defense += 90;
-			hero->Weapon[21] = 1;
+			hero->Weapon[21]++;
 			break;
 		case 22:
 			hero->Resistance += 90;
-			hero->Weapon[22] = 1;
+			hero->Weapon[22]++;
 			break;
 		case 23:
 			hero->MaxHP += 1000;
-			hero->Weapon[23] = 1;
+			hero->Weapon[23]++;
 			break;
 		case 24:
 			hero->Defense += 210;
-			hero->Weapon[24] = 1;
+			hero->Weapon[24]++;
 			break;
 		case 25:
 			hero->Resistance += 150;
-			hero->Weapon[25] = 1;
+			hero->Weapon[25]++;
 			break;
 		case 26:
 			hero->MaxHP += 2000;
-			hero->Weapon[26] = 1;
+			hero->Weapon[26]++;
 			break;
 		case 27:
 			hero->Defense += 400;
-			hero->Weapon[27] = 1;
+			hero->Weapon[27]++;
 			break;
 		case 28:
 			hero->Resistance += 320; 
-			hero->Weapon[28] = 1;
+			hero->Weapon[28]++;
 			break;
 		case 29:
 
@@ -452,4 +474,127 @@ void ShopLayer::shopMenuCallback(Ref* psender)
 			break;
 		}
 	}
-
+	void ShopLayer::sellCallback(Ref* psender, int num,int price)
+	{
+		hero->Money += price/2;
+		hero->Weapon[num]--;
+		hero->weaponCount--;
+		if (hero->Weapon[num] == 0)
+		{
+			this->removeChildByName("menu1");
+		}
+		switch (num)
+		{
+		case 1:
+			hero->speed -= 2;
+			break;
+		case 2:
+			hero->Attack -= 20;
+		
+			break;
+		case 3:
+			hero->Attack_Speed -= 10;
+			
+			break;
+		case 4:
+			hero->Critical_Rate -= 10;
+		
+			break;
+		case 5:
+			hero->Attack -= 80;
+		
+			break;
+		case 6:
+			hero->Attack_Speed -= 25;
+		
+			break;
+		case 7:
+			hero->Critical_Rate -= 25;
+			
+			break;
+		case 8:
+			hero->Attack -= 160;
+			
+			break;
+		case 9:
+			hero->Attack_Speed -= 40;
+		
+			break;
+		case 10:
+			hero->Critical_Rate -= 50;
+			
+			break;
+		case 11:
+			hero->Skill_Enhance -= 5;
+		
+			break;
+		case 12:
+			hero->MaxMP -= 300;
+			
+			break;
+		case 13:
+			hero->MP_Recover -= 5;
+	
+			break;
+		case 14:
+			hero->Skill_Enhance -= 15;
+			
+			break;
+		case 15:
+			hero->MaxMP -= 400;
+		
+			break;
+		case 16:
+			hero->MP_Recover -= 15;
+		
+			break;
+		case 17:
+			hero->Skill_Enhance -= 50;
+			
+			break;
+		case 18:
+			hero->MaxMP -= 1000;
+		
+			break;
+		case 19:
+			hero->MP_Recover -= 40;
+			
+			break;
+		case 20:
+			hero->MaxHP -= 300;
+			
+			break;
+		case 21:
+			hero->Defense -= 90;
+			
+			break;
+		case 22:
+			hero->Resistance -= 90;
+			
+			break;
+		case 23:
+			hero->MaxHP -= 1000;
+			
+			break;
+		case 24:
+			hero->Defense -= 210;
+			
+			break;
+		case 25:
+			hero->Resistance -= 150;
+		
+			break;
+		case 26:
+			hero->MaxHP -= 2000;
+			
+			break;
+		case 27:
+			hero->Defense -= 400;
+			
+			break;
+		case 28:
+			hero->Resistance -= 320;
+		
+			break;
+		}
+    }

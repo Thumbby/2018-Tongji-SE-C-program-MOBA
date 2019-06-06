@@ -468,6 +468,7 @@ bool HelloWorld::init()
 void HelloWorld::update(float dt)
 
 {
+	log("Money %d  Speed %f", hero->Money, hero->speed);
 	float coin = rand() % 100 + 1;
 	if (coin <= hero->Critical_Rate)
 	{
@@ -1279,7 +1280,38 @@ void HelloWorld::update(float dt)
 				it++;
 		}
 	}
-
+	this->removeChildByName("kda");
+	this->removeChildByName("eco");
+	this->removeChildByName("weapon0");
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	string kill = to_string(hero->kill);
+	string dead = to_string(hero->dead);
+	string assist = to_string(hero->assist);
+	Label* kda=Label::Label::createWithSystemFont(kill+" "+dead+" "+assist, "Arial", 20);
+	kda->setPosition(3 * visibleSize.width / 4, visibleSize.height-20);
+	kda->setName("kda");
+	this->addChild(kda);
+	string _ = "$ ";
+	string money = to_string(hero->Money);
+	Label* eco = Label::Label::createWithSystemFont(_+money, "Arial", 20);
+	eco->setPosition(3 * visibleSize.width / 4, visibleSize.height-40);
+	eco->setName("eco");
+	this->addChild(eco);
+	string weapon = "Weapon  ";
+	for (auto it = hero->Weapon.begin(); it != hero->Weapon.end(); it++)
+	{
+		int num = (*it).first;
+		int cnt = (*it).second;
+		for (int i = 1; i <= cnt; i++)
+		{
+			string temp = to_string(num) + " ";
+			weapon += temp;
+		}
+	}
+	Label* weapon0 = Label::Label::createWithSystemFont(weapon, "Arial", 20);
+	weapon0->setPosition(3 * visibleSize.width / 4, visibleSize.height - 60);
+	weapon0->setName("weapon0");
+	this->addChild(weapon0);
 }
 
 Color4B HelloWorld::getColor(int x, int y)

@@ -11,6 +11,7 @@ public:
 	CREATE_FUNC(ShopLayer);
 	void shopMenuCallback(Ref* psender);
 	void buyCallback(Ref* psender,int price);
+	void sellCallback(Ref* psender, int num,int price);
 	static ShopLayer* createLayer(Hero* hero1);
 private:
 	ScrollView* mscrollView;
