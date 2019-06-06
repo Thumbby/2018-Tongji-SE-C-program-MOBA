@@ -21,7 +21,7 @@ public:
 	int Max_Exp(int level);
 	Point position;
 	Sprite* sprite;
-	static Hero* createHeroSprite(Point position, int direction, const char* name,int ID);
+	static Hero* createHeroSprite(Point position, int direction, const char* name, int ID);
 	void heroInit(Point position, int direction, const char* name);
 	virtual bool init();
 	Animate* createAnimate(int direction, const char* action, int num);
@@ -46,11 +46,12 @@ private:
 	int Exp, Level;
 	float Critical_Rate;
 	float speed = 5;
+	int Critical;
 	float DeadTime;
 	float RebornTime;
 	int Reward_Money, Reward_Exp;
 	int Attack_Ready;
-	float Attack_Cool_Down ;
+	float Attack_Cool_Down;
 	int Skill_Q_On_Release;
 	float Skill_Q_Cool_Down;
 	int Skill_W_On_Release;

@@ -1,7 +1,7 @@
 #include "Hero.h"
 USING_NS_CC;
 int ID2;
-Hero* Hero::createHeroSprite(Point position, int direction, const char* name,int ID)
+Hero* Hero::createHeroSprite(Point position, int direction, const char* name, int ID)
 {
 	ID2 = ID;
 	Hero* hero = new Hero();
@@ -37,7 +37,7 @@ void Hero::heroInit(Point position, int direction, const char* name)
 Animate* Hero::createAnimate(int direction, const char* action, int num)
 {
 	auto* m_frameCache = SpriteFrameCache::getInstance();
-	if (ID2==1)
+	if (ID2 == 1)
 	{
 		m_frameCache->addSpriteFramesWithFile("guanyu.plist", "guanyu.png");
 	}
