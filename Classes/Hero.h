@@ -27,7 +27,7 @@ public:
 	Animate* createAnimate(int direction, const char* action, int num);
 	void setAction(int direction, const char* action, int num);
 	void moveTo(float x, float y);
-	void Death();
+	//void Death();
 	void Experience_System(int exp, int Level_Exp);
 	void Money_System(int money);
 	void Get_Attack(int damage);
@@ -60,5 +60,6 @@ private:
 	int Skill_R_On_Release;
 	float Skill_R_Cool_Down;
 	int Able_To_Attack;
+	int life;
 };
 #endif

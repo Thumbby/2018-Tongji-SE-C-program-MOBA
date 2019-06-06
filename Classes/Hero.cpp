@@ -83,11 +83,11 @@ void Hero::moveTo(float x, float y)
 	position.y += y / r;
 	sprite->setPosition(position);
 }
-void Hero::Death() {
+/*void Hero::Death() {
 	if (HP <= 0) {
 		this->setVisible(false);
 	}
-}
+}*/
 int Hero::Max_Exp(int level) {
 	int max_exp;
 	max_exp = 300 + (level - 1) * 50;

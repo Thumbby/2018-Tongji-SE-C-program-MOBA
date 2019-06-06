@@ -56,6 +56,8 @@ public:
 
 	TimeCounter* HeroTimeCounter;
 
+	TimeCounter* DeadTime;
+
 	TimeCounter* skillTimeCounter;
 
 	TimeCounter* Atk;
