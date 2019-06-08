@@ -1,5 +1,6 @@
 #include "cocos2d.h"
 #include "HeroSelectScene.h"
+#include"HelloWorldScene.h"
 using namespace cocos2d;
 Scene* HeroSelectScene::createScene()
 {

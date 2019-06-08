@@ -1069,7 +1069,7 @@ void HelloWorld::update(float dt)
 
 	}
 
-
+	//²ú±ø
 	if (soliderTimeCounter->getfCurTime() >= 15)
 
 	{
@@ -1078,7 +1078,7 @@ void HelloWorld::update(float dt)
 
 		{
 
-			solider = Monster::createMonsterSprite(Vec2(320 + background->getPositionX(), 180 + background->getPositionY()), 2, "stand");
+			solider = Monster::createMonsterSprite(Vec2(720 + background->getPositionX(), 420 + background->getPositionY()), 2, "stand");
 
 			this->addChild(solider);
 
@@ -1126,7 +1126,7 @@ void HelloWorld::update(float dt)
 
 				{
 
-					solider->setPosition(solider->getPositionX() + 0.5, solider->getPositionY() + 0.5);
+					solider->setPosition(solider->getPositionX() + 0.5, solider->getPositionY() + 0.3);
 
 				}
 
@@ -1158,6 +1158,7 @@ void HelloWorld::update(float dt)
 		auto bgPoint = sp1->getPosition();
 
 		auto remPoint = bgPoint;
+		auto flag = 0;
 
 		Point egPoint;
 		if (effect_w != NULL)
@@ -1172,15 +1173,28 @@ void HelloWorld::update(float dt)
 		if (color.r < 10 && color.g < 10 && color.b>250)
 		{
 			bgPoint = remPoint;
+			flag = 1;
 		}
-
-		if ((temp.x - hero->position.x) * (temp.x - hero->position.x) + (temp.y - hero->position.y) * (temp.y - hero->position.y) <= 100*hero->speed*hero->speed)
+		if ((temp.x - hero->position.x) * (temp.x - hero->position.x) + (temp.y - hero->position.y) * (temp.y - hero->position.y) <= 100 * hero->speed * hero->speed)
+		{
 			temp = hero->position;
+		}
 
 		else if (bgPoint.y <= 0 && bgPoint.x <= 0 && bgPoint.x + bgSize.width >= visibleSize.width && bgPoint.y + bgSize.height >= visibleSize.height)
 
+		{
 			sp1->setPosition(bgPoint);
+		}
+		if (flag == 0)
+		{
+			for (auto solider : m_soliderManager)
 
+			{
+
+				solider->setPosition(solider->getPositionX() - (temp.x - hero->position.x) / r, solider->getPositionY() - (temp.y - hero->position.y) / r);
+
+			}
+		}
 		if (effect_w != NULL)
 			effect_w->setPosition(sp1->getPosition() + egPoint);
 
@@ -1189,16 +1203,6 @@ void HelloWorld::update(float dt)
 		tower->setPosition(bgPoint + Point(500, 500));
 
 		monster->setPosition(monsterX - (temp.x - hero->position.x) / r1, monsterY - (temp.y - hero->position.y) / r1);
-
-		for (auto solider : m_soliderManager)
-
-		{
-
-			solider->setPosition(solider->getPositionX() - (temp.x - hero->position.x) / r1, solider->getPositionY() - (temp.y - hero->position.y) / r1);
-
-		}
-
-
 
 		pos.x = pos.x - (temp.x - hero->position.x) / r;
 
