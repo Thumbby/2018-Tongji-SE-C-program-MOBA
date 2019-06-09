@@ -334,19 +334,21 @@ void ShopLayer::shopMenuCallback(Ref* psender)
 			this->addChild(label1);
 			return;
 	    }
-		hero->weaponCount++;
+		
 		
 		if (hero->Money < price)
 		{
+
 			Label* label1 = Label::createWithSystemFont("More Money...", "Arial", 20);
 			label1->setPosition(75 * winSize.width / 100, 30 * winSize.height / 100+10);
 			label1->setTag(200);
 			this->addChild(label1);
 			return;
 		}
-			
+		
 		else
 			hero->Money -= price;
+		hero->weaponCount++;	
 		auto itemSelect = (MenuItem*)psender;
 		int num = itemSelect->getTag();
 		switch (num)
@@ -420,7 +422,7 @@ void ShopLayer::shopMenuCallback(Ref* psender)
 			hero->Weapon[17]++;
 			break;
 		case 18:
-			hero->MaxMP + 1000;
+			hero->MaxMP +=1000;
 			hero->Weapon[18]++;
 			break;
 		case 19:

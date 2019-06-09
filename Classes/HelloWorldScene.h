@@ -1,9 +1,6 @@
 #ifndef __HELLOWORLD_SCENE_H__
 
 #define __HELLOWORLD_SCENE_H__
-
-
-
 #include "cocos2d.h"
 
 #include"Hero.h"
@@ -11,10 +8,9 @@
 #include "Monster.h"
 
 #include "Tower.h"
-
-#include "TimeCounter.h"
-
 #include <vector>
+#include "TimeCounter.h"
+#include "_Bullet.h"
 USING_NS_CC;
 using namespace std;
 
@@ -80,8 +76,6 @@ public:
 
 	Sprite* Effect_W;
 
-	Tower* tower;
-
 	Label* label;
 
 	MenuItemImage* outButton;
@@ -106,17 +100,17 @@ public:
 
 	virtual void onKeyReleased(EventKeyboard::KeyCode keycode, Event* event);
 
-	virtual bool onContactBegin(const PhysicsContact& contact);
-
 	void Shop(Ref* psender);
 
 	vector<Sprite*> bullet;
 
-	PhysicsWorld* m_world;
+	vector<Sprite*> bullett;
 
-	void setPhyWorld(PhysicsWorld* world) { m_world = world; };
+	vector<Tower*> tower;
 
-	int choice = 0;
+	vector<TimeCounter*> timec;
+
+	int choice = 2;
 };
 
 
