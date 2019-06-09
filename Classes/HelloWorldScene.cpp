@@ -186,7 +186,7 @@ bool HelloWorld::init()
 
 	hero->Money = 0;
 
-	hero->speed = 2;
+	hero->speed = 1.4;
 
 	hero->Exp = 0;
 
@@ -258,8 +258,6 @@ bool HelloWorld::init()
 
 	progress2->setPosition(Point(hero->position.x, hero->position.y + 40));
 
-	log("%d", ID);
-
 	if (hero->ID == 1) {
 
 		Skill_Q = TimeCounter::create();
@@ -298,7 +296,7 @@ bool HelloWorld::init()
 
 		hero->Attack = 70;
 
-		hero->Attack_Speed = 1;
+		hero->Attack_Speed = 1.5;
 
 		hero->Attack_Range = 20;
 
@@ -358,7 +356,7 @@ bool HelloWorld::init()
 
 		hero->Critical_Rate = 10;
 
-		hero->Attack_Speed = 1;
+		hero->Attack_Speed = 1.6;
 
 		hero->Attack_Range = 200;
 
@@ -416,7 +414,7 @@ bool HelloWorld::init()
 
 		hero->Critical_Rate = 10;
 
-		hero->Attack_Speed = 1;
+		hero->Attack_Speed = 1.2;
 
 		hero->Attack_Range = 200;
 
@@ -600,7 +598,7 @@ void HelloWorld::update(float dt)
 				if (target->getPosition().x <= 450 && target->getPosition().x >= 250)
 				{
 					if (target->getPosition().y <= 250 && target->getPosition().y >= 150) {
-						target->HP -= 2 * (1 + hero->Level + hero->Attack*0.45);
+						target->HP -= 2 * (1 + hero->Level + hero->Attack * 0.45);
 					}
 				}
 			}
@@ -637,7 +635,7 @@ void HelloWorld::update(float dt)
 				if (target->getPosition().x <= 450 && target->getPosition().x >= 250)
 				{
 					if (target->getPosition().y <= 250 && target->getPosition().y >= 150) {
-						target->HP -= 5 * (1 + hero->Level + hero->Skill_Enhance*0.35);
+						target->HP -= 5 * (1 + hero->Level + hero->Skill_Enhance * 0.35);
 						if (hero->HP < hero->MaxHP) {
 							hero->HP += 5;
 						}
@@ -674,10 +672,10 @@ void HelloWorld::update(float dt)
 		case 1: {
 			Skill_R->start();
 			hero->Skill_R_On_Release = 2;
-			hero->HP_Recover += 20 * (1 + hero->Level / 10);
-			hero->Defense += 70 * (1 + hero->Level / 10);
-			hero->Resistance += 70 * (1 + hero->Level / 10);
-			hero->Attack_Range += 200;
+			hero->HP_Recover += 15 * (1 + hero->Level / 10);
+			hero->Defense += 35 * (1 + hero->Level / 10);
+			hero->Resistance += 35 * (1 + hero->Level / 10);
+			hero->Attack_Range += 180;
 			hero->Attack_Speed *= 1.75;
 			break;
 		}
@@ -757,7 +755,7 @@ void HelloWorld::update(float dt)
 				if (target == NULL)break;
 				if (target->getPosition().x <= Effect_W->getPosition().x + 100 && target->getPosition().x >= Effect_W->getPosition().x - 100) {
 					if (target->getPosition().y <= Effect_W->getPosition().y + 100 && target->getPosition().y >= Effect_W->getPosition().y - 100) {
-						target->HP -= 50 * (1 + hero->Level + hero->Skill_Enhance / 100);
+						target->HP -= 35 * (1 + hero->Level + hero->Skill_Enhance / 100);
 					}
 				}
 			}
@@ -868,8 +866,9 @@ void HelloWorld::update(float dt)
 			break;
 		}
 		case 2: {
+			hero->setVisible(false);
 			if (Skill_E->getfCurTime() >= hero->Skill_E_Cool_Down) {
-				hero->Skill_E_On_Release = 0;
+				hero->Skill_E_On_Release = 3;
 				break;
 			}
 		}
@@ -1238,13 +1237,13 @@ void HelloWorld::update(float dt)
 			if (aim == NULL)break;
 			Point pos1 = (*it)->getPosition();
 
-			(*it)->setRotation(360 - 180 / 3.14*atan2((aim->getPositionY() - (*it)->getPositionY()), (aim->getPositionX() - (*it)->getPositionX())));
+			(*it)->setRotation(360 - 180 / 3.14 * atan2((aim->getPositionY() - (*it)->getPositionY()), (aim->getPositionX() - (*it)->getPositionX())));
 
 			float r2 = sqrt((pos1.x - aim->getPosition().x) * (pos1.x - aim->getPosition().x) + (pos1.y - aim->getPosition().y) * (pos1.y - aim->getPosition().y));
 
 			float distance = (hero->getPosition().x - aim->getPosition().x) * (hero->getPosition().x - aim->getPosition().x) + (hero->getPosition().y - aim->getPosition().y) * (hero->getPosition().y - aim->getPosition().y);
 
-			if (distance <= (hero->Attack_Range*hero->Attack_Range))
+			if (distance <= (hero->Attack_Range * hero->Attack_Range))
 			{
 				hero->Able_To_Attack = 1;
 			}
@@ -1270,10 +1269,10 @@ void HelloWorld::update(float dt)
 					}
 				}
 				else if ((*it)->getName() == "skill") {
-					aim->HP -= 300 * (1 + hero->Attack);
+					aim->HP -= 150 * (1 + hero->Attack);
 				}
 				else if ((*it)->getName() == "magic") {
-					aim->HP -= 120 * (1 + hero->Skill_Enhance);
+					aim->HP -= 90 * (1 + hero->Skill_Enhance);
 				}
 				this->removeChild(*it);
 
@@ -1291,14 +1290,14 @@ void HelloWorld::update(float dt)
 	string kill = to_string(hero->kill);
 	string dead = to_string(hero->dead);
 	string assist = to_string(hero->assist);
-	Label* kda=Label::Label::createWithSystemFont(kill+" "+dead+" "+assist, "Arial", 20);
-	kda->setPosition(3 * visibleSize.width / 4, visibleSize.height-20);
+	Label* kda = Label::Label::createWithSystemFont(kill + " " + dead + " " + assist, "Arial", 20);
+	kda->setPosition(3 * visibleSize.width / 4, visibleSize.height - 20);
 	kda->setName("kda");
 	this->addChild(kda);
 	string _ = "$ ";
 	string money = to_string(hero->Money);
-	Label* eco = Label::Label::createWithSystemFont(_+money, "Arial", 20);
-	eco->setPosition(3 * visibleSize.width / 4, visibleSize.height-40);
+	Label* eco = Label::Label::createWithSystemFont(_ + money, "Arial", 20);
+	eco->setPosition(3 * visibleSize.width / 4, visibleSize.height - 40);
 	eco->setName("eco");
 	this->addChild(eco);
 	string weapon = "Weapon  ";
@@ -1525,7 +1524,6 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 			{
 				if (hero->Attack_Ready == 0) {
 
-
 					auto bullet0 = Sprite::create("hack.png");
 
 					bullet0->setPosition(Point(hero->position.x, hero->position.y));
@@ -1693,13 +1691,11 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 			case EventKeyboard::KeyCode::KEY_A:
 			{
 				if (hero->Attack_Ready == 0) {
-					if (hero->isVisible() == false)
+					if (hero->Skill_E_On_Release==3||hero->Skill_E_On_Release==2)
 					{
 						hero->setVisible(true);
 
-						hero->speed = hero->speed / 2;
-
-						hero->Critical_Rate = hero->Critical_Rate / 2;
+						hero->Skill_E_On_Release = 0;
 
 					}
 					auto visibleSize = Director::getInstance()->getVisibleSize();
@@ -1763,11 +1759,7 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 
 					hero->Critical_Rate = hero->Critical_Rate * 10;
 
-					hero->setVisible(false);
-
-					log("fuck%d", hero->isVisible());
-
-					hero->speed = hero->speed * 2;
+					hero->speed = hero->speed * (1+hero->speed*2/100);
 
 					hero->Skill_E_On_Release = 1;
 				}
@@ -1862,14 +1854,8 @@ void HelloWorld::Shop(Ref* psender)
 	}
 }
 /*PhysicsBody* bulletBody = PhysicsBody::createBox(bullet0->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT);
-
 bulletBody->setGravityEnable(false);
-
 bulletBody->setCategoryBitmask(0x01);
-
 bulletBody->setContactTestBitmask(0x01);
-
-
 bulletBody->setCollisionBitmask(0x01);
-
 bullet0->setPhysicsBody(bulletBody);*/
