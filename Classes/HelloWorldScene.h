@@ -10,7 +10,6 @@
 #include "Tower.h"
 #include <vector>
 #include "TimeCounter.h"
-#include "_Bullet.h"
 USING_NS_CC;
 using namespace std;
 
@@ -109,6 +108,8 @@ public:
 	vector<Tower*> tower;
 
 	vector<TimeCounter*> timec;
+
+	string level;
 
 	int choice = 2;
 };

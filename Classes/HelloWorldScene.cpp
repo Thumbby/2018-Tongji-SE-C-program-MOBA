@@ -342,7 +342,7 @@ bool HelloWorld::init()
 
 		hero->Attack_Speed = 1.2;
 
-		hero->Attack_Range = 200;
+		hero->Attack_Range = 100;
 
 		hero->Defense = 30;
 
@@ -400,7 +400,7 @@ bool HelloWorld::init()
 
 		hero->Attack_Speed = 2;
 
-		hero->Attack_Range = 200;
+		hero->Attack_Range = 100;
 
 		hero->Defense = 40;
 
@@ -713,7 +713,6 @@ void HelloWorld::update(float dt)
 			hero->HP_Recover += 15 * (1 + hero->Level / 10);
 			hero->Defense += 35 * (1 + hero->Level / 10);
 			hero->Resistance += 35 * (1 + hero->Level / 10);
-			hero->Attack_Range += 150;
 			hero->Attack_Speed *= 1.75;
 			break;
 		}
@@ -724,7 +723,6 @@ void HelloWorld::update(float dt)
 				hero->HP_Recover -= 15 * (1 + hero->Level / 10);
 				hero->Defense -= 35 * (1 + hero->Level / 10);
 				hero->Resistance -= 35 * (1 + hero->Level / 10);
-				hero->Attack_Range -= 150;
 				hero->Attack_Speed /= hero->Attack * 1.75;
 				hero->Skill_R_On_Release = 3;
 			}
@@ -1274,8 +1272,6 @@ void HelloWorld::update(float dt)
 
 	}
 
-
-
 	if (monster->isAttacked)
 
 	{
@@ -1365,7 +1361,7 @@ void HelloWorld::update(float dt)
 
 			float r3 = sqrt((pos1.x - hero->position.x) * (pos1.x - hero->position.x) + (pos1.y - hero->position.y) * (pos1.y - hero->position.y));
 
-			(*it)->setPosition(Point(pos1.x + 20 * (hero->position.x - pos1.x) / r2, pos1.y + 20 * (hero->position.y - pos1.y) / r2));
+			(*it)->setPosition(Point(pos1.x + 20 * (hero->position.x - pos1.x) / r3, pos1.y + 20 * (hero->position.y - pos1.y) / r3));
 
 			if (r3 <= 10)
 			{
@@ -1615,12 +1611,15 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 {
 	if (hero->life == 1)
 	{
+		auto aim = (Tower*)background->getChildByTag(choice);
+		auto aimPoint = aim->getPosition() + background->getPosition();
+		float distance = (hero->getPosition().x - aimPoint.x) * (hero->getPosition().x - aimPoint.x) + (hero->getPosition().y - aimPoint.y) * (hero->getPosition().y - aimPoint.y);
 		if (hero->ID == 1) {
 			switch (keycode)
 			{
 			case EventKeyboard::KeyCode::KEY_A:
 			{
-				if (hero->Attack_Ready == 0) {
+				if (hero->Attack_Ready == 0&&(distance<=200000)) {
 
 					auto bullet0 = Sprite::create("hack.png");
 
@@ -1701,7 +1700,7 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 			{
 			case EventKeyboard::KeyCode::KEY_A:
 			{
-				if (hero->Attack_Ready == 0) {
+				if (hero->Attack_Ready == 0&& (distance <=400000)) {
 
 
 					auto bullet0 = Sprite::create("magicbullet.png");
@@ -1788,7 +1787,7 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 			{
 			case EventKeyboard::KeyCode::KEY_A:
 			{
-				if (hero->Attack_Ready == 0) {
+				if (hero->Attack_Ready == 0&& (distance <= 400000)) {
 					if (hero->Skill_E_On_Release==2||hero->Skill_E_On_Release==3)
 					{
 						hero->setVisible(true);
