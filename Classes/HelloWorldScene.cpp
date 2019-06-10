@@ -1220,7 +1220,13 @@ void HelloWorld::update(float dt)
 		for (int i = 0; i < tower.size(); i++)
 		{
 			TimeCounter* t = (TimeCounter*)tower[i]->getChildByName("t");
-			tower[i]->progress->setPercentage((tower[i]->HP / tower[i]->MaxHP) * 100);
+			tower[i]->progress->setPercentage((((float)tower[i]->HP) / tower[i]->MaxHP) * 100);
+			if (tower[i]->HP <= 0)
+			{
+				tower[i]->sprBar->setVisible(false);
+				continue;
+			}
+			if (hero->HP <= 0)continue;
 			float r2 = (hero->position.x - tower[i]->getPositionX() - background->getPositionX())*(hero->position.x - tower[i]->getPositionX() - background->getPositionX()) + (hero->position.y - tower[i]->getPositionY() - background->getPositionY())*(hero->position.y - tower[i]->getPositionY() - background->getPositionY());
 			log("r2 %f", r2);
 			if (r2<=10000)
