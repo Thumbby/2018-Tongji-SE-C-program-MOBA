@@ -146,6 +146,9 @@ bool HelloWorld::init()
 
 	this->addChild(skillTimeCounter);
 
+	_heroAttack= TimeCounter::create();
+
+	this->addChild(_heroAttack);
 
 	soliderTimeCounter = TimeCounter::create();
 
@@ -240,8 +243,109 @@ bool HelloWorld::init()
 
 	progress2->setPosition(Point(hero->position.x, hero->position.y + 40));
 
-	log("%d", ID);
 
+	_hero = Hero::createHeroSprite(Vec2(500, 300), 2, "stand", 1);//2670 1500
+	_hero->MaxHP = 1000;
+
+	_hero->MaxMP = 300;
+
+	_hero->HP = 1000;
+
+	_hero->MP = 300;
+
+	_hero->Attack = 70;
+
+	_hero->Attack_Speed = 1.5;
+
+	_hero->Attack_Range = 20;
+
+	_hero->Skill_Enhance = 0;
+
+	_hero->Critical_Rate = 10;
+
+	_hero->Defense = 55;
+
+	_hero->Resistance = 35;
+
+	_hero->HP_Recover = 0.5;
+
+	_hero->MP_Recover = 0.15;
+	
+	_hero->setScale(1.0f);
+
+	_hero->setName("_hero");
+	//
+	_hero->ID = 1;
+
+	_hero->life = 1;
+
+	_hero->Level = 1;
+
+	_hero->Money = 0;
+
+	_hero->speed = 0.9;
+
+	_hero->Exp = 0;
+
+	_hero->Attack_Ready = 0;
+
+	_sprBar = Sprite::create("bar.png");
+
+	_sprBar->setScale(0.1f);
+
+	_hero->addChild(_sprBar);
+
+
+
+	_sprBar2 = Sprite::create("bar.png");
+
+	_sprBar2->setScale(0.1f);
+
+	_hero->addChild(_sprBar2);
+
+
+
+	_sprBlood = Sprite::create("blood.png");
+
+	_progress = ProgressTimer::create(_sprBlood);
+
+	_progress->setType(ProgressTimer::Type::BAR);
+
+	_progress->setScale(0.1f);
+
+	_progress->setMidpoint(Point(0, 0.5));
+
+	_progress->setBarChangeRate(Point(1, 0));
+
+	_hero->addChild(_progress);
+
+
+
+	auto _sprMagic = Sprite::create("magic.png");
+
+	_progress2 = ProgressTimer::create(_sprMagic);
+
+	_progress2->setType(ProgressTimer::Type::BAR);
+
+	_progress2->setScale(0.1f);
+
+	_progress2->setMidpoint(Point(0, 0.5));
+
+	_progress2->setBarChangeRate(Point(1, 0));
+
+	_hero->addChild(_progress2);
+
+	_sprBar->setPosition(Point(_hero->position.x, _hero->position.y + 45));
+
+	_sprBar2->setPosition(Point(_hero->position.x, _hero->position.y + 40));
+
+	_progress->setPosition(Point(_hero->position.x, _hero->position.y + 45));
+
+	_progress2->setPosition(Point(_hero->position.x, _hero->position.y + 40));
+
+
+	_hero->setTag(5);
+	background->addChild(_hero);
 	if (hero->ID == 1) {
 
 		Skill_Q = TimeCounter::create();
@@ -280,7 +384,7 @@ bool HelloWorld::init()
 
 		hero->Attack = 70;
 
-		hero->Attack_Speed = 3;
+		hero->Attack_Speed = 1.5;
 
 		hero->Attack_Range = 20;
 
@@ -340,7 +444,7 @@ bool HelloWorld::init()
 
 		hero->Critical_Rate = 10;
 
-		hero->Attack_Speed = 2.4;
+		hero->Attack_Speed = 1.2;
 
 		hero->Attack_Range = 100;
 
@@ -398,7 +502,7 @@ bool HelloWorld::init()
 
 		hero->Critical_Rate = 10;
 
-		hero->Attack_Speed = 3.4;
+		hero->Attack_Speed = 2;
 
 		hero->Attack_Range = 100;
 
@@ -516,6 +620,9 @@ void HelloWorld::update(float dt)
 
 	progress2->setPercentage((((float)hero->MP) / hero->MaxMP) * 100);
 
+	_progress->setPercentage((((float)_hero->HP) / _hero->MaxHP) * 100);
+
+	_progress2->setPercentage((((float)_hero->MP) / _hero->MaxMP) * 100);
 
 	string level = to_string(hero->Level);
 
@@ -630,9 +737,9 @@ void HelloWorld::update(float dt)
 				for (int j = 0; j < 1000; j++) {
 					auto target = (Tower*)background->getChildByTag(j);
 					if (target == NULL)continue;
-					if (target->getPosition().x + background->getPosition().x <=450 && target->getPosition().x + background->getPosition().x >= 350)
+					if (target->getPosition().x + background->getPosition().x <= 450 && target->getPosition().x + background->getPosition().x >= 350)
 					{
-						if (target->getPosition().y + background->getPosition().y <= 250&& target->getPosition().y + background->getPosition().y >= 150) {
+						if (target->getPosition().y + background->getPosition().y <= 250 && target->getPosition().y + background->getPosition().y >= 150) {
 							target->HP -= 2 * (1 + hero->Level * 0.2 + hero->Attack * 0.15);
 						}
 					}
@@ -790,8 +897,8 @@ void HelloWorld::update(float dt)
 				for (int j = 0; j < 1000; j++) {
 					auto target = (Tower*)background->getChildByTag(j);
 					if (target == NULL)continue;
-					if (target->getPosition().x+background->getPosition().x <= Effect_W->getPosition().x + 100 && target->getPosition().x + background->getPosition().x >= Effect_W->getPosition().x - 100) {
-						if (target->getPosition().y+background->getPosition().y <= Effect_W->getPosition().y + 100 && target->getPosition().y + background->getPosition().y >= Effect_W->getPosition().y - 100) {
+					if (target->getPosition().x + background->getPosition().x <= Effect_W->getPosition().x + 100 && target->getPosition().x + background->getPosition().x >= Effect_W->getPosition().x - 100) {
+						if (target->getPosition().y + background->getPosition().y <= Effect_W->getPosition().y + 100 && target->getPosition().y + background->getPosition().y >= Effect_W->getPosition().y - 100) {
 							target->HP -= 10 * (1 + hero->Level * 0.35 + hero->Skill_Enhance / 100);
 						}
 					}
@@ -799,7 +906,7 @@ void HelloWorld::update(float dt)
 			}
 			if (Skill_W->getfCurTime() >= 3)
 			{
-				this->removeChild(Effect_W);
+				this->removeChild(Effect_W, true);
 				hero->Skill_W_On_Release = 3;
 			}
 			break;
@@ -824,7 +931,7 @@ void HelloWorld::update(float dt)
 		case 2: {
 			if (Skill_E->getfCurTime() >= 5)
 			{
-				hero->HP_Recover -= 1.5*(1+hero->Level*0.2);
+				hero->HP_Recover -= 1.5*(1 + hero->Level*0.2);
 				hero->Skill_Enhance -= 300;
 				hero->Skill_E_On_Release = 3;
 			}
@@ -1176,12 +1283,27 @@ void HelloWorld::update(float dt)
 
 	float monsterY = monster->getPositionY();
 
-
-
-	if (r != 0)
-
-	{
 		auto visibleSize = Director::getInstance()->getVisibleSize();
+		
+		Vec2 point = _hero->getParent()->convertToWorldSpaceAR(_hero->getPosition())+Point(500,300);
+		//_hero
+		float r4 = sqrt((point.x - hero->position.x) * (point.x - hero->position.x) + (point.y - hero->position.y) * (point.y - hero->position.y));
+		if (r4 >=50)
+		{
+			_hero->setPosition(Point(_hero->getPosition().x + 3*(hero->position.x - point.x) / r4, _hero->getPosition().y + 3*(hero->position.y - point.y) / r4));
+		}
+		else
+		{
+			if(_heroAttack->getfCurTime()==0)
+			_heroAttack->start();
+			if (_heroAttack->getfCurTime() >= 1)
+			{
+				_hero->setAction(1, "attack", 4);
+				hero->HP -= 100;
+				_heroAttack->start();
+			}
+		}
+
 
 		auto sp1 = this->getChildByTag(200);
 
@@ -1270,7 +1392,7 @@ void HelloWorld::update(float dt)
 
 		pos.y = pos.y - (temp.y - hero->position.y) / r;
 
-	}
+	
 
 	if (monster->isAttacked)
 
@@ -1295,7 +1417,11 @@ void HelloWorld::update(float dt)
 		for (auto it = bullet.begin(); it != bullet.end();)
 		{
 			auto aim = (Tower*)background->getChildByTag(choice);
-			auto aimPoint = aim->getPosition() + background->getPosition();
+			Point aimPoint;
+			if (choice != 5)
+				aimPoint = aim->getPosition() + background->getPosition();
+			else
+				aimPoint = background->convertToWorldSpaceAR(aim->getPosition())+Point(500,300);
 			if (aim == NULL)break;
 			Point pos1 = (*it)->getPosition();
 
@@ -1328,7 +1454,7 @@ void HelloWorld::update(float dt)
 					}
 					else {
 						if (hero->ID == 3 && hero->Skill_Q_On_Release == 1) {
-							aim->HP -= hero->Attack * (1 + hero->Level * 0.75);
+							hero->Attack = hero->Attack * (1 + hero->Level * 0.75);
 						}
 						else {
 							aim->HP -= hero->Attack;
@@ -1336,10 +1462,10 @@ void HelloWorld::update(float dt)
 					}
 				}
 				else if ((*it)->getName() == "skill") {
-					aim->HP -= 250 * (1 + hero->Attack*0.25+hero->Level*0.01);
+					aim->HP -= 250 * (1 + hero->Attack*0.25 + hero->Level*0.01);
 				}
 				else if ((*it)->getName() == "magic") {
-					aim->HP -= 120 * (1 + hero->Skill_Enhance*0.01+hero->Level*0.01);
+					aim->HP -= 120 * (1 + hero->Skill_Enhance*0.01 + hero->Level*0.01);
 				}
 				this->removeChild(*it);
 
@@ -1378,7 +1504,6 @@ void HelloWorld::update(float dt)
 	this->removeChildByName("kda");
 	this->removeChildByName("eco");
 	this->removeChildByName("weapon0");
-	auto visibleSize = Director::getInstance()->getVisibleSize();
 	string kill = to_string(hero->kill);
 	string dead = to_string(hero->dead);
 	string assist = to_string(hero->assist);
@@ -1388,7 +1513,7 @@ void HelloWorld::update(float dt)
 	this->addChild(kda);
 	string _ = "$ ";
 	string money = to_string(hero->Money);
-	Label* eco = Label::Label::createWithSystemFont(_+money, "Arial", 20);
+	Label* eco = Label::Label::createWithSystemFont(_ + money, "Arial", 20);
 	eco->setPosition(3 * visibleSize.width / 4, visibleSize.height - 40);
 	eco->setName("eco");
 	this->addChild(eco);
@@ -1408,6 +1533,7 @@ void HelloWorld::update(float dt)
 	weapon0->setName("weapon0");
 	this->addChild(weapon0);
 	log("%d", choice);
+
 }
 
 Color4B HelloWorld::getColor(int x, int y)
@@ -1477,8 +1603,7 @@ static CCRect getRect(CCNode* pNode)
 bool HelloWorld::onTouchBegan(Touch* touch, Event* unused_event)
 
 {
-	//获取触屏位置（坐标）
-	//log("TouchBegan");
+
 	pos = touch->getLocation();
 
 	flag = 1;
@@ -1486,10 +1611,28 @@ bool HelloWorld::onTouchBegan(Touch* touch, Event* unused_event)
 	Point touchLocation = convertTouchToNodeSpace(touch);
 
 
-	for (int i = 2; i <= 4; i++)
+	for (int i = 2; i <= 5; i++)
 	{
 		auto sprite = background->getChildByTag(i);
-		Point spritePoint = sprite->getPosition() + background->getPosition();
+		Point spritePoint;
+		switch (i)
+		{
+		case 2:
+        spritePoint = background->getPosition() + Point(1800, 1000);
+        break;
+		case 3:
+		 spritePoint = background->getPosition() + Point(1960, 1160);
+		 break;
+		case 4:
+			spritePoint = background->getPosition() + Point(2220, 1255);
+			break;
+		case 5:
+			spritePoint = background->getPosition() + Point(500, 300);
+			break;
+
+		}
+		log("touch %f %f", touchLocation.x, touchLocation.y);
+		log("sprite %f %f", spritePoint.x, spritePoint.y);
 		float r2 = sqrt((touchLocation.x - spritePoint.x) * (touchLocation.x - spritePoint.x) + (touchLocation.y - spritePoint.y) * (touchLocation.y - spritePoint.y));
 
 		if (r2 <= 100)
@@ -1619,7 +1762,7 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 			{
 			case EventKeyboard::KeyCode::KEY_A:
 			{
-				if (hero->Attack_Ready == 0&&(distance<=100000)) {
+				if (hero->Attack_Ready == 0 && (distance <= 200000)) {
 
 					auto bullet0 = Sprite::create("hack.png");
 
@@ -1700,7 +1843,7 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 			{
 			case EventKeyboard::KeyCode::KEY_A:
 			{
-				if (hero->Attack_Ready == 0&& (distance <=400000)) {
+				if (hero->Attack_Ready == 0 && (distance <= 400000)) {
 
 
 					auto bullet0 = Sprite::create("magicbullet.png");
@@ -1787,8 +1930,8 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 			{
 			case EventKeyboard::KeyCode::KEY_A:
 			{
-				if (hero->Attack_Ready == 0&& (distance <= 400000)) {
-					if (hero->Skill_E_On_Release==2||hero->Skill_E_On_Release==3)
+				if (hero->Attack_Ready == 0 && (distance <= 400000)) {
+					if (hero->Skill_E_On_Release == 2 || hero->Skill_E_On_Release == 3)
 					{
 						hero->setVisible(true);
 

@@ -36,6 +36,8 @@ public:
 
 	Hero* hero;
 
+	Hero* _hero;
+
 	int counter = 0;
 
 	Monster* monster;
@@ -54,6 +56,8 @@ public:
 	TimeCounter* DeadTime;
 
 	TimeCounter* skillTimeCounter;
+
+	TimeCounter* _heroAttack;
 
 	TimeCounter* Atk;
 
@@ -82,6 +86,16 @@ public:
 	ProgressTimer* progress;
 
 	ProgressTimer* progress2;
+
+	Sprite* _sprBar;
+
+	Sprite* _sprBar2;
+
+	Sprite* _sprBlood;
+
+	ProgressTimer* _progress;
+
+	ProgressTimer* _progress2;
 
 	static cocos2d::Scene* createScene(int ID);
 
