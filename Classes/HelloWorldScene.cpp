@@ -280,7 +280,7 @@ bool HelloWorld::init()
 
 		hero->Attack = 70;
 
-		hero->Attack_Speed = 1.5;
+		hero->Attack_Speed = 3;
 
 		hero->Attack_Range = 20;
 
@@ -340,7 +340,7 @@ bool HelloWorld::init()
 
 		hero->Critical_Rate = 10;
 
-		hero->Attack_Speed = 1.2;
+		hero->Attack_Speed = 2.4;
 
 		hero->Attack_Range = 100;
 
@@ -398,7 +398,7 @@ bool HelloWorld::init()
 
 		hero->Critical_Rate = 10;
 
-		hero->Attack_Speed = 2;
+		hero->Attack_Speed = 3.4;
 
 		hero->Attack_Range = 100;
 
@@ -799,7 +799,7 @@ void HelloWorld::update(float dt)
 			}
 			if (Skill_W->getfCurTime() >= 3)
 			{
-				this->removeChild(Effect_W, true);
+				this->removeChild(Effect_W);
 				hero->Skill_W_On_Release = 3;
 			}
 			break;
@@ -1328,7 +1328,7 @@ void HelloWorld::update(float dt)
 					}
 					else {
 						if (hero->ID == 3 && hero->Skill_Q_On_Release == 1) {
-							hero->Attack = hero->Attack * (1 + hero->Level * 0.75);
+							aim->HP -= hero->Attack * (1 + hero->Level * 0.75);
 						}
 						else {
 							aim->HP -= hero->Attack;
@@ -1619,7 +1619,7 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 			{
 			case EventKeyboard::KeyCode::KEY_A:
 			{
-				if (hero->Attack_Ready == 0&&(distance<=200000)) {
+				if (hero->Attack_Ready == 0&&(distance<=100000)) {
 
 					auto bullet0 = Sprite::create("hack.png");
 
