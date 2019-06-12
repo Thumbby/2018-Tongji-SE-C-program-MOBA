@@ -670,19 +670,6 @@ void HelloWorld::update(float dt)
 				}
 
 			}
-			for (auto enemySoldier :  enemySoldierManager)
-
-			{
-
-				if (enemySoldier->isAlive)
-
-				{
-
-					enemySoldier->setPosition(solider->getPositionX() - background->getPositionX(), solider->getPositionY() - background->getPositionY());
-
-				}
-
-			}
 
 			background->setPosition(0, 0);
 
@@ -748,12 +735,26 @@ void HelloWorld::update(float dt)
 			if (Skill_Q->getfCurTime() < 0.5)
 			{
 				for (int j = 0; j < 1000; j++) {
-					auto target = (Tower*)background->getChildByTag(j);
-					if (target == NULL)continue;
-					if (target->getPosition().x + background->getPosition().x <= 450 && target->getPosition().x + background->getPosition().x >= 350)
+					if (j == 5)
 					{
-						if (target->getPosition().y + background->getPosition().y <= 250 && target->getPosition().y + background->getPosition().y >= 150) {
-							target->HP -= 2 * (1 + hero->Level * 0.2 + hero->Attack * 0.15);
+						auto target = (Hero*)background->getChildByTag(j);
+						if (target == NULL)continue;
+						if (target->getPosition().x + background->getPosition().x <= 450 && target->getPosition().x + background->getPosition().x >= 350)
+						{
+							if (target->getPosition().y + background->getPosition().y <= 250 && target->getPosition().y + background->getPosition().y >= 150) {
+								target->HP -= 2 * (1 + hero->Level * 0.2 + hero->Attack * 0.15);
+							}
+						}
+					}
+					else
+					{
+						auto target = (Tower*)background->getChildByTag(j);
+						if (target == NULL)continue;
+						if (target->getPosition().x + background->getPosition().x <= 450 && target->getPosition().x + background->getPosition().x >= 350)
+						{
+							if (target->getPosition().y + background->getPosition().y <= 250 && target->getPosition().y + background->getPosition().y >= 150) {
+								target->HP -= 2 * (1 + hero->Level * 0.2 + hero->Attack * 0.15);
+							}
 						}
 					}
 				}
@@ -919,7 +920,7 @@ void HelloWorld::update(float dt)
 			}
 			if (Skill_W->getfCurTime() >= 3)
 			{
-				this->removeChild(Effect_W, true);
+				this->removeChild(Effect_W);
 				hero->Skill_W_On_Release = 3;
 			}
 			break;
@@ -1221,38 +1222,32 @@ void HelloWorld::update(float dt)
 
 	}
 
-	//产兵		////////////////////////////////////////////////////////////////////////////////
-	if (soliderTimeCounter->getfCurTime() >= 15)//每隔十五秒产兵
+	//产兵
+	if (soliderTimeCounter->getfCurTime() >= 15)
 
 	{
 
-		if (soliderTimeCounter->getfCurTime() - 15 >= counter)//15秒后每秒产一个兵
+		if (soliderTimeCounter->getfCurTime() - 15 >= counter)
 
 		{
 
 			solider = Monster::createMonsterSprite(Vec2(720 + background->getPositionX(), 420 + background->getPositionY()), 2, "stand");
 
-			enemySoldier = Monster::createMonsterSprite(Vec2(2370 + background->getPositionX(), 1410 + background->getPositionY()), 2, "stand");
-
 			this->addChild(solider);
 
-			this->addChild(enemySoldier);
-
 			m_soliderManager.pushBack(solider);
-
-			enemySoldierManager.pushBack(enemySoldier);
 
 			counter++;
 
 		}
 
-		if (counter >= 3)//产三个兵
+		if (counter >= 5)
 
 		{
 
 			counter = 0;
 
-			soliderTimeCounter->start();//重新计时
+			soliderTimeCounter->start();
 
 		}
 
@@ -1265,61 +1260,34 @@ void HelloWorld::update(float dt)
 		for (auto solider : m_soliderManager)
 
 		{
+
 			if (solider->isAlive)
 
 			{
+
 				if (solider->isAttacked)
+
 				{
-					/*for (auto enemySoldier : enemySoldierManager) 
-						{
-							if (pow((solider->getPositionX() - enemySoldier->getPositionX()), 2) + pow((solider->getPositionY() - enemySoldier->getPositionY()), 2) <= 1)
-								solider->runAttack(enemySoldier);
-						}*/
-					/////尝试做出攻击，但会抛出空指针
 
 					solider->runAttack(solider);
 
 					solider->isAttacked = 0;
 
 				}
+
 				else
+
 				{
 
 					solider->setPosition(solider->getPositionX() + 0.5, solider->getPositionY() + 0.3);
 
 				}
+
 			}
 
 		}
 
-		for (auto enemySoldier : enemySoldierManager)
-
-		{
-			if (enemySoldier->isAlive)
-
-			{
-				if (enemySoldier->isAttacked)
-				{
-
-					/*for (auto solider : m_soliderManager)
-
-					{
-						if (pow((solider->getPositionX() - enemySoldier->getPositionX()), 2) + pow((solider->getPositionY() - enemySoldier->getPositionY()), 2) <= 1)
-							enemySoldier->runAttack(solider);
-					}*/
-					//同上
-
-					enemySoldier->runAttack(enemySoldier);
-
-					enemySoldier->isAttacked = 0;
-				}
-				else {
-					enemySoldier->setPosition(enemySoldier->getPositionX() - 0.5, enemySoldier->getPositionY() - 0.3);
-				}
-			}
-		}
 	}
-
 
 	float m = background->getPositionX();
 
@@ -1345,7 +1313,7 @@ void HelloWorld::update(float dt)
 		if (_heroAttack->getfCurTime() >= 1)
 		{
 			_hero->setAction(1, "attack", 4);
-			hero->HP -= 100;
+			hero->HP -= 0;
 			_heroAttack->start();
 		}
 	}
@@ -1392,13 +1360,6 @@ void HelloWorld::update(float dt)
 		{
 
 			solider->setPosition(solider->getPositionX() - (temp.x - hero->position.x) / r, solider->getPositionY() - (temp.y - hero->position.y) / r);
-
-		}
-		for (auto enemySoldier : enemySoldierManager)
-
-		{
-
-			enemySoldier->setPosition(enemySoldier->getPositionX() - (temp.x - hero->position.x) / r, enemySoldier->getPositionY() - (temp.y - hero->position.y) / r);
 
 		}
 	}
@@ -1464,69 +1425,134 @@ void HelloWorld::update(float dt)
 		monster->waiting();
 
 	}
-
+	CCLog("bullet %d", bullet.begin());
 	if (bullet.size() >= 1)
 	{
 		for (auto it = bullet.begin(); it != bullet.end();)
 		{
-			auto aim = (Tower*)background->getChildByTag(choice);
-			Point aimPoint;
-			if (choice != 5)
-				aimPoint = aim->getPosition() + background->getPosition();
-			else
-				aimPoint = background->convertToWorldSpaceAR(aim->getPosition()) + Point(500, 300);
-			if (aim == NULL)break;
-			Point pos1 = (*it)->getPosition();
 
-			(*it)->setRotation(360 - 180 / 3.14 * atan2((aimPoint.y - (*it)->getPositionY()), (aimPoint.x - (*it)->getPositionX())));
-
-			float r2 = sqrt((pos1.x - aimPoint.x) * (pos1.x - aimPoint.x) + (pos1.y - aimPoint.y) * (pos1.y - aimPoint.y));
-
-			float distance = (hero->getPosition().x - aimPoint.x) * (hero->getPosition().x - aimPoint.x) + (hero->getPosition().y - aimPoint.y) * (hero->getPosition().y - aimPoint.y);
-
-			if (distance <= (hero->Attack_Range * hero->Attack_Range))
+			if (choice == 5)
 			{
-				hero->Able_To_Attack = 1;
-			}
-			else
-			{
-				hero->Able_To_Attack = 0;
-			}
+				auto aim = (Hero*)background->getChildByTag(choice);
+				Point aimPoint;
+				if (choice != 5)
+					aimPoint = aim->getPosition() + background->getPosition();
+				else
+					aimPoint = background->convertToWorldSpaceAR(aim->getPosition()) + Point(500, 300);
+				if (aim == NULL)break;
+				Point pos1 = (*it)->getPosition();
 
-			(*it)->setPosition(Point(pos1.x + 20 * (aimPoint.x - pos1.x) / r2, pos1.y + 20 * (aimPoint.y - pos1.y) / r2));
+				(*it)->setRotation(360 - 180 / 3.14 * atan2((aimPoint.y - (*it)->getPositionY()), (aimPoint.x - (*it)->getPositionX())));
 
+				float r2 = sqrt((pos1.x - aimPoint.x) * (pos1.x - aimPoint.x) + (pos1.y - aimPoint.y) * (pos1.y - aimPoint.y));
 
+				float distance = (hero->getPosition().x - aimPoint.x) * (hero->getPosition().x - aimPoint.x) + (hero->getPosition().y - aimPoint.y) * (hero->getPosition().y - aimPoint.y);
 
-			if (r2 <= 10)
-			{
-				if ((*it)->getName() == "attack")
+				if (distance <= (hero->Attack_Range * hero->Attack_Range))
 				{
-					if (hero->Critical == 1)
+					hero->Able_To_Attack = 1;
+				}
+				else
+				{
+					hero->Able_To_Attack = 0;
+				}
+
+				(*it)->setPosition(Point(pos1.x + 20 * (aimPoint.x - pos1.x) / r2, pos1.y + 20 * (aimPoint.y - pos1.y) / r2));
+
+
+
+				if (r2 <= 10)
+				{
+					if ((*it)->getName() == "attack")
 					{
-						aim->HP -= hero->Attack * 1.8;
-					}
-					else {
-						if (hero->ID == 3 && hero->Skill_Q_On_Release == 1) {
-							hero->Attack = hero->Attack * (1 + hero->Level * 0.75);
+						if (hero->Critical == 1)
+						{
+							aim->HP -= hero->Attack * 1.8;
 						}
 						else {
-							aim->HP -= hero->Attack;
+							if (hero->ID == 3 && hero->Skill_Q_On_Release == 1) {
+								hero->Attack = hero->Attack * (1 + hero->Level * 0.75);
+							}
+							else {
+								aim->HP -= hero->Attack;
+							}
 						}
 					}
-				}
-				else if ((*it)->getName() == "skill") {
-					aim->HP -= 250 * (1 + hero->Attack * 0.25 + hero->Level * 0.01);
-				}
-				else if ((*it)->getName() == "magic") {
-					aim->HP -= 120 * (1 + hero->Skill_Enhance * 0.01 + hero->Level * 0.01);
-				}
-				this->removeChild(*it);
+					else if ((*it)->getName() == "skill") {
+						aim->HP -= 250 * (1 + hero->Attack * 0.25 + hero->Level * 0.01);
+					}
+					else if ((*it)->getName() == "magic") {
+						aim->HP -= 120 * (1 + hero->Skill_Enhance * 0.01 + hero->Level * 0.01);
+					}
+					this->removeChild(*it);
 
-				it = bullet.erase(it);
+					it = bullet.erase(it);
 
+				}
+				else
+					it++;
 			}
 			else
-				it++;
+			{
+				auto aim = (Tower*)background->getChildByTag(choice);
+				Point aimPoint;
+				if (choice != 5)
+					aimPoint = aim->getPosition() + background->getPosition();
+				else
+					aimPoint = background->convertToWorldSpaceAR(aim->getPosition()) + Point(500, 300);
+				if (aim == NULL)break;
+				Point pos1 = (*it)->getPosition();
+
+				(*it)->setRotation(360 - 180 / 3.14 * atan2((aimPoint.y - (*it)->getPositionY()), (aimPoint.x - (*it)->getPositionX())));
+
+				float r2 = sqrt((pos1.x - aimPoint.x) * (pos1.x - aimPoint.x) + (pos1.y - aimPoint.y) * (pos1.y - aimPoint.y));
+
+				float distance = (hero->getPosition().x - aimPoint.x) * (hero->getPosition().x - aimPoint.x) + (hero->getPosition().y - aimPoint.y) * (hero->getPosition().y - aimPoint.y);
+
+				if (distance <= (hero->Attack_Range * hero->Attack_Range))
+				{
+					hero->Able_To_Attack = 1;
+				}
+				else
+				{
+					hero->Able_To_Attack = 0;
+				}
+
+				(*it)->setPosition(Point(pos1.x + 20 * (aimPoint.x - pos1.x) / r2, pos1.y + 20 * (aimPoint.y - pos1.y) / r2));
+
+
+
+				if (r2 <= 10)
+				{
+					if ((*it)->getName() == "attack")
+					{
+						if (hero->Critical == 1)
+						{
+							aim->HP -= hero->Attack * 1.8;
+						}
+						else {
+							if (hero->ID == 3 && hero->Skill_Q_On_Release == 1) {
+								hero->Attack = hero->Attack * (1 + hero->Level * 0.75);
+							}
+							else {
+								aim->HP -= hero->Attack;
+							}
+						}
+					}
+					else if ((*it)->getName() == "skill") {
+						aim->HP -= 250 * (1 + hero->Attack * 0.25 + hero->Level * 0.01);
+					}
+					else if ((*it)->getName() == "magic") {
+						aim->HP -= 120 * (1 + hero->Skill_Enhance * 0.01 + hero->Level * 0.01);
+					}
+					this->removeChild(*it);
+
+					it = bullet.erase(it);
+
+				}
+				else
+					it++;
+			}
 		}
 	}
 	if (bullett.size() >= 1)

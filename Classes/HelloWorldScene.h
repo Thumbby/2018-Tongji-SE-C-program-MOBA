@@ -2,7 +2,7 @@
 
 #define __HELLOWORLD_SCENE_H__
 #include "cocos2d.h"
-
+#include<typeinfo>
 #include"Hero.h"
 
 #include "Monster.h"
@@ -44,11 +44,7 @@ public:
 
 	Monster* solider;
 
-	Monster* enemySoldier;
-
 	Vector<Monster*> m_soliderManager;
-
-	Vector<Monster*> enemySoldierManager;
 	//TimeCounter* soliderTimeCounter;
 
 	TimeCounter* m_timeCounter;
