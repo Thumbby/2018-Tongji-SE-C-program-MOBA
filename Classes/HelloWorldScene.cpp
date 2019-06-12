@@ -106,7 +106,7 @@ bool HelloWorld::init()
 
 	{
 
-		CCLOG("key is pressed,keycode is %d", keycode);
+		log("key is pressed,keycode is %d", keycode);
 
 	};
 
@@ -523,6 +523,17 @@ bool HelloWorld::init()
 	addChild(monster);
 
 	//·ÀÓùËþ
+
+	Tower* _home = Tower::create();
+
+	_home->setTag(6);
+
+	_home->setPosition(Point(2450, 1400));//1800 1000
+
+	background->addChild(_home);
+
+	tower.push_back(_home);
+
 	Tower* tower1 = Tower::create();
 
 	tower1->setTag(2);
@@ -1155,7 +1166,7 @@ void HelloWorld::update(float dt)
 
 	}
 
-	CCLOG("%f  %f", temp.x - hero->position.x, temp.y - hero->position.y);
+	log("%f  %f", temp.x - hero->position.x, temp.y - hero->position.y);
 
 	if (pos == Point::ZERO)
 
@@ -1313,7 +1324,7 @@ void HelloWorld::update(float dt)
 		if (_heroAttack->getfCurTime() >= 1)
 		{
 			_hero->setAction(1, "attack", 4);
-			hero->HP -= 0;
+			hero->HP -= 100;
 			_heroAttack->start();
 		}
 	}
@@ -1368,7 +1379,8 @@ void HelloWorld::update(float dt)
 
 	for (int i = 0; i < tower.size(); i++)
 	{
-		TimeCounter* t = (TimeCounter*)tower[i]->getChildByName("t");
+		
+		
 		tower[i]->progress->setPercentage((((float)tower[i]->HP) / tower[i]->MaxHP) * 100);
 		if (tower[i]->HP <= 0)
 		{
@@ -1377,7 +1389,9 @@ void HelloWorld::update(float dt)
 		}
 		if (hero->HP <= 0)continue;
 		float r2 = (hero->position.x - tower[i]->getPositionX() - background->getPositionX()) * (hero->position.x - tower[i]->getPositionX() - background->getPositionX()) + (hero->position.y - tower[i]->getPositionY() - background->getPositionY()) * (hero->position.y - tower[i]->getPositionY() - background->getPositionY());
-
+		TimeCounter* t = (TimeCounter*)tower[i]->getChildByName("t");
+		if (t == NULL)
+			continue;
 		if (r2 <= 10000)
 		{
 
@@ -1425,7 +1439,7 @@ void HelloWorld::update(float dt)
 		monster->waiting();
 
 	}
-	CCLog("bullet %d", bullet.begin());
+	log("bullet %d", bullet.begin());
 	if (bullet.size() >= 1)
 	{
 		for (auto it = bullet.begin(); it != bullet.end();)
@@ -1648,7 +1662,7 @@ Color4B HelloWorld::getColor(int x, int y)
 
 	c.a = (*pixel >> 24) & 0xff;
 
-	CCLOG("color r:%d g:%d b:%d a:%d ", c.r, c.g, c.b, c.a);
+	log("color r:%d g:%d b:%d a:%d ", c.r, c.g, c.b, c.a);
 
 	return c;
 
@@ -1706,7 +1720,10 @@ bool HelloWorld::onTouchBegan(Touch* touch, Event* unused_event)
 			spritePoint = background->getPosition() + Point(2220, 1255);
 			break;
 		case 5:
-			spritePoint = background->getPosition() + Point(500, 300);
+			spritePoint= _hero->getParent()->convertToWorldSpaceAR(_hero->getPosition()) + Point(500, 300);
+			break;
+		case 6:
+			spritePoint = background->getPosition() + Point(2450, 1400);
 			break;
 
 		}
