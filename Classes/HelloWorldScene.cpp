@@ -351,7 +351,7 @@ bool HelloWorld::init()
 	_progress2->setPosition(Point(_hero->position.x, _hero->position.y + 40));
 
 
-	_hero->setTag(5);
+	_hero->setTag(6);
 
 	background->addChild(_hero);
 	if (hero->ID == 1) {
@@ -564,6 +564,20 @@ bool HelloWorld::init()
 
 	tower.push_back(tower3);
 
+	Tower* tower4 = Tower::create();
+
+	tower4->setTag(5);
+
+	tower4->setPosition(Point(2430, 1390));
+
+	TimeCounter* t4 = TimeCounter::create(); t4->setName("t");
+
+	background->addChild(tower4);
+
+	tower.push_back(tower4);
+
+	tower4->addChild(t4);
+
 	level = to_string(hero->Level);
 
 	label = Label::createWithTTF(level, "fonts/Marker Felt.ttf", 30);
@@ -758,7 +772,7 @@ hero->removeChildByName("lab");
 			if (Skill_Q->getfCurTime() < 0.5)
 			{
 				for (int j = 0; j < 1000; j++) {
-					if (j == 5)
+					if (j == 6)
 					{
 						auto target = (Hero*)background->getChildByTag(j);
 						Point Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2670, 1500);
@@ -813,7 +827,7 @@ hero->removeChildByName("lab");
 			if (Skill_W->getfCurTime() < 5)
 			{
 				for (int j = 0; j < 1000; j++) {
-					if (j == 5) {
+					if (j == 6) {
 						auto target = (Hero*)background->getChildByTag(j);
 						Point Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2670, 1500);
 						log("x%fy%f", Target.x, Target.y);
@@ -952,7 +966,7 @@ hero->removeChildByName("lab");
 		case 2: {
 			if (Skill_W->getfCurTime() < 3) {
 				for (int j = 0; j < 1000; j++) {
-					if (j == 5) {
+					if (j == 6) {
 						auto target = (Hero*)background->getChildByTag(j);
 						Point Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2670, 1500);
 						if (target == NULL)continue;
@@ -1486,7 +1500,7 @@ hero->removeChildByName("lab");
 		for (auto it = bullet.begin(); it != bullet.end();)
 		{
 
-			if (choice == 5)
+			if (choice == 6)
 			{
 				auto aim = (Hero*)background->getChildByTag(choice);
 				Point aimPoint;
@@ -1735,7 +1749,7 @@ bool HelloWorld::onTouchBegan(Touch* touch, Event* unused_event)
 	Point touchLocation = convertTouchToNodeSpace(touch);
 
 
-	for (int i = 2; i <= 5; i++)
+	for (int i = 2; i <= 6; i++)
 	{
 		auto sprite = background->getChildByTag(i);
 		Point spritePoint;
@@ -1751,6 +1765,9 @@ bool HelloWorld::onTouchBegan(Touch* touch, Event* unused_event)
 			spritePoint = background->getPosition() + Point(2220, 1255);
 			break;
 		case 5:
+			spritePoint = background->getPosition() + Point(2430, 1390);
+			break;
+		case 6:
 			spritePoint=background->convertToWorldSpaceAR(sprite->getPosition()) + Point(2670, 1500);
 			break;
 
@@ -1879,7 +1896,7 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 	if (hero->life == 1)
 	{
 		Point aimPoint;
-		if (choice == 5) {
+		if (choice == 6) {
 			auto aim = (Hero*)background->getChildByTag(choice);
 			aimPoint = background->convertToWorldSpaceAR(aim->getPosition()) + Point(2670, 1500);
 		}
