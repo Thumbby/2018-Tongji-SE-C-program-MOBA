@@ -146,7 +146,7 @@ bool HelloWorld::init()
 
 	this->addChild(skillTimeCounter);
 
-	_heroAttack= TimeCounter::create();
+	_heroAttack = TimeCounter::create();
 
 	this->addChild(_heroAttack);
 
@@ -270,7 +270,7 @@ bool HelloWorld::init()
 	_hero->HP_Recover = 0.5;
 
 	_hero->MP_Recover = 0.15;
-	
+
 	_hero->setScale(1.0f);
 
 	_hero->setName("_hero");
@@ -670,6 +670,19 @@ void HelloWorld::update(float dt)
 				}
 
 			}
+			for (auto enemySoldier :  enemySoldierManager)
+
+			{
+
+				if (enemySoldier->isAlive)
+
+				{
+
+					enemySoldier->setPosition(solider->getPositionX() - background->getPositionX(), solider->getPositionY() - background->getPositionY());
+
+				}
+
+			}
 
 			background->setPosition(0, 0);
 
@@ -931,7 +944,7 @@ void HelloWorld::update(float dt)
 		case 2: {
 			if (Skill_E->getfCurTime() >= 5)
 			{
-				hero->HP_Recover -= 1.5*(1 + hero->Level*0.2);
+				hero->HP_Recover -= 1.5 * (1 + hero->Level * 0.2);
 				hero->Skill_Enhance -= 300;
 				hero->Skill_E_On_Release = 3;
 			}
@@ -1208,32 +1221,38 @@ void HelloWorld::update(float dt)
 
 	}
 
-	//产兵
-	if (soliderTimeCounter->getfCurTime() >= 15)
+	//产兵		////////////////////////////////////////////////////////////////////////////////
+	if (soliderTimeCounter->getfCurTime() >= 15)//每隔十五秒产兵
 
 	{
 
-		if (soliderTimeCounter->getfCurTime() - 15 >= counter)
+		if (soliderTimeCounter->getfCurTime() - 15 >= counter)//15秒后每秒产一个兵
 
 		{
 
 			solider = Monster::createMonsterSprite(Vec2(720 + background->getPositionX(), 420 + background->getPositionY()), 2, "stand");
 
+			enemySoldier = Monster::createMonsterSprite(Vec2(2370 + background->getPositionX(), 1410 + background->getPositionY()), 2, "stand");
+
 			this->addChild(solider);
 
+			this->addChild(enemySoldier);
+
 			m_soliderManager.pushBack(solider);
+
+			enemySoldierManager.pushBack(enemySoldier);
 
 			counter++;
 
 		}
 
-		if (counter >= 5)
+		if (counter >= 3)//产三个兵
 
 		{
 
 			counter = 0;
 
-			soliderTimeCounter->start();
+			soliderTimeCounter->start();//重新计时
 
 		}
 
@@ -1246,34 +1265,48 @@ void HelloWorld::update(float dt)
 		for (auto solider : m_soliderManager)
 
 		{
-
 			if (solider->isAlive)
 
 			{
-
 				if (solider->isAttacked)
-
 				{
+
 
 					solider->runAttack(solider);
 
 					solider->isAttacked = 0;
 
 				}
-
 				else
-
 				{
 
 					solider->setPosition(solider->getPositionX() + 0.5, solider->getPositionY() + 0.3);
 
 				}
-
 			}
 
 		}
 
+		for (auto enemySoldier : enemySoldierManager)
+
+		{
+			if (enemySoldier->isAlive)
+
+			{
+				if (enemySoldier->isAttacked)
+				{
+
+					enemySoldier->runAttack(enemySoldier);
+
+					enemySoldier->isAttacked = 0;
+				}
+				else {
+					enemySoldier->setPosition(enemySoldier->getPositionX() - 0.5, enemySoldier->getPositionY() - 0.3);
+				}
+			}
+		}
 	}
+
 
 	float m = background->getPositionX();
 
@@ -1283,116 +1316,123 @@ void HelloWorld::update(float dt)
 
 	float monsterY = monster->getPositionY();
 
-		auto visibleSize = Director::getInstance()->getVisibleSize();
-		
-		Vec2 point = _hero->getParent()->convertToWorldSpaceAR(_hero->getPosition())+Point(500,300);
-		//_hero
-		float r4 = sqrt((point.x - hero->position.x) * (point.x - hero->position.x) + (point.y - hero->position.y) * (point.y - hero->position.y));
-		if (r4 >=50)
-		{
-			_hero->setPosition(Point(_hero->getPosition().x + 3*(hero->position.x - point.x) / r4, _hero->getPosition().y + 3*(hero->position.y - point.y) / r4));
-		}
-		else
-		{
-			if(_heroAttack->getfCurTime()==0)
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+
+	Vec2 point = _hero->getParent()->convertToWorldSpaceAR(_hero->getPosition()) + Point(500, 300);
+	//_hero
+	float r4 = sqrt((point.x - hero->position.x) * (point.x - hero->position.x) + (point.y - hero->position.y) * (point.y - hero->position.y));
+	if (r4 >= 50)
+	{
+		_hero->setPosition(Point(_hero->getPosition().x + 3 * (hero->position.x - point.x) / r4, _hero->getPosition().y + 3 * (hero->position.y - point.y) / r4));
+	}
+	else
+	{
+		if (_heroAttack->getfCurTime() == 0)
 			_heroAttack->start();
-			if (_heroAttack->getfCurTime() >= 1)
+		if (_heroAttack->getfCurTime() >= 1)
+		{
+			_hero->setAction(1, "attack", 4);
+			hero->HP -= 100;
+			_heroAttack->start();
+		}
+	}
+
+
+	auto sp1 = this->getChildByTag(200);
+
+	auto effect_w = this->getChildByName("explosion");
+
+	auto bgPoint = sp1->getPosition();
+
+	auto remPoint = bgPoint;
+	auto flag = 0;
+
+	Point egPoint;
+	if (effect_w != NULL)
+		egPoint = effect_w->getPosition() - bgPoint;
+
+	auto bgSize = sp1->getContentSize();
+
+	bgPoint = Point(bgPoint.x - (temp.x - hero->position.x) / r, bgPoint.y - (temp.y - hero->position.y) / r);
+
+	auto color = getColor(hero->position.x - (int)bgPoint.x, hero->position.y - (int)bgPoint.y);
+
+	if (color.r < 10 && color.g < 10 && color.b>250)
+	{
+		bgPoint = remPoint;
+		flag = 1;
+	}
+	if ((temp.x - hero->position.x) * (temp.x - hero->position.x) + (temp.y - hero->position.y) * (temp.y - hero->position.y) <= 100 * hero->speed * hero->speed)
+	{
+		temp = hero->position;
+	}
+
+	else if (bgPoint.y <= 0 && bgPoint.x <= 0 && bgPoint.x + bgSize.width >= visibleSize.width && bgPoint.y + bgSize.height >= visibleSize.height)
+
+	{
+		sp1->setPosition(bgPoint);
+	}
+	if (flag == 0)
+	{
+		for (auto solider : m_soliderManager)
+
+		{
+
+			solider->setPosition(solider->getPositionX() - (temp.x - hero->position.x) / r, solider->getPositionY() - (temp.y - hero->position.y) / r);
+
+		}
+		for (auto enemySoldier : enemySoldierManager)
+
+		{
+
+			enemySoldier->setPosition(enemySoldier->getPositionX() - (temp.x - hero->position.x) / r, enemySoldier->getPositionY() - (temp.y - hero->position.y) / r);
+
+		}
+	}
+	if (effect_w != NULL)
+		effect_w->setPosition(sp1->getPosition() + egPoint);
+
+	for (int i = 0; i < tower.size(); i++)
+	{
+		TimeCounter* t = (TimeCounter*)tower[i]->getChildByName("t");
+		tower[i]->progress->setPercentage((((float)tower[i]->HP) / tower[i]->MaxHP) * 100);
+		if (tower[i]->HP <= 0)
+		{
+			tower[i]->sprBar->setVisible(false);
+			continue;
+		}
+		if (hero->HP <= 0)continue;
+		float r2 = (hero->position.x - tower[i]->getPositionX() - background->getPositionX()) * (hero->position.x - tower[i]->getPositionX() - background->getPositionX()) + (hero->position.y - tower[i]->getPositionY() - background->getPositionY()) * (hero->position.y - tower[i]->getPositionY() - background->getPositionY());
+
+		if (r2 <= 10000)
+		{
+
+			if (t->getfCurTime() == 0)
+				t->start();
+			if (t->getfCurTime() >= 1)
 			{
-				_hero->setAction(1, "attack", 4);
-				hero->HP -= 100;
-				_heroAttack->start();
+				auto bullet0 = Sprite::create("towerbullet.png");
+
+				bullet0->setPosition(tower[i]->getPosition() + background->getPosition());
+
+				this->addChild(bullet0);
+
+				bullet0->setScale(0.4f);
+
+				bullett.push_back(bullet0);
+				t->start();
 			}
 		}
 
+	}
 
-		auto sp1 = this->getChildByTag(200);
+	monster->setPosition(monsterX - (temp.x - hero->position.x) / r1, monsterY - (temp.y - hero->position.y) / r1);
 
-		auto effect_w = this->getChildByName("explosion");
+	pos.x = pos.x - (temp.x - hero->position.x) / r;
 
-		auto bgPoint = sp1->getPosition();
+	pos.y = pos.y - (temp.y - hero->position.y) / r;
 
-		auto remPoint = bgPoint;
-		auto flag = 0;
 
-		Point egPoint;
-		if (effect_w != NULL)
-			egPoint = effect_w->getPosition() - bgPoint;
-
-		auto bgSize = sp1->getContentSize();
-
-		bgPoint = Point(bgPoint.x - (temp.x - hero->position.x) / r, bgPoint.y - (temp.y - hero->position.y) / r);
-
-		auto color = getColor(hero->position.x - (int)bgPoint.x, hero->position.y - (int)bgPoint.y);
-
-		if (color.r < 10 && color.g < 10 && color.b>250)
-		{
-			bgPoint = remPoint;
-			flag = 1;
-		}
-		if ((temp.x - hero->position.x) * (temp.x - hero->position.x) + (temp.y - hero->position.y) * (temp.y - hero->position.y) <= 100 * hero->speed * hero->speed)
-		{
-			temp = hero->position;
-		}
-
-		else if (bgPoint.y <= 0 && bgPoint.x <= 0 && bgPoint.x + bgSize.width >= visibleSize.width && bgPoint.y + bgSize.height >= visibleSize.height)
-
-		{
-			sp1->setPosition(bgPoint);
-		}
-		if (flag == 0)
-		{
-			for (auto solider : m_soliderManager)
-
-			{
-
-				solider->setPosition(solider->getPositionX() - (temp.x - hero->position.x) / r, solider->getPositionY() - (temp.y - hero->position.y) / r);
-
-			}
-		}
-		if (effect_w != NULL)
-			effect_w->setPosition(sp1->getPosition() + egPoint);
-
-		for (int i = 0; i < tower.size(); i++)
-		{
-			TimeCounter* t = (TimeCounter*)tower[i]->getChildByName("t");
-			tower[i]->progress->setPercentage((((float)tower[i]->HP) / tower[i]->MaxHP) * 100);
-			if (tower[i]->HP <= 0)
-			{
-				tower[i]->sprBar->setVisible(false);
-				continue;
-			}
-			if (hero->HP <= 0)continue;
-			float r2 = (hero->position.x - tower[i]->getPositionX() - background->getPositionX()) * (hero->position.x - tower[i]->getPositionX() - background->getPositionX()) + (hero->position.y - tower[i]->getPositionY() - background->getPositionY()) * (hero->position.y - tower[i]->getPositionY() - background->getPositionY());
-
-			if (r2 <= 10000)
-			{
-
-				if (t->getfCurTime() == 0)
-					t->start();
-				if (t->getfCurTime() >= 1)
-				{
-					auto bullet0 = Sprite::create("towerbullet.png");
-
-					bullet0->setPosition(tower[i]->getPosition() + background->getPosition());
-
-					this->addChild(bullet0);
-
-					bullet0->setScale(0.4f);
-
-					bullett.push_back(bullet0);
-					t->start();
-				}
-			}
-
-		}
-
-		monster->setPosition(monsterX - (temp.x - hero->position.x) / r1, monsterY - (temp.y - hero->position.y) / r1);
-
-		pos.x = pos.x - (temp.x - hero->position.x) / r;
-
-		pos.y = pos.y - (temp.y - hero->position.y) / r;
-
-	
 
 	if (monster->isAttacked)
 
@@ -1421,7 +1461,7 @@ void HelloWorld::update(float dt)
 			if (choice != 5)
 				aimPoint = aim->getPosition() + background->getPosition();
 			else
-				aimPoint = background->convertToWorldSpaceAR(aim->getPosition())+Point(500,300);
+				aimPoint = background->convertToWorldSpaceAR(aim->getPosition()) + Point(500, 300);
 			if (aim == NULL)break;
 			Point pos1 = (*it)->getPosition();
 
@@ -1462,10 +1502,10 @@ void HelloWorld::update(float dt)
 					}
 				}
 				else if ((*it)->getName() == "skill") {
-					aim->HP -= 250 * (1 + hero->Attack*0.25 + hero->Level*0.01);
+					aim->HP -= 250 * (1 + hero->Attack * 0.25 + hero->Level * 0.01);
 				}
 				else if ((*it)->getName() == "magic") {
-					aim->HP -= 120 * (1 + hero->Skill_Enhance*0.01 + hero->Level*0.01);
+					aim->HP -= 120 * (1 + hero->Skill_Enhance * 0.01 + hero->Level * 0.01);
 				}
 				this->removeChild(*it);
 
@@ -1618,11 +1658,11 @@ bool HelloWorld::onTouchBegan(Touch* touch, Event* unused_event)
 		switch (i)
 		{
 		case 2:
-        spritePoint = background->getPosition() + Point(1800, 1000);
-        break;
+			spritePoint = background->getPosition() + Point(1800, 1000);
+			break;
 		case 3:
-		 spritePoint = background->getPosition() + Point(1960, 1160);
-		 break;
+			spritePoint = background->getPosition() + Point(1960, 1160);
+			break;
 		case 4:
 			spritePoint = background->getPosition() + Point(2220, 1255);
 			break;
