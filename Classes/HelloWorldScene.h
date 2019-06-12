@@ -59,6 +59,10 @@ public:
 
 	TimeCounter* _heroAttack;
 
+	TimeCounter* _heroDeath;
+
+	int _heroLife;
+
 	TimeCounter* Atk;
 
 	TimeCounter* Skill_Q;
