@@ -761,7 +761,7 @@ hero->removeChildByName("lab");
 					if (j == 5)
 					{
 						auto target = (Hero*)background->getChildByTag(j);
-						Point Target = convertToWorldSpaceAR(target->getPosition()) + Point(2670, 1500);
+						Point Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2670, 1500);
 						log("x%fy%f", Target.x, Target.y);
 						if (target == NULL)continue;
 						if (Target.x <= 450 && Target.x >= 350)
@@ -815,14 +815,16 @@ hero->removeChildByName("lab");
 				for (int j = 0; j < 1000; j++) {
 					if (j == 5) {
 						auto target = (Hero*)background->getChildByTag(j);
-						Point Target = convertToWorldSpaceAR(target->getPosition()) + Point(2670, 1500);
+						Point Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2670, 1500);
+						log("x%fy%f", Target.x, Target.y);
 						if (target == NULL)continue;
-						if (target->getPosition().x + background->getPosition().x <= 450 && target->getPosition().x + background->getPosition().x >= 350)
+						if (Target.x <= 450 && Target.x >= 350)
 						{
-							if (target->getPosition().y + background->getPosition().y <= 250 && target->getPosition().y + background->getPosition().y >= 150) {
-								target->HP -= 2 * (1 + hero->Level * 0.15 + hero->Skill_Enhance * 0.35);
-								if (hero->HP < hero->MaxHP) {
-									hero->HP += 5;
+							if (Target.y <= 250 && Target.y >= 150) {
+								target->HP -= 5 * (1 + hero->Level * 0.1 + hero->Skill_Enhance * 0.15);
+								if (hero->HP<=hero->MaxHP)
+								{
+									hero->HP += 2;
 								}
 							}
 						}
@@ -952,10 +954,11 @@ hero->removeChildByName("lab");
 				for (int j = 0; j < 1000; j++) {
 					if (j == 5) {
 						auto target = (Hero*)background->getChildByTag(j);
+						Point Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2670, 1500);
 						if (target == NULL)continue;
-						if (target->getPosition().x + background->getPosition().x <= Effect_W->getPosition().x + 100 && target->getPosition().x + background->getPosition().x >= Effect_W->getPosition().x - 100) {
-							if (target->getPosition().y + background->getPosition().y <= Effect_W->getPosition().y + 100 && target->getPosition().y + background->getPosition().y >= Effect_W->getPosition().y - 100) {
-								target->HP -= 10 * (1 + hero->Level * 0.35 + hero->Skill_Enhance / 100);
+						if (Target.x <= Effect_W->getPosition().x + 100 &&Target.x >= Effect_W->getPosition().x - 100) {
+							if (Target.y <= Effect_W->getPosition().y + 100 && Target.y >= Effect_W->getPosition().y - 100) {
+								target->HP -= 5 * (1 + hero->Level * 0.15 + hero->Skill_Enhance / 100);
 							}
 						}
 					}
