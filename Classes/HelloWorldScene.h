@@ -44,7 +44,11 @@ public:
 
 	Monster* solider;
 
+	Monster* enemySoldier;
+
 	Vector<Monster*> m_soliderManager;
+
+	Vector<Monster*> enemySoldierManager;
 	//TimeCounter* soliderTimeCounter;
 
 	TimeCounter* m_timeCounter;

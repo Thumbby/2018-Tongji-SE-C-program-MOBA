@@ -1270,7 +1270,12 @@ void HelloWorld::update(float dt)
 			{
 				if (solider->isAttacked)
 				{
-
+					/*for (auto enemySoldier : enemySoldierManager) 
+						{
+							if (pow((solider->getPositionX() - enemySoldier->getPositionX()), 2) + pow((solider->getPositionY() - enemySoldier->getPositionY()), 2) <= 1)
+								solider->runAttack(enemySoldier);
+						}*/
+					/////尝试做出攻击，但会抛出空指针
 
 					solider->runAttack(solider);
 
@@ -1295,6 +1300,14 @@ void HelloWorld::update(float dt)
 			{
 				if (enemySoldier->isAttacked)
 				{
+
+					/*for (auto solider : m_soliderManager)
+
+					{
+						if (pow((solider->getPositionX() - enemySoldier->getPositionX()), 2) + pow((solider->getPositionY() - enemySoldier->getPositionY()), 2) <= 1)
+							enemySoldier->runAttack(solider);
+					}*/
+					//同上
 
 					enemySoldier->runAttack(enemySoldier);
 
