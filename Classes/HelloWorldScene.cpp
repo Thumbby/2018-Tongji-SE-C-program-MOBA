@@ -1995,7 +1995,7 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 	if (hero->life == 1)
 	{
 		Point aimPoint;
-		if (choice == 6) {
+		if (choice >= 6) {
 			auto aim = (Hero*)background->getChildByTag(choice);
 			aimPoint = background->convertToWorldSpaceAR(aim->getPosition()) + Point(2670, 1500);
 		}
