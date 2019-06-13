@@ -113,26 +113,43 @@ public:
 	ProgressTimer* _progress;
 
 	ProgressTimer* _progress2;
+
 	//Ð¡±øÑªÌõ
+	
 	Sprite* sprBar_7;
+	
 	Sprite* sprBar_8;
+	
 	Sprite* sprBar_9;
+	
 	Sprite* sprBar_10;
+	
 	Sprite* sprBar_11;
+	
 	Sprite* sprBar_12;
 
 	Sprite* sprBlood_7;
+	
 	Sprite* sprBlood_8;
+	
 	Sprite* sprBlood_9;
+	
 	Sprite* sprBlood_10;
+	
 	Sprite* sprBlood_11;
+	
 	Sprite* sprBlood_12;
 
 	ProgressTimer* progress_7;
+	
 	ProgressTimer* progress_8;
+	
 	ProgressTimer* progress_9;
+	
 	ProgressTimer* progress_10;
+	
 	ProgressTimer* progress_11;
+	
 	ProgressTimer* progress_12;
 
 	static cocos2d::Scene* createScene(int ID);
@@ -150,6 +167,10 @@ public:
 	virtual void onKeyPressed(EventKeyboard::KeyCode keycode, Event* event);
 
 	virtual void onKeyReleased(EventKeyboard::KeyCode keycode, Event* event);
+
+	void win();
+
+	void lose();
 
 	void Shop(Ref* psender);
 

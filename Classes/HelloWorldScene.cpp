@@ -8,6 +8,9 @@
 
 #include <cmath>
 
+#include "WinLayer.h"
+
+#include "LoseLayer.h"
 int ID1;
 
 USING_NS_CC;
@@ -334,7 +337,7 @@ bool HelloWorld::init()
 	this->addChild(Death_7);
 	Attack_7 = TimeCounter::create();
 	this->addChild(Attack_7);
-	soldier_7= Hero::createHeroSprite(Vec2(2430, 1345), 2, "stand", 4);
+	soldier_7 = Hero::createHeroSprite(Vec2(2430, 1345), 2, "stand", 4);
 	soldier_7->life = 0;
 	soldier_7->MaxHP = 500;
 	soldier_7->HP = 500;
@@ -346,7 +349,7 @@ bool HelloWorld::init()
 	soldier_7->setName("soldier_7");
 	soldier_7->speed = 0.9;
 	soldier_7->Attack_Ready = 0;
-	sprBar_7= Sprite::create("bar.png");
+	sprBar_7 = Sprite::create("bar.png");
 	sprBar_7->setScale(0.1f);
 	soldier_7->addChild(sprBar_7);
 	sprBlood_7 = Sprite::create("blood.png");
@@ -424,7 +427,7 @@ bool HelloWorld::init()
 	progress_9->setPosition(Point(soldier_9->position.x, soldier_9->position.y + 45));
 	soldier_9->setTag(9);
 	background->addChild(soldier_9);
-	
+
 	//Ó¢ÐÛ¼¼ÄÜ
 	if (hero->ID == 1) {
 
@@ -645,6 +648,62 @@ bool HelloWorld::init()
 
 	tower4->addChild(t4);
 
+	Tower* tower5 = Tower::create();
+
+	tower5->setTag(-2);
+
+	tower5->setPosition(Point(1400, 780));
+
+	TimeCounter* t5 = TimeCounter::create(); t5->setName("t");
+
+	background->addChild(tower5);
+
+	tower.push_back(tower5);
+
+	tower5->addChild(t5);
+
+	Tower* tower6 = Tower::create();
+
+	tower6->setTag(-3);
+
+	tower6->setPosition(Point(1100, 600));
+
+	TimeCounter* t6 = TimeCounter::create(); t6->setName("t");
+
+	background->addChild(tower6);
+
+	tower.push_back(tower6);
+
+	tower6->addChild(t6);
+
+	Tower* tower7 = Tower::create();
+
+	tower7->setTag(-4);
+
+	tower7->setPosition(Point(850, 500));
+
+	TimeCounter* t7 = TimeCounter::create(); t7->setName("t");
+
+	background->addChild(tower7);
+
+	tower.push_back(tower7);
+
+	tower7->addChild(t7);
+
+	Tower* tower8 = Tower::create();
+
+	tower8->setTag(-4);
+
+	tower8->setPosition(Point(650, 350));
+
+	TimeCounter* t8 = TimeCounter::create(); t8->setName("t");
+
+	background->addChild(tower8);
+
+	tower.push_back(tower8);
+
+	tower8->addChild(t8);
+
 	level = to_string(hero->Level);
 
 	label = Label::createWithTTF(level, "fonts/Marker Felt.ttf", 30);
@@ -677,8 +736,8 @@ bool HelloWorld::init()
 }
 
 void HelloWorld::update(float dt)
-{	
-    hero->removeChildByName("lab");
+{
+	hero->removeChildByName("lab");
 
 	level = to_string(hero->Level);
 
@@ -692,7 +751,7 @@ void HelloWorld::update(float dt)
 
 	label->setName("lab");
 
-	hero->addChild(label); 
+	hero->addChild(label);
 
 	float coin = rand() % 100 + 1;
 	if (coin <= hero->Critical_Rate)
@@ -739,8 +798,9 @@ void HelloWorld::update(float dt)
 			_hero->HP = _hero->MaxHP;
 			_hero->MP = _hero->MaxMP;
 			_heroLife = 0;
-			_hero->setPosition(Vec2(2670, 1500)+background->getPosition());
-		
+
+			_hero->setPosition(Vec2(2670, 1500) + background->getPosition());
+
 			_hero->setVisible(true);
 		}
 	}
@@ -756,7 +816,7 @@ void HelloWorld::update(float dt)
 		if (Death_7->getfCurTime() >= 5) {
 			soldier_7->HP = soldier_7->MaxHP;
 			soldier_7->life = 0;
-			soldier_7->setPosition(Vec2(2430,1345) + background->getPosition());
+			soldier_7->setPosition(Vec2(2430, 1345) + background->getPosition());
 			soldier_7->setVisible(true);
 		}
 	}
@@ -823,7 +883,7 @@ void HelloWorld::update(float dt)
 			hero->Skill_W_On_Release = 0;
 			hero->Skill_Q_On_Release = 0;
 		}
-		if (hero->ID==3)
+		if (hero->ID == 3)
 		{
 			hero->Skill_E_On_Release = 0;
 		}
@@ -917,7 +977,7 @@ void HelloWorld::update(float dt)
 						if (target == NULL)continue;
 						if (Target.x <= 450 && Target.x >= 350)
 						{
-							if (Target.y<= 250 && Target.y>= 150) {
+							if (Target.y <= 250 && Target.y >= 150) {
 								target->HP -= 2 * (1 + hero->Level * 0.2 + hero->Attack * 0.15);
 							}
 						}
@@ -990,7 +1050,7 @@ void HelloWorld::update(float dt)
 						{
 							if (Target.y <= 250 && Target.y >= 150) {
 								target->HP -= 5 * (1 + hero->Level * 0.1 + hero->Skill_Enhance * 0.15);
-								if (hero->HP<=hero->MaxHP)
+								if (hero->HP <= hero->MaxHP)
 								{
 									hero->HP += 2;
 								}
@@ -1124,25 +1184,25 @@ void HelloWorld::update(float dt)
 						auto target = (Hero*)background->getChildByTag(j);
 						Point Target;
 						switch (j) {
-						   case 6: {
+						case 6: {
 							Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2670, 1500);
 							break;
-						   }
-						   case 7: {
+						}
+						case 7: {
 							Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2430, 1345);
 							break;
-						   }
-						   case 8: {
+						}
+						case 8: {
 							Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2435, 1350);
 							break;
-						   }
-						   case 9: {
+						}
+						case 9: {
 							Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2440, 1355);
 							break;
-						   }
+						}
 						}
 						if (target == NULL)continue;
-						if (Target.x <= Effect_W->getPosition().x + 100 &&Target.x >= Effect_W->getPosition().x - 100) {
+						if (Target.x <= Effect_W->getPosition().x + 100 && Target.x >= Effect_W->getPosition().x - 100) {
 							if (Target.y <= Effect_W->getPosition().y + 100 && Target.y >= Effect_W->getPosition().y - 100) {
 								target->HP -= 5 * (1 + hero->Level * 0.15 + hero->Skill_Enhance / 100);
 							}
@@ -1475,13 +1535,13 @@ void HelloWorld::update(float dt)
 	float r4 = sqrt((point.x - hero->position.x) * (point.x - hero->position.x) + (point.y - hero->position.y) * (point.y - hero->position.y));
 	if (r4 >= 50)
 	{
-		_hero->setPosition(Point(_hero->getPosition().x + 2* (hero->position.x - point.x) / r4, _hero->getPosition().y + 2 * (hero->position.y - point.y) / r4));
+		_hero->setPosition(Point(_hero->getPosition().x + 2 * (hero->position.x - point.x) / r4, _hero->getPosition().y + 2 * (hero->position.y - point.y) / r4));
 	}
 	else
 	{
 		if (_heroAttack->getfCurTime() == 0)
 			_heroAttack->start();
-		if (_heroAttack->getfCurTime() >= 1&&_heroLife==0)
+		if (_heroAttack->getfCurTime() >= 1 && _heroLife == 0)
 		{
 			_hero->setAction(1, "attack", 4, _hero->ID);
 			hero->HP -= _hero->Attack;
@@ -1536,6 +1596,8 @@ void HelloWorld::update(float dt)
 		tower[i]->progress->setPercentage((((float)tower[i]->HP) / tower[i]->MaxHP) * 100);
 		if (tower[i]->HP <= 0)
 		{
+			if (tower[i]->getTag() == 5)
+				win();
 			tower[i]->sprBar->setVisible(false);
 			continue;
 		}
@@ -1578,7 +1640,7 @@ void HelloWorld::update(float dt)
 			{
 				auto aim = (Hero*)background->getChildByTag(choice);
 				Point aimPoint;
-				switch (choice) {  
+				switch (choice) {
 				case 6: {
 					aimPoint = background->convertToWorldSpaceAR(aim->getPosition()) + Point(2670, 1500);
 					break;
@@ -1627,7 +1689,7 @@ void HelloWorld::update(float dt)
 							aim->HP -= hero->Attack * 1.2;
 						}
 						else {
-								aim->HP -= hero->Attack ;
+							aim->HP -= hero->Attack;
 						}
 					}
 					else if ((*it)->getName() == "skill") {
@@ -1637,7 +1699,7 @@ void HelloWorld::update(float dt)
 						aim->HP -= 120 * (1 + hero->Skill_Enhance * 0.01 + hero->Level * 0.01);
 					}
 					else if ((*it)->getName() == "burnning_bullet") {
-						aim->HP -= hero->Attack * 1.2 ;
+						aim->HP -= hero->Attack * 1.2;
 					}
 					this->removeChild(*it);
 
@@ -1683,7 +1745,7 @@ void HelloWorld::update(float dt)
 							aim->HP -= hero->Attack * 1.2;
 						}
 						else {
-								aim->HP -= hero->Attack;
+							aim->HP -= hero->Attack;
 						}
 					}
 					else if ((*it)->getName() == "skill") {
@@ -1859,7 +1921,7 @@ bool HelloWorld::onTouchBegan(Touch* touch, Event* unused_event)
 			spritePoint = background->getPosition() + Point(2430, 1390);
 			break;
 		case 6:
-			spritePoint=background->convertToWorldSpaceAR(sprite->getPosition()) + Point(2670, 1500);
+			spritePoint = background->convertToWorldSpaceAR(sprite->getPosition()) + Point(2670, 1500);
 			break;
 		case 7:
 			spritePoint = background->convertToWorldSpaceAR(sprite->getPosition()) + Point(2430, 1345);
@@ -1976,7 +2038,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keycode, Event* event)
 		}
 		case EventKeyboard::KeyCode::KEY_W:
 		{
-			hero->setAction(hero->direction, "skill", 4,hero->ID);
+			hero->setAction(hero->direction, "skill", 4, hero->ID);
 		}
 		case EventKeyboard::KeyCode::KEY_E:
 		{
@@ -2311,9 +2373,11 @@ void HelloWorld::Shop(Ref* psender)
 		outButton->setTag(0);
 	}
 }
-/*PhysicsBody* bulletBody = PhysicsBody::createBox(bullet0->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT);
-bulletBody->setGravityEnable(false);
-bulletBody->setCategoryBitmask(0x01);
-bulletBody->setContactTestBitmask(0x01);
-bulletBody->setCollisionBitmask(0x01);
-bullet0->setPhysicsBody(bulletBody);*/
+void HelloWorld::win()
+{
+	Director::getInstance()->replaceScene(TransitionFade::create(3.0f, WinLayer::createScene()));
+}
+void HelloWorld::lose()
+{
+	Director::getInstance()->replaceScene(TransitionFade::create(3.0f, LoseLayer::createScene()));
+}
