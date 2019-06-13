@@ -1,14 +1,12 @@
 #include "Hero.h"
 USING_NS_CC;
-int ID2;
 Hero* Hero::createHeroSprite(Point position, int direction, const char* name, int ID)
 {
-	ID2 = ID;
 	Hero* hero = new Hero();
 	if (hero && hero->init())
 	{
-		hero->autorelease();
-		hero->heroInit(position, direction, name);
+		hero->ID = ID;
+		hero->heroInit(position, direction, name,ID);
 		hero->setScale(1.2f);
 		return hero;
 	}
@@ -23,36 +21,49 @@ bool Hero::init()
 	}
 	return true;
 }
-void Hero::heroInit(Point position, int direction, const char* name)
+void Hero::heroInit(Point position, int direction, const char* name,int ID)
 {
 	this->isRun = false;
 	this->position = position;
-	sprite = Sprite::create(String::createWithFormat("%s11.png", name)->getCString());
+	sprite = Sprite::create(String::createWithFormat("%d%s11.png",ID, name)->getCString());
 	sprite->setPosition(position);
 	addChild(sprite);
-	auto* action = createAnimate(1, "stand", 2);
+	auto* action = createAnimate(1, "stand", 2,ID);
 	action->setTag(100);
 	sprite->runAction(action);
 }
-Animate* Hero::createAnimate(int direction, const char* action, int num)
+Animate* Hero::createAnimate(int direction, const char* action, int num,int ID)
 {
+	
 	auto* m_frameCache = SpriteFrameCache::getInstance();
-	if (ID2 == 1)
+	if (ID == 1)
 	{
 		m_frameCache->addSpriteFramesWithFile("guanyu.plist", "guanyu.png");
 	}
-	if (ID2 == 2)
+	if (ID == 2)
 	{
 		m_frameCache->addSpriteFramesWithFile("zhugeliang.plist", "zhugeliang.png");
 	}
-	if (ID2 == 3)
+	if (ID == 3)
 	{
 		m_frameCache->addSpriteFramesWithFile("huangzhong.plist", "huangzhong.png");
+	}
+	if (ID == 4)
+	{
+		m_frameCache->addSpriteFramesWithFile("jinzhanxiaobing.plist", "jinzhanxiaobing.png");
+	}
+	if (ID == 5)
+	{
+		m_frameCache->addSpriteFramesWithFile("yuanchengxiaobing.plist", "yuanchengxiaobing.png");
+	}
+	if(ID==6)
+	{
+		m_frameCache->addSpriteFramesWithFile("paoche.plist", "paoche.png");
 	}
 	Vector<SpriteFrame*> frameArray;
 	for (int i = 1; i <= num; i++)
 	{
-		auto* frame = m_frameCache->getSpriteFrameByName(String::createWithFormat("%s%d%d.png", action, direction, i)->getCString());
+		auto* frame = m_frameCache->getSpriteFrameByName(String::createWithFormat("%d%s%d%d.png", ID ,action, direction, i)->getCString());
 		frameArray.pushBack(frame);
 	}
 	Animation* animation = Animation::createWithSpriteFrames(frameArray);
@@ -69,10 +80,10 @@ Animate* Hero::createAnimate(int direction, const char* action, int num)
 	//将动画包装成一个动作
 	return Animate::create(animation);
 }
-void Hero::setAction(int direction, const char* action, int num)
+void Hero::setAction(int direction, const char* action, int num,int ID)
 {
 	sprite->stopActionByTag(100);
-	auto* animate = createAnimate(direction, action, num);
+	auto* animate = createAnimate(direction, action, num,ID);
 	animate->setTag(100);
 	sprite->runAction(animate);
 }
@@ -92,25 +103,4 @@ int Hero::Max_Exp(int level) {
 	int max_exp;
 	max_exp = 300 + (level - 1) * 50;
 	return max_exp;
-}
-void Hero::Experience_System(int exp, int Level_Exp) {
-	Exp = Exp + exp;
-	if (Exp >= Level_Exp) {
-		Level++;
-		Exp = Exp - Level_Exp;
-		Attack += 5;
-		MaxHP += 20;
-		MaxMP += 10;
-		Defense += 5;
-	}
-	if (Level > 18) {
-		Level = 18;
-		Exp = 0;
-	}
-}
-void Hero::Money_System(int money) {
-	Money = Money + money;
-}
-void Hero::Get_Attack(int damage) {
-	HP = HP - damage;
 }

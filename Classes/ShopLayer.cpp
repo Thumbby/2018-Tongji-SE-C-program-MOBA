@@ -14,37 +14,37 @@ bool ShopLayer::init()
 	{
 		CC_BREAK_IF(!Layer::init());
 		Size winSize = Director::getInstance()->getWinSize();
-		ScrollView * scrollView = ScrollView::create(Size(winSize.width, 35*winSize.height/100));
-		scrollView->setBounceable(true);								   
-        scrollView->ignoreAnchorPointForPosition(false);
-	    scrollView->setPosition(Point(winSize.width/2, winSize.height/2));
-	    scrollView->setDirection(ScrollView::Direction::VERTICAL);
-		
-		Layer * layer = Layer::create();
+		ScrollView* scrollView = ScrollView::create(Size(winSize.width, 35 * winSize.height / 100));
+		scrollView->setBounceable(true);
+		scrollView->ignoreAnchorPointForPosition(false);
+		scrollView->setPosition(Point(winSize.width / 2, winSize.height / 2));
+		scrollView->setDirection(ScrollView::Direction::VERTICAL);
+
+		Layer* layer = Layer::create();
 		auto layerSize = layer->getContentSize();
 		layer->setPosition(0, 0);
 		scrollView->setBounceable(true);
 
 		Label* yidong = Label::createWithSystemFont("Move", "Arial", 20);
-		yidong ->setPosition(25 * winSize.width / 100, 105 * winSize.height / 100);
+		yidong->setPosition(25 * winSize.width / 100, 105 * winSize.height / 100);
 		layer->addChild(yidong);
 
-		MenuItem* shoes = MenuItemImage::create("shensuzhixve.jpg", "shensuzhixve.jpg",CC_CALLBACK_1(ShopLayer::shopMenuCallback,this));
-		shoes->setScale(0.2f); shoes->setTag(1); shoes->setPosition(35*winSize.width / 100, 105 * winSize.height / 100);
+		MenuItem* shoes = MenuItemImage::create("shensuzhixve.jpg", "shensuzhixve.jpg", CC_CALLBACK_1(ShopLayer::shopMenuCallback, this));
+		shoes->setScale(0.2f); shoes->setTag(1); shoes->setPosition(35 * winSize.width / 100, 105 * winSize.height / 100);
 
 		Label* attack = Label::createWithSystemFont("Attack", "Arial", 20);
 		attack->setPosition(25 * winSize.width / 100, 95 * winSize.height / 100);
 		layer->addChild(attack);
 
 		MenuItem* attack1 = MenuItemImage::create("tiejian.jpg", "tiejian.jpg", CC_CALLBACK_1(ShopLayer::shopMenuCallback, this));
-		attack1->setScale(0.2f); attack1->setTag(2); attack1->setPosition(35*winSize.width / 100, 95 * winSize.height / 100);
+		attack1->setScale(0.2f); attack1->setTag(2); attack1->setPosition(35 * winSize.width / 100, 95 * winSize.height / 100);
 
 		MenuItem* attack2 = MenuItemImage::create("bishou.jpg", "bishou.jpg", CC_CALLBACK_1(ShopLayer::shopMenuCallback, this));
-		attack2->setScale(0.2f); attack2->setTag(3); attack2->setPosition(45*winSize.width / 100, 95 * winSize.height / 100);
+		attack2->setScale(0.2f); attack2->setTag(3); attack2->setPosition(45 * winSize.width / 100, 95 * winSize.height / 100);
 
 		MenuItem* attack3 = MenuItemImage::create("bojiquantao.jpg", "bojiquantao.jpg", CC_CALLBACK_1(ShopLayer::shopMenuCallback, this));
 		attack3->setScale(0.2f); attack3->setTag(4); attack3->setPosition(55 * winSize.width / 100, 95 * winSize.height / 100);
-		
+
 		MenuItem* attack4 = MenuItemImage::create("fengbaojujian.jpg", "fengbaojujian.jpg", CC_CALLBACK_1(ShopLayer::shopMenuCallback, this));
 		attack4->setScale(0.2f); attack4->setTag(5); attack4->setPosition(35 * winSize.width / 100, 85 * winSize.height / 100);
 
@@ -68,7 +68,7 @@ bool ShopLayer::init()
 		layer->addChild(spell);
 
 		MenuItem* spell1 = MenuItemImage::create("zhoushudianji.jpg", "zhoushudianji.jpg", CC_CALLBACK_1(ShopLayer::shopMenuCallback, this));
-		spell1->setScale(0.2f); spell1->setTag(11); spell1->setPosition(35 * winSize.width / 100,65 * winSize.height / 100);
+		spell1->setScale(0.2f); spell1->setTag(11); spell1->setPosition(35 * winSize.width / 100, 65 * winSize.height / 100);
 
 		MenuItem* spell2 = MenuItemImage::create("lanbaoshi.jpg", "lanbaoshi.jpg", CC_CALLBACK_1(ShopLayer::shopMenuCallback, this));
 		spell2->setScale(0.2f); spell2->setTag(12); spell2->setPosition(45 * winSize.width / 100, 65 * winSize.height / 100);
@@ -97,7 +97,7 @@ bool ShopLayer::init()
 		Label* defence = Label::createWithSystemFont("Defence", "Arial", 20);
 		defence->setPosition(25 * winSize.width / 100, 35 * winSize.height / 100);
 		layer->addChild(defence);
-		
+
 		MenuItem* defence1 = MenuItemImage::create("hongmanao.jpg", "hongmanao.jpg", CC_CALLBACK_1(ShopLayer::shopMenuCallback, this));
 		defence1->setScale(0.2f); defence1->setTag(20); defence1->setPosition(35 * winSize.width / 100, 35 * winSize.height / 100);
 
@@ -139,24 +139,24 @@ bool ShopLayer::init()
 		support3->setScale(0.2f); support3->setTag(31); support3->setPosition(55 * winSize.width / 100, 5 * winSize.height / 100);
 
 		Menu* shop = Menu::create(
-			shoes, 
-			attack1, attack2,attack3,attack4,attack5,attack6,attack7,attack8,attack9, 
-			spell1,spell2,spell3,spell4,spell5,spell6,spell7,spell8,spell9,
-			defence1,defence2,defence3,defence4,defence5,defence6,defence7,defence8,defence9,
-			support1,support2,support3,
+			shoes,
+			attack1, attack2, attack3, attack4, attack5, attack6, attack7, attack8, attack9,
+			spell1, spell2, spell3, spell4, spell5, spell6, spell7, spell8, spell9,
+			defence1, defence2, defence3, defence4, defence5, defence6, defence7, defence8, defence9,
+			support1, support2, support3,
 			NULL
 		);
 		shop->setPosition(Point::ZERO);
 		layer->addChild(shop);
 
 		scrollView->setContainer(layer);
-		scrollView->setContentSize(Size(winSize.width/2, 110*winSize.height/100));
+		scrollView->setContentSize(Size(winSize.width / 2, 110 * winSize.height / 100));
 		scrollView->setContentOffset(Point(0, 0));
 		this->addChild(scrollView);
 		mscrollView = scrollView;
 		bRet = true;
 	} while (0);
-	
+
 	return bRet;
 }
 void ShopLayer::shopMenuCallback(Ref* psender)
@@ -168,17 +168,17 @@ void ShopLayer::shopMenuCallback(Ref* psender)
 	this->removeChildByName("menu1");
 	Size winSize = Director::getInstance()->getWinSize();
 	auto itemSelect = (MenuItem*)psender;
-	int num = itemSelect->getTag(); 
+	int num = itemSelect->getTag();
 
 	Label* contents;
 	switch (num)
 	{
 	case 1:
-		contents= Label::createWithSystemFont("speed+30   $250", "Arial", 16);
+		contents = Label::createWithSystemFont("speed+0.5   $250", "Arial", 16);
 		price = 250;
 		break;
 	case 2:
-	    contents = Label::createWithSystemFont("Attack+20  $250", "Arial", 16);
+		contents = Label::createWithSystemFont("Attack+20  $250", "Arial", 16);
 		price = 250;
 		break;
 	case 3:
@@ -301,7 +301,7 @@ void ShopLayer::shopMenuCallback(Ref* psender)
 	if (hero->Weapon[num] >= 1)
 	{
 		Label* sell = Label::createWithSystemFont("Sell", "Arial", 20);
-		auto btn1 = MenuItemLabel::create(sell, CC_CALLBACK_1(ShopLayer::sellCallback, this, num,price));
+		auto btn1 = MenuItemLabel::create(sell, CC_CALLBACK_1(ShopLayer::sellCallback, this, num, price));
 		btn1->setTag(num);
 		btn1->setPosition(75 * winSize.width / 100, 50 * winSize.height / 100);
 		Menu* menu1 = Menu::create(btn1, NULL);
@@ -313,7 +313,7 @@ void ShopLayer::shopMenuCallback(Ref* psender)
 	contents->setPosition(70 * winSize.width / 100, 60 * winSize.height / 100);
 	this->addChild(contents);
 	Label* buy = Label::createWithSystemFont("Buy", "Arial", 20);
-	auto btn = MenuItemLabel::create(buy, CC_CALLBACK_1(ShopLayer::buyCallback, this,price));
+	auto btn = MenuItemLabel::create(buy, CC_CALLBACK_1(ShopLayer::buyCallback, this, price));
 	btn->setTag(num);
 	btn->setPosition(75 * winSize.width / 100, 40 * winSize.height / 100);
 	Menu* menu = Menu::create(btn, NULL);
@@ -322,281 +322,281 @@ void ShopLayer::shopMenuCallback(Ref* psender)
 	this->addChild(menu, 1);
 
 }
-	void ShopLayer::buyCallback(Ref* psender,int price)
+void ShopLayer::buyCallback(Ref* psender, int price)
+{
+	this->removeChildByTag(200);
+	Size winSize = Director::getInstance()->getWinSize();
+	if (hero->weaponCount == 6)
 	{
-		this->removeChildByTag(200);
-		Size winSize = Director::getInstance()->getWinSize();
-		if (hero->weaponCount == 6)
-		{
-			Label* label1 = Label::createWithSystemFont("No More Weapons", "Arial", 20);
-			label1->setPosition(75 * winSize.width / 100, 30 * winSize.height / 100 + 10);
-			label1->setTag(200);
-			this->addChild(label1);
-			return;
-	    }
-		
-		
-		if (hero->Money < price)
-		{
-
-			Label* label1 = Label::createWithSystemFont("More Money...", "Arial", 20);
-			label1->setPosition(75 * winSize.width / 100, 30 * winSize.height / 100+10);
-			label1->setTag(200);
-			this->addChild(label1);
-			return;
-		}
-		
-		else
-			hero->Money -= price;
-		hero->weaponCount++;	
-		auto itemSelect = (MenuItem*)psender;
-		int num = itemSelect->getTag();
-		switch (num)
-		{
-		case 1:
-			hero->speed += 2;
-			hero->Weapon[1]++;
-			break;
-		case 2:
-			hero->Attack += 20;
-			hero->Weapon[2]++;
-			break;
-		case 3:
-			hero->Attack_Speed += 10;
-			hero->Weapon[3]++;
-			break;
-		case 4:
-			hero->Critical_Rate += 10;
-			hero->Weapon[4]++;
-			break;
-		case 5:
-			hero->Attack += 80;
-			hero->Weapon[5]++;
-			break;
-		case 6:
-			hero->Attack_Speed += 25;
-			hero->Weapon[6]++;
-			break;
-		case 7:
-			hero->Critical_Rate += 25;
-			hero->Weapon[7]++;
-			break;
-		case 8:
-			hero->Attack += 160;
-			hero->Weapon[8]++;
-			break;
-		case 9:
-			hero->Attack_Speed += 40;
-			hero->Weapon[9]++;
-			break;
-		case 10:
-			hero->Critical_Rate += 50;
-			hero->Weapon[10]++;
-			break;
-		case 11:
-			hero->Skill_Enhance += 5;
-			hero->Weapon[11]++;
-			break;
-		case 12:
-			hero->MaxMP += 300;
-			hero->Weapon[12]++;
-			break;
-		case 13:
-			hero->MP_Recover += 5;
-			hero->Weapon[13]++;
-			break;
-		case 14:
-			hero->Skill_Enhance += 15;
-			hero->Weapon[14]++;
-			break;
-		case 15:
-			hero->MaxMP += 400;
-			hero->Weapon[15]++;
-			break;
-		case 16:
-			hero->MP_Recover += 15;
-			hero->Weapon[16]++;
-			break;
-		case 17:
-			hero->Skill_Enhance += 50;
-			hero->Weapon[17]++;
-			break;
-		case 18:
-			hero->MaxMP +=1000;
-			hero->Weapon[18]++;
-			break;
-		case 19:
-			hero->MP_Recover += 40;
-			hero->Weapon[19]++;
-			break;
-		case 20:
-			hero->MaxHP += 300;
-			hero->Weapon[20]++;
-			break;
-		case 21:
-			hero->Defense += 90;
-			hero->Weapon[21]++;
-			break;
-		case 22:
-			hero->Resistance += 90;
-			hero->Weapon[22]++;
-			break;
-		case 23:
-			hero->MaxHP += 1000;
-			hero->Weapon[23]++;
-			break;
-		case 24:
-			hero->Defense += 210;
-			hero->Weapon[24]++;
-			break;
-		case 25:
-			hero->Resistance += 150;
-			hero->Weapon[25]++;
-			break;
-		case 26:
-			hero->MaxHP += 2000;
-			hero->Weapon[26]++;
-			break;
-		case 27:
-			hero->Defense += 400;
-			hero->Weapon[27]++;
-			break;
-		case 28:
-			hero->Resistance += 320; 
-			hero->Weapon[28]++;
-			break;
-		case 29:
-
-			break;
-		case 30:
-
-			break;
-		case 31:
-
-			break;
-		}
+		Label* label1 = Label::createWithSystemFont("No More Weapons", "Arial", 20);
+		label1->setPosition(75 * winSize.width / 100, 30 * winSize.height / 100 + 10);
+		label1->setTag(200);
+		this->addChild(label1);
+		return;
 	}
-	void ShopLayer::sellCallback(Ref* psender, int num,int price)
+
+
+	if (hero->Money < price)
 	{
-		hero->Money += price/2;
-		hero->Weapon[num]--;
-		hero->weaponCount--;
-		if (hero->Weapon[num] == 0)
-		{
-			this->removeChildByName("menu1");
-		}
-		switch (num)
-		{
-		case 1:
-			hero->speed -= 2;
-			break;
-		case 2:
-			hero->Attack -= 20;
-		
-			break;
-		case 3:
-			hero->Attack_Speed -= 10;
-			
-			break;
-		case 4:
-			hero->Critical_Rate -= 10;
-		
-			break;
-		case 5:
-			hero->Attack -= 80;
-		
-			break;
-		case 6:
-			hero->Attack_Speed -= 25;
-		
-			break;
-		case 7:
-			hero->Critical_Rate -= 25;
-			
-			break;
-		case 8:
-			hero->Attack -= 160;
-			
-			break;
-		case 9:
-			hero->Attack_Speed -= 40;
-		
-			break;
-		case 10:
-			hero->Critical_Rate -= 50;
-			
-			break;
-		case 11:
-			hero->Skill_Enhance -= 5;
-		
-			break;
-		case 12:
-			hero->MaxMP -= 300;
-			
-			break;
-		case 13:
-			hero->MP_Recover -= 5;
-	
-			break;
-		case 14:
-			hero->Skill_Enhance -= 15;
-			
-			break;
-		case 15:
-			hero->MaxMP -= 400;
-		
-			break;
-		case 16:
-			hero->MP_Recover -= 15;
-		
-			break;
-		case 17:
-			hero->Skill_Enhance -= 50;
-			
-			break;
-		case 18:
-			hero->MaxMP -= 1000;
-		
-			break;
-		case 19:
-			hero->MP_Recover -= 40;
-			
-			break;
-		case 20:
-			hero->MaxHP -= 300;
-			
-			break;
-		case 21:
-			hero->Defense -= 90;
-			
-			break;
-		case 22:
-			hero->Resistance -= 90;
-			
-			break;
-		case 23:
-			hero->MaxHP -= 1000;
-			
-			break;
-		case 24:
-			hero->Defense -= 210;
-			
-			break;
-		case 25:
-			hero->Resistance -= 150;
-		
-			break;
-		case 26:
-			hero->MaxHP -= 2000;
-			
-			break;
-		case 27:
-			hero->Defense -= 400;
-			
-			break;
-		case 28:
-			hero->Resistance -= 320;
-		
-			break;
-		}
-    }
+
+		Label* label1 = Label::createWithSystemFont("More Money...", "Arial", 20);
+		label1->setPosition(75 * winSize.width / 100, 30 * winSize.height / 100 + 10);
+		label1->setTag(200);
+		this->addChild(label1);
+		return;
+	}
+
+	else
+		hero->Money -= price;
+	hero->weaponCount++;
+	auto itemSelect = (MenuItem*)psender;
+	int num = itemSelect->getTag();
+	switch (num)
+	{
+	case 1:
+		hero->speed += 0.5;
+		hero->Weapon[1]++;
+		break;
+	case 2:
+		hero->Attack += 20;
+		hero->Weapon[2]++;
+		break;
+	case 3:
+		hero->Attack_Speed += 10;
+		hero->Weapon[3]++;
+		break;
+	case 4:
+		hero->Critical_Rate += 10;
+		hero->Weapon[4]++;
+		break;
+	case 5:
+		hero->Attack += 80;
+		hero->Weapon[5]++;
+		break;
+	case 6:
+		hero->Attack_Speed += 25;
+		hero->Weapon[6]++;
+		break;
+	case 7:
+		hero->Critical_Rate += 25;
+		hero->Weapon[7]++;
+		break;
+	case 8:
+		hero->Attack += 160;
+		hero->Weapon[8]++;
+		break;
+	case 9:
+		hero->Attack_Speed += 40;
+		hero->Weapon[9]++;
+		break;
+	case 10:
+		hero->Critical_Rate += 50;
+		hero->Weapon[10]++;
+		break;
+	case 11:
+		hero->Skill_Enhance += 5;
+		hero->Weapon[11]++;
+		break;
+	case 12:
+		hero->MaxMP += 300;
+		hero->Weapon[12]++;
+		break;
+	case 13:
+		hero->MP_Recover += 5;
+		hero->Weapon[13]++;
+		break;
+	case 14:
+		hero->Skill_Enhance += 15;
+		hero->Weapon[14]++;
+		break;
+	case 15:
+		hero->MaxMP += 400;
+		hero->Weapon[15]++;
+		break;
+	case 16:
+		hero->MP_Recover += 15;
+		hero->Weapon[16]++;
+		break;
+	case 17:
+		hero->Skill_Enhance += 50;
+		hero->Weapon[17]++;
+		break;
+	case 18:
+		hero->MaxMP += 1000;
+		hero->Weapon[18]++;
+		break;
+	case 19:
+		hero->MP_Recover += 40;
+		hero->Weapon[19]++;
+		break;
+	case 20:
+		hero->MaxHP += 300;
+		hero->Weapon[20]++;
+		break;
+	case 21:
+		hero->Defense += 90;
+		hero->Weapon[21]++;
+		break;
+	case 22:
+		hero->Resistance += 90;
+		hero->Weapon[22]++;
+		break;
+	case 23:
+		hero->MaxHP += 1000;
+		hero->Weapon[23]++;
+		break;
+	case 24:
+		hero->Defense += 210;
+		hero->Weapon[24]++;
+		break;
+	case 25:
+		hero->Resistance += 150;
+		hero->Weapon[25]++;
+		break;
+	case 26:
+		hero->MaxHP += 2000;
+		hero->Weapon[26]++;
+		break;
+	case 27:
+		hero->Defense += 400;
+		hero->Weapon[27]++;
+		break;
+	case 28:
+		hero->Resistance += 320;
+		hero->Weapon[28]++;
+		break;
+	case 29:
+
+		break;
+	case 30:
+
+		break;
+	case 31:
+
+		break;
+	}
+}
+void ShopLayer::sellCallback(Ref* psender, int num, int price)
+{
+	hero->Money += price / 2;
+	hero->Weapon[num]--;
+	hero->weaponCount--;
+	if (hero->Weapon[num] == 0)
+	{
+		this->removeChildByName("menu1");
+	}
+	switch (num)
+	{
+	case 1:
+		hero->speed -= 2;
+		break;
+	case 2:
+		hero->Attack -= 20;
+
+		break;
+	case 3:
+		hero->Attack_Speed -= 10;
+
+		break;
+	case 4:
+		hero->Critical_Rate -= 10;
+
+		break;
+	case 5:
+		hero->Attack -= 80;
+
+		break;
+	case 6:
+		hero->Attack_Speed -= 25;
+
+		break;
+	case 7:
+		hero->Critical_Rate -= 25;
+
+		break;
+	case 8:
+		hero->Attack -= 160;
+
+		break;
+	case 9:
+		hero->Attack_Speed -= 40;
+
+		break;
+	case 10:
+		hero->Critical_Rate -= 50;
+
+		break;
+	case 11:
+		hero->Skill_Enhance -= 5;
+
+		break;
+	case 12:
+		hero->MaxMP -= 300;
+
+		break;
+	case 13:
+		hero->MP_Recover -= 5;
+
+		break;
+	case 14:
+		hero->Skill_Enhance -= 15;
+
+		break;
+	case 15:
+		hero->MaxMP -= 400;
+
+		break;
+	case 16:
+		hero->MP_Recover -= 15;
+
+		break;
+	case 17:
+		hero->Skill_Enhance -= 50;
+
+		break;
+	case 18:
+		hero->MaxMP -= 1000;
+
+		break;
+	case 19:
+		hero->MP_Recover -= 40;
+
+		break;
+	case 20:
+		hero->MaxHP -= 300;
+
+		break;
+	case 21:
+		hero->Defense -= 90;
+
+		break;
+	case 22:
+		hero->Resistance -= 90;
+
+		break;
+	case 23:
+		hero->MaxHP -= 1000;
+
+		break;
+	case 24:
+		hero->Defense -= 210;
+
+		break;
+	case 25:
+		hero->Resistance -= 150;
+
+		break;
+	case 26:
+		hero->MaxHP -= 2000;
+
+		break;
+	case 27:
+		hero->Defense -= 400;
+
+		break;
+	case 28:
+		hero->Resistance -= 320;
+
+		break;
+	}
+}

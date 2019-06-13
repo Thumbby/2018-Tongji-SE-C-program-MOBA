@@ -38,18 +38,14 @@ public:
 
 	Hero* _hero;
 
+	Hero* soldier_7;
+	Hero* soldier_8;
+	Hero* soldier_9;
+	Hero* soldier_10;
+	Hero* soldier_11;
+	Hero* soldier_12;
+
 	int counter = 0;
-
-	Monster* monster;
-
-	Monster* solider;
-
-	Vector<Monster*> m_soliderManager;
-	//TimeCounter* soliderTimeCounter;
-
-	TimeCounter* m_timeCounter;
-
-	TimeCounter* soliderTimeCounter;
 
 	TimeCounter* HeroTimeCounter;
 
@@ -60,6 +56,20 @@ public:
 	TimeCounter* _heroAttack;
 
 	TimeCounter* _heroDeath;
+
+	TimeCounter* Attack_7;
+	TimeCounter* Attack_8;
+	TimeCounter* Attack_9;
+	TimeCounter* Attack_10;
+	TimeCounter* Attack_11;
+	TimeCounter* Attack_12;
+
+	TimeCounter* Death_7;
+	TimeCounter* Death_8;
+	TimeCounter* Death_9;
+	TimeCounter* Death_10;
+	TimeCounter* Death_11;
+	TimeCounter* Death_12;
 
 	int _heroLife;
 
@@ -91,15 +101,39 @@ public:
 
 	ProgressTimer* progress2;
 
+	//AIÑªÌõ
 	Sprite* _sprBar;
 
 	Sprite* _sprBar2;
 
 	Sprite* _sprBlood;
 
+	Sprite* _sprMagic;
+
 	ProgressTimer* _progress;
 
 	ProgressTimer* _progress2;
+	//Ð¡±øÑªÌõ
+	Sprite* sprBar_7;
+	Sprite* sprBar_8;
+	Sprite* sprBar_9;
+	Sprite* sprBar_10;
+	Sprite* sprBar_11;
+	Sprite* sprBar_12;
+
+	Sprite* sprBlood_7;
+	Sprite* sprBlood_8;
+	Sprite* sprBlood_9;
+	Sprite* sprBlood_10;
+	Sprite* sprBlood_11;
+	Sprite* sprBlood_12;
+
+	ProgressTimer* progress_7;
+	ProgressTimer* progress_8;
+	ProgressTimer* progress_9;
+	ProgressTimer* progress_10;
+	ProgressTimer* progress_11;
+	ProgressTimer* progress_12;
 
 	static cocos2d::Scene* createScene(int ID);
 

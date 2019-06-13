@@ -110,8 +110,6 @@ bool HelloWorld::init()
 
 	};
 
-
-
 	//创建事件监听器，监听鼠标事件
 
 	auto myMouseListener = EventListenerMouse::create();
@@ -121,9 +119,7 @@ bool HelloWorld::init()
 
 	touchListener->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan, this);
 
-
 	myMouseListener->onMouseMove = [=](Event* event)
-
 	{
 
 		EventMouse* e = (EventMouse*)event;
@@ -131,7 +127,6 @@ bool HelloWorld::init()
 		mouse->setPosition(e->getCursorX(), e->getCursorY());
 
 	};
-
 
 	//将事件监听器与场景绑定
 
@@ -154,11 +149,6 @@ bool HelloWorld::init()
 
 	this->addChild(_heroDeath);
 
-	soliderTimeCounter = TimeCounter::create();
-
-	this->addChild(soliderTimeCounter);
-
-	soliderTimeCounter->start();
 
 	HeroTimeCounter = TimeCounter::create();
 
@@ -178,12 +168,12 @@ bool HelloWorld::init()
 	hero->setScale(1.0f);
 
 	hero->setName("hero");
-	//
-	hero->ID = ID1;
 
 	hero->life = 1;
 
 	hero->Level = 6;
+
+	hero->MaxExp = 600;
 
 	hero->Money = 0;
 
@@ -199,15 +189,11 @@ bool HelloWorld::init()
 
 	hero->addChild(sprBar);
 
-
-
 	sprBar2 = Sprite::create("bar.png");
 
 	sprBar2->setScale(0.1f);
 
 	hero->addChild(sprBar2);
-
-
 
 	sprBlood = Sprite::create("blood.png");
 
@@ -222,8 +208,6 @@ bool HelloWorld::init()
 	progress->setBarChangeRate(Point(1, 0));
 
 	hero->addChild(progress);
-
-
 
 	auto sprMagic = Sprite::create("magic.png");
 
@@ -246,8 +230,7 @@ bool HelloWorld::init()
 	progress->setPosition(Point(hero->position.x, hero->position.y + 45));
 
 	progress2->setPosition(Point(hero->position.x, hero->position.y + 40));
-
-
+	//AI
 	_hero = Hero::createHeroSprite(Vec2(2670, 1500), 2, "stand", 1);//2670 1500
 
 	_hero->life = 0;
@@ -281,8 +264,6 @@ bool HelloWorld::init()
 	_hero->setScale(1.0f);
 
 	_hero->setName("_hero");
-	//
-	_hero->ID = 1;
 
 	_hero->life = 1;
 
@@ -302,15 +283,11 @@ bool HelloWorld::init()
 
 	_hero->addChild(_sprBar);
 
-
-
 	_sprBar2 = Sprite::create("bar.png");
 
 	_sprBar2->setScale(0.1f);
 
 	_hero->addChild(_sprBar2);
-
-
 
 	_sprBlood = Sprite::create("blood.png");
 
@@ -326,9 +303,7 @@ bool HelloWorld::init()
 
 	_hero->addChild(_progress);
 
-
-
-	auto _sprMagic = Sprite::create("magic.png");
+	_sprMagic = Sprite::create("magic.png");
 
 	_progress2 = ProgressTimer::create(_sprMagic);
 
@@ -350,10 +325,107 @@ bool HelloWorld::init()
 
 	_progress2->setPosition(Point(_hero->position.x, _hero->position.y + 40));
 
-
 	_hero->setTag(6);
 
 	background->addChild(_hero);
+
+	//近战小兵
+	Death_7 = TimeCounter::create();
+	this->addChild(Death_7);
+	Attack_7 = TimeCounter::create();
+	this->addChild(Attack_7);
+	soldier_7= Hero::createHeroSprite(Vec2(2430, 1345), 2, "stand", 4);
+	soldier_7->life = 0;
+	soldier_7->MaxHP = 500;
+	soldier_7->HP = 500;
+	soldier_7->Attack = 50;
+	soldier_7->Attack_Speed = 3.5;
+	soldier_7->Defense = 15;
+	soldier_7->Resistance = 10;
+	soldier_7->setScale(1.0f);
+	soldier_7->setName("soldier_7");
+	soldier_7->speed = 0.9;
+	soldier_7->Attack_Ready = 0;
+	sprBar_7= Sprite::create("bar.png");
+	sprBar_7->setScale(0.1f);
+	soldier_7->addChild(sprBar_7);
+	sprBlood_7 = Sprite::create("blood.png");
+	progress_7 = ProgressTimer::create(sprBlood_7);
+	progress_7->setType(ProgressTimer::Type::BAR);
+	progress_7->setScale(0.1f);
+	progress_7->setMidpoint(Point(0, 0.5));
+	progress_7->setBarChangeRate(Point(1, 0));
+	soldier_7->addChild(progress_7);
+	sprBar_7->setPosition(Point(soldier_7->position.x, soldier_7->position.y + 45));
+	progress_7->setPosition(Point(soldier_7->position.x, soldier_7->position.y + 45));
+	soldier_7->setTag(7);
+	background->addChild(soldier_7);
+
+	//远程小兵
+	Death_8 = TimeCounter::create();
+	this->addChild(Death_8);
+	Attack_8 = TimeCounter::create();
+	this->addChild(Attack_8);
+	soldier_8 = Hero::createHeroSprite(Vec2(2435, 1350), 2, "stand", 5);
+	soldier_8->life = 0;
+	soldier_8->MaxHP = 400;
+	soldier_8->HP = 400;
+	soldier_8->Attack = 55;
+	soldier_8->Attack_Speed = 3.5;
+	soldier_8->Defense = 15;
+	soldier_8->Resistance = 10;
+	soldier_8->setScale(1.0f);
+	soldier_8->setName("soldier_8");
+	soldier_8->speed = 0.9;
+	soldier_8->Attack_Ready = 0;
+	sprBar_8 = Sprite::create("bar.png");
+	sprBar_8->setScale(0.1f);
+	soldier_8->addChild(sprBar_8);
+	sprBlood_8 = Sprite::create("blood.png");
+	progress_8 = ProgressTimer::create(sprBlood_8);
+	progress_8->setType(ProgressTimer::Type::BAR);
+	progress_8->setScale(0.1f);
+	progress_8->setMidpoint(Point(0, 0.5));
+	progress_8->setBarChangeRate(Point(1, 0));
+	soldier_8->addChild(progress_8);
+	sprBar_8->setPosition(Point(soldier_8->position.x, soldier_8->position.y + 45));
+	progress_8->setPosition(Point(soldier_8->position.x, soldier_8->position.y + 45));
+	soldier_8->setTag(8);
+	background->addChild(soldier_8);
+
+	//炮
+	Death_9 = TimeCounter::create();
+	this->addChild(Death_9);
+	Attack_9 = TimeCounter::create();
+	this->addChild(Attack_9);
+	soldier_9 = Hero::createHeroSprite(Vec2(2440, 1355), 2, "stand", 6);
+	soldier_9->life = 0;
+	soldier_9->MaxHP = 1000;
+	soldier_9->HP = 1000;
+	soldier_9->Attack = 70;
+	soldier_9->Attack_Speed = 2.0;
+	soldier_9->Defense = 35;
+	soldier_9->Resistance = 30;
+	soldier_9->setScale(1.0f);
+	soldier_9->setName("soldier_9");
+	soldier_9->speed = 0.9;
+	soldier_9->Attack_Ready = 0;
+	sprBar_9 = Sprite::create("bar.png");
+	sprBar_9->setScale(0.1f);
+	soldier_9->addChild(sprBar_9);
+	sprBlood_9 = Sprite::create("blood.png");
+	progress_9 = ProgressTimer::create(sprBlood_9);
+	progress_9->setType(ProgressTimer::Type::BAR);
+	progress_9->setScale(0.1f);
+	progress_9->setMidpoint(Point(0, 0.5));
+	progress_9->setBarChangeRate(Point(1, 0));
+	soldier_9->addChild(progress_9);
+	sprBar_9->setPosition(Point(soldier_9->position.x, soldier_9->position.y + 45));
+	progress_9->setPosition(Point(soldier_9->position.x, soldier_9->position.y + 45));
+	soldier_9->setTag(9);
+	background->addChild(soldier_9);
+	
+	//英雄技能
 	if (hero->ID == 1) {
 
 		Skill_Q = TimeCounter::create();
@@ -525,11 +597,6 @@ bool HelloWorld::init()
 		this->addChild(hero);
 
 	}
-	//野怪
-	monster = Monster::createMonsterSprite(Vec2(1050, 950), 2, "stand");
-
-	addChild(monster);
-
 	//防御塔
 	Tower* tower1 = Tower::create();
 
@@ -610,9 +677,8 @@ bool HelloWorld::init()
 }
 
 void HelloWorld::update(float dt)
-{	log("a%f b%f c%f d%f", hero->getPosition().x, hero->getPosition().y, _hero->getPosition().x, _hero->getPosition().y);
-	
-hero->removeChildByName("lab");
+{	
+    hero->removeChildByName("lab");
 
 	level = to_string(hero->Level);
 
@@ -626,8 +692,8 @@ hero->removeChildByName("lab");
 
 	label->setName("lab");
 
-	hero->addChild(label);
-	log("Money %d  Speed %f", hero->Money, hero->speed);
+	hero->addChild(label); 
+
 	float coin = rand() % 100 + 1;
 	if (coin <= hero->Critical_Rate)
 	{
@@ -647,6 +713,10 @@ hero->removeChildByName("lab");
 
 	_progress2->setPercentage((((float)_hero->MP) / _hero->MaxMP) * 100);
 
+	progress_7->setPercentage((((float)soldier_7->HP) / soldier_7->MaxHP) * 100);
+	progress_8->setPercentage((((float)soldier_8->HP) / soldier_8->MaxHP) * 100);
+	progress_9->setPercentage((((float)soldier_9->HP) / soldier_9->MaxHP) * 100);
+
 	string level = to_string(hero->Level);
 
 	label = Label::createWithTTF(level, "fonts/Marker Felt.ttf", 30);
@@ -655,7 +725,83 @@ hero->removeChildByName("lab");
 
 	label->setPosition(Point(hero->position.x - 110, hero->position.y + 75));
 
+	//AI复活
+	if (_hero->HP <= 0 && _heroLife == 0) {
+		hero->kill++;
+		hero->Exp += 200;
+		hero->Money += 300;
+		_hero->setVisible(false);
+		_heroDeath->start();
+		_heroLife = 1;
+	}
+	if (_heroLife == 1) {
+		if (_heroDeath->getfCurTime() >= 10) {
+			_hero->HP = _hero->MaxHP;
+			_hero->MP = _hero->MaxMP;
+			_heroLife = 0;
+			_hero->setPosition(Vec2(2670, 1500)+background->getPosition());
+		
+			_hero->setVisible(true);
+		}
+	}
+	//小兵复活
+	if (soldier_7->HP <= 0 && soldier_7->life == 0) {
+		soldier_7->setVisible(false);
+		hero->Exp += 200;
+		hero->Money += 30;
+		Death_7->start();
+		soldier_7->life = 1;
+	}
+	if (soldier_7->life == 1) {
+		if (Death_7->getfCurTime() >= 5) {
+			soldier_7->HP = soldier_7->MaxHP;
+			soldier_7->life = 0;
+			soldier_7->setPosition(Vec2(2430,1345) + background->getPosition());
+			soldier_7->setVisible(true);
+		}
+	}
 
+	if (soldier_8->HP <= 0 && soldier_8->life == 0) {
+		soldier_8->setVisible(false);
+		hero->Exp += 200;
+		hero->Money += 30;
+		Death_8->start();
+		soldier_8->life = 1;
+	}
+	if (soldier_8->life == 1) {
+		if (Death_8->getfCurTime() >= 5) {
+			soldier_8->HP = soldier_8->MaxHP;
+			soldier_8->life = 0;
+			soldier_8->setPosition(Vec2(2435, 1350) + background->getPosition());
+			soldier_8->setVisible(true);
+		}
+	}
+
+	if (soldier_9->HP <= 0 && soldier_9->life == 0) {
+		soldier_9->setVisible(false);
+		hero->Exp += 300;
+		hero->Money += 50;
+		Death_9->start();
+		soldier_9->life = 1;
+	}
+	if (soldier_9->life == 1) {
+		if (Death_9->getfCurTime() >= 5) {
+			soldier_9->HP = soldier_9->MaxHP;
+			soldier_9->life = 0;
+			soldier_9->setPosition(Vec2(2440, 1355) + background->getPosition());
+			soldier_9->setVisible(true);
+		}
+	}
+
+	//英雄
+	if (hero->Level <= 18 && hero->Exp >= hero->MaxExp)
+	{
+		hero->Level++;
+		hero->MaxExp += 100;
+		hero->Attack += 5;
+		hero->MaxHP += 20;
+		hero->MaxMP += 10;
+	}
 	if (hero->HP > 0 && hero->life == 1)
 	{
 		hero->setVisible(true);
@@ -667,21 +813,6 @@ hero->removeChildByName("lab");
 		hero->life = 0;
 
 	}
-	if (_hero->HP <= 0 && _heroLife == 0) {
-		_hero->setVisible(false);
-		_heroDeath->start();
-		_heroLife = 1;
-	}
-	if (_heroLife == 1) {
-		if (_heroDeath->getfCurTime() >= 5) {
-			_hero->HP = _hero->MaxHP;
-			_hero->MP = _hero->MaxMP;
-			_heroLife = 0;
-			_hero->setPosition(Vec2(2670, 1500)+background->getPosition());
-		
-			_hero->setVisible(true);
-		}
-	}
 	if (hero->life == 0) {
 
 		hero->setVisible(false);
@@ -689,25 +820,14 @@ hero->removeChildByName("lab");
 		if (hero->ID == 1)
 		{
 			hero->Skill_E_On_Release = 0;
+			hero->Skill_W_On_Release = 0;
+			hero->Skill_Q_On_Release = 0;
 		}
-
-		if ((DeadTime->getfCurTime()) >= 5) {
-
-
-			for (auto solider : m_soliderManager)
-
-			{
-
-				if (solider->isAlive)
-
-				{
-
-					solider->setPosition(solider->getPositionX() - background->getPositionX(), solider->getPositionY() - background->getPositionY());
-
-				}
-
-			}
-
+		if (hero->ID==3)
+		{
+			hero->Skill_E_On_Release = 0;
+		}
+		if ((DeadTime->getfCurTime()) >= 10) {
 			background->setPosition(0, 0);
 
 			hero->life = 1;
@@ -772,11 +892,28 @@ hero->removeChildByName("lab");
 			if (Skill_Q->getfCurTime() < 0.5)
 			{
 				for (int j = 0; j < 1000; j++) {
-					if (j == 6)
+					if (j >= 6)
 					{
 						auto target = (Hero*)background->getChildByTag(j);
-						Point Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2670, 1500);
-						log("x%fy%f", Target.x, Target.y);
+						Point Target;
+						switch (j) {
+						case 6: {
+							Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2670, 1500);
+							break;
+						}
+						case 7: {
+							Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2430, 1345);
+							break;
+						}
+						case 8: {
+							Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2435, 1350);
+							break;
+						}
+						case 9: {
+							Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2440, 1355);
+							break;
+						}
+						}
 						if (target == NULL)continue;
 						if (Target.x <= 450 && Target.x >= 350)
 						{
@@ -827,10 +964,27 @@ hero->removeChildByName("lab");
 			if (Skill_W->getfCurTime() < 5)
 			{
 				for (int j = 0; j < 1000; j++) {
-					if (j == 6) {
+					if (j >= 6) {
 						auto target = (Hero*)background->getChildByTag(j);
-						Point Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2670, 1500);
-						log("x%fy%f", Target.x, Target.y);
+						Point Target;
+						switch (j) {
+						case 6: {
+							Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2670, 1500);
+							break;
+						}
+						case 7: {
+							Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2430, 1345);
+							break;
+						}
+						case 8: {
+							Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2435, 1350);
+							break;
+						}
+						case 9: {
+							Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2440, 1355);
+							break;
+						}
+						}
 						if (target == NULL)continue;
 						if (Target.x <= 450 && Target.x >= 350)
 						{
@@ -966,9 +1120,27 @@ hero->removeChildByName("lab");
 		case 2: {
 			if (Skill_W->getfCurTime() < 3) {
 				for (int j = 0; j < 1000; j++) {
-					if (j == 6) {
+					if (j >= 6) {
 						auto target = (Hero*)background->getChildByTag(j);
-						Point Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2670, 1500);
+						Point Target;
+						switch (j) {
+						   case 6: {
+							Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2670, 1500);
+							break;
+						   }
+						   case 7: {
+							Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2430, 1345);
+							break;
+						   }
+						   case 8: {
+							Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2435, 1350);
+							break;
+						   }
+						   case 9: {
+							Target = background->convertToWorldSpaceAR(target->getPosition()) + Point(2440, 1355);
+							break;
+						   }
+						}
 						if (target == NULL)continue;
 						if (Target.x <= Effect_W->getPosition().x + 100 &&Target.x >= Effect_W->getPosition().x - 100) {
 							if (Target.y <= Effect_W->getPosition().y + 100 && Target.y >= Effect_W->getPosition().y - 100) {
@@ -1132,7 +1304,7 @@ hero->removeChildByName("lab");
 
 		hero->isRun = false;
 
-		hero->setAction(hero->direction, "stand", 4);
+		hero->setAction(hero->direction, "stand", 4, hero->ID);
 
 	}
 
@@ -1232,7 +1404,7 @@ hero->removeChildByName("lab");
 
 		hero->isRun = false;
 
-		hero->setAction(hero->direction, "stand", 4);
+		hero->setAction(hero->direction, "stand", 4, hero->ID);
 
 		return;
 
@@ -1248,7 +1420,7 @@ hero->removeChildByName("lab");
 
 		nowDirection = hero->direction;
 
-		hero->setAction(hero->direction, "run", 4);
+		hero->setAction(hero->direction, "run", 4, hero->ID);
 
 	}
 
@@ -1262,7 +1434,7 @@ hero->removeChildByName("lab");
 
 			nowDirection = hero->direction;
 
-			hero->setAction(hero->direction, "run", 2);
+			hero->setAction(hero->direction, "run", 2, hero->ID);
 
 		}
 
@@ -1291,103 +1463,36 @@ hero->removeChildByName("lab");
 
 	}
 
-	//产兵
-	if (soliderTimeCounter->getfCurTime() >= 15)
-
-	{
-
-		if (soliderTimeCounter->getfCurTime() - 15 >= counter)
-
-		{
-
-			solider = Monster::createMonsterSprite(Vec2(720 + background->getPositionX(), 420 + background->getPositionY()), 2, "stand");
-
-			this->addChild(solider);
-
-			m_soliderManager.pushBack(solider);
-
-			counter++;
-
-		}
-
-		if (counter >= 5)
-
-		{
-
-			counter = 0;
-
-			soliderTimeCounter->start();
-
-		}
-
-	}
-
-	if (m_soliderManager.size())
-
-	{
-
-		for (auto solider : m_soliderManager)
-
-		{
-
-			if (solider->isAlive)
-
-			{
-
-				if (solider->isAttacked)
-
-				{
-
-					solider->runAttack(solider);
-
-					solider->isAttacked = 0;
-
-				}
-
-				else
-
-				{
-
-					solider->setPosition(solider->getPositionX() + 0.5, solider->getPositionY() + 0.3);
-
-				}
-
-			}
-
-		}
-
-	}
-
 	float m = background->getPositionX();
 
 	float n = background->getPositionY();
 
-	float monsterX = monster->getPositionX();
-
-	float monsterY = monster->getPositionY();
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
+	//AI移动和攻击
 	Vec2 point = _hero->getParent()->convertToWorldSpaceAR(_hero->getPosition()) + Point(2670, 1500);
-	//_hero
 	float r4 = sqrt((point.x - hero->position.x) * (point.x - hero->position.x) + (point.y - hero->position.y) * (point.y - hero->position.y));
 	if (r4 >= 50)
 	{
-		_hero->setPosition(Point(_hero->getPosition().x + 3 * (hero->position.x - point.x) / r4, _hero->getPosition().y + 3 * (hero->position.y - point.y) / r4));
+		_hero->setPosition(Point(_hero->getPosition().x + 2* (hero->position.x - point.x) / r4, _hero->getPosition().y + 2 * (hero->position.y - point.y) / r4));
 	}
 	else
 	{
 		if (_heroAttack->getfCurTime() == 0)
 			_heroAttack->start();
-		if (_heroAttack->getfCurTime() >= 1)
+		if (_heroAttack->getfCurTime() >= 1&&_heroLife==0)
 		{
-			_hero->setAction(1, "attack", 4);
-			hero->HP -= 0;
+			_hero->setAction(1, "attack", 4, _hero->ID);
+			hero->HP -= _hero->Attack;
 			_heroAttack->start();
 		}
 	}
-
-
+	//小兵移动和攻击
+	/*Point point_7 = soldier_7->getParent()->convertToWorldSpaceAR(soldier_7->getPosition()) + Point(2430, 1345);
+	float r7 = sqrt((point_7.x - hero->position.x) * (point_7.x - hero->position.x) + (point_7.y - hero->position.y) * (point_7.y - hero->position.y));
+	soldier_7->setPosition(Point(soldier_7->getPosition().x - (soldier_7->speed)*(hero->position.x-point_7.x)/ r7, soldier_7->getPosition().y - (soldier_7->speed)*(hero->position.y-point_7.y)/ r7));
+	*/
 	auto sp1 = this->getChildByTag(200);
 
 	auto effect_w = this->getChildByName("explosion");
@@ -1421,16 +1526,6 @@ hero->removeChildByName("lab");
 
 	{
 		sp1->setPosition(bgPoint);
-	}
-	if (flag == 0)
-	{
-		for (auto solider : m_soliderManager)
-
-		{
-
-			solider->setPosition(solider->getPositionX() - (temp.x - hero->position.x) / r, solider->getPositionY() - (temp.y - hero->position.y) / r);
-
-		}
 	}
 	if (effect_w != NULL)
 		effect_w->setPosition(sp1->getPosition() + egPoint);
@@ -1468,43 +1563,39 @@ hero->removeChildByName("lab");
 		}
 
 	}
-
-	monster->setPosition(monsterX - (temp.x - hero->position.x) / r1, monsterY - (temp.y - hero->position.y) / r1);
-
 	pos.x = pos.x - (temp.x - hero->position.x) / r;
 
 	pos.y = pos.y - (temp.y - hero->position.y) / r;
 
 
-
-	if (monster->isAttacked)
-
-	{
-
-		monster->runAttack(monster);
-
-		monster->isAttacked = 0;
-
-	}
-
-	else
-
-	{
-
-		monster->waiting();
-
-	}
 	log("bullet %d", bullet.size());
 	if (bullet.size() >= 1)
 	{
 		for (auto it = bullet.begin(); it != bullet.end();)
 		{
 
-			if (choice == 6)
+			if (choice >= 6)
 			{
 				auto aim = (Hero*)background->getChildByTag(choice);
 				Point aimPoint;
-				aimPoint = background->convertToWorldSpaceAR(aim->getPosition()) + Point(2670, 1500);
+				switch (choice) {  
+				case 6: {
+					aimPoint = background->convertToWorldSpaceAR(aim->getPosition()) + Point(2670, 1500);
+					break;
+				}
+				case 7: {
+					aimPoint = background->convertToWorldSpaceAR(aim->getPosition()) + Point(2430, 1345);
+					break;
+				}
+				case 8: {
+					aimPoint = background->convertToWorldSpaceAR(aim->getPosition()) + Point(2435, 1350);
+					break;
+				}
+				case 9: {
+					aimPoint = background->convertToWorldSpaceAR(aim->getPosition()) + Point(2440, 1355);
+					break;
+				}
+				}
 				if (aim == NULL)break;
 				Point pos1 = (*it)->getPosition();
 
@@ -1536,7 +1627,7 @@ hero->removeChildByName("lab");
 							aim->HP -= hero->Attack * 1.2;
 						}
 						else {
-								aim->HP -= hero->Attack;
+								aim->HP -= hero->Attack ;
 						}
 					}
 					else if ((*it)->getName() == "skill") {
@@ -1546,7 +1637,7 @@ hero->removeChildByName("lab");
 						aim->HP -= 120 * (1 + hero->Skill_Enhance * 0.01 + hero->Level * 0.01);
 					}
 					else if ((*it)->getName() == "burnning_bullet") {
-						aim->HP -= hero->Attack * (1 + hero->Level * 0.35);
+						aim->HP -= hero->Attack * 1.2 ;
 					}
 					this->removeChild(*it);
 
@@ -1749,7 +1840,7 @@ bool HelloWorld::onTouchBegan(Touch* touch, Event* unused_event)
 	Point touchLocation = convertTouchToNodeSpace(touch);
 
 
-	for (int i = 2; i <= 6; i++)
+	for (int i = 2; i <= 9; i++)
 	{
 		auto sprite = background->getChildByTag(i);
 		Point spritePoint;
@@ -1770,7 +1861,15 @@ bool HelloWorld::onTouchBegan(Touch* touch, Event* unused_event)
 		case 6:
 			spritePoint=background->convertToWorldSpaceAR(sprite->getPosition()) + Point(2670, 1500);
 			break;
-
+		case 7:
+			spritePoint = background->convertToWorldSpaceAR(sprite->getPosition()) + Point(2430, 1345);
+			break;
+		case 8:
+			spritePoint = background->convertToWorldSpaceAR(sprite->getPosition()) + Point(2435, 1350);
+			break;
+		case 9:
+			spritePoint = background->convertToWorldSpaceAR(sprite->getPosition()) + Point(2440, 1355);
+			break;
 		}
 		log("touch %f %f", touchLocation.x, touchLocation.y);
 		log("sprite %f %f", spritePoint.x, spritePoint.y);
@@ -1799,23 +1898,23 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keycode, Event* event)
 		{
 			hero->isRun == false;
 
-			hero->setAction(hero->direction, "attack", 4);
+			hero->setAction(hero->direction, "attack", 4, hero->ID);
 		}
 		case EventKeyboard::KeyCode::KEY_Q:
 		{
-			hero->setAction(hero->direction, "skill", 4);
+			hero->setAction(hero->direction, "skill", 4, hero->ID);
 		}
 		case EventKeyboard::KeyCode::KEY_W:
 		{
-			hero->setAction(hero->direction, "skill", 4);
+			hero->setAction(hero->direction, "skill", 4, hero->ID);
 		}
 		case EventKeyboard::KeyCode::KEY_E:
 		{
-			hero->setAction(hero->direction, "skill", 4);
+			hero->setAction(hero->direction, "skill", 4, hero->ID);
 		}
 		case EventKeyboard::KeyCode::KEY_R:
 		{
-			hero->setAction(hero->direction, "skill", 4);
+			hero->setAction(hero->direction, "skill", 4, hero->ID);
 
 		}
 		}
@@ -1828,24 +1927,24 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keycode, Event* event)
 		{
 			hero->isRun == false;
 
-			hero->setAction(hero->direction, "attack", 4);
+			hero->setAction(hero->direction, "attack", 4, hero->ID);
 
 		}
 		case EventKeyboard::KeyCode::KEY_Q:
 		{
-			hero->setAction(hero->direction, "skill", 4);
+			hero->setAction(hero->direction, "skill", 4, hero->ID);
 		}
 		case EventKeyboard::KeyCode::KEY_W:
 		{
-			hero->setAction(hero->direction, "skill", 4);
+			hero->setAction(hero->direction, "skill", 4, hero->ID);
 		}
 		case EventKeyboard::KeyCode::KEY_E:
 		{
-			hero->setAction(hero->direction, "skill", 4);
+			hero->setAction(hero->direction, "skill", 4, hero->ID);
 		}
 		case EventKeyboard::KeyCode::KEY_R:
 		{
-			hero->setAction(hero->direction, "skill", 4);
+			hero->setAction(hero->direction, "skill", 4, hero->ID);
 
 		}
 		}
@@ -1860,7 +1959,7 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keycode, Event* event)
 			{
 				hero->isRun == false;
 
-				hero->setAction(hero->direction, "attack", 4);
+				hero->setAction(hero->direction, "attack", 4, hero->ID);
 
 				if (hero->Skill_E_On_Release == 1)
 				{
@@ -1877,15 +1976,15 @@ void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keycode, Event* event)
 		}
 		case EventKeyboard::KeyCode::KEY_W:
 		{
-			hero->setAction(hero->direction, "skill", 4);
+			hero->setAction(hero->direction, "skill", 4,hero->ID);
 		}
 		case EventKeyboard::KeyCode::KEY_E:
 		{
-			hero->setAction(hero->direction, "skill", 4);
+			hero->setAction(hero->direction, "skill", 4, hero->ID);
 		}
 		case EventKeyboard::KeyCode::KEY_R:
 		{
-			hero->setAction(hero->direction, "skill", 4);
+			hero->setAction(hero->direction, "skill", 4, hero->ID);
 
 		}
 		}
@@ -1991,7 +2090,7 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 			{
 			case EventKeyboard::KeyCode::KEY_A:
 			{
-				if (hero->Attack_Ready == 0 && (distance <= 400000)) {
+				if (hero->Attack_Ready == 0 && (distance <= 450000)) {
 
 
 					auto bullet0 = Sprite::create("magicbullet.png");
@@ -2077,7 +2176,7 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 			{
 			case EventKeyboard::KeyCode::KEY_A:
 			{
-				if (hero->Attack_Ready == 0 && (distance <= 400000)) {
+				if (hero->Attack_Ready == 0 && (distance <= 450000)) {
 					if (hero->Skill_E_On_Release == 2 || hero->Skill_E_On_Release == 3)
 					{
 						hero->setVisible(true);
