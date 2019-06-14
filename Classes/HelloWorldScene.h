@@ -178,6 +178,8 @@ public:
 
 	vector<Sprite*> bullett;
 
+	vector<Sprite*> _bullett;
+
 	vector<Tower*> tower;
 
 	vector<TimeCounter*> timec;

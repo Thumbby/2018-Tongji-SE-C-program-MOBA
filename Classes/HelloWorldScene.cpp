@@ -692,7 +692,7 @@ bool HelloWorld::init()
 
 	Tower* tower8 = Tower::create();
 
-	tower8->setTag(-4);
+	tower8->setTag(-5);
 
 	tower8->setPosition(Point(650, 350));
 
@@ -1594,17 +1594,21 @@ void HelloWorld::update(float dt)
 	{
 		TimeCounter* t = (TimeCounter*)tower[i]->getChildByName("t");
 		tower[i]->progress->setPercentage((((float)tower[i]->HP) / tower[i]->MaxHP) * 100);
+		Point _heroPos= background->convertToWorldSpaceAR(_hero->getPosition()) + Point(2670, 1500);
 		if (tower[i]->HP <= 0)
 		{
 			if (tower[i]->getTag() == 5)
 				win();
+			if (tower[i]->getTag() == -5)
+				lose();
 			tower[i]->sprBar->setVisible(false);
 			continue;
 		}
-		if (hero->HP <= 0)continue;
+	
+		float r1= (_heroPos.x - tower[i]->getPositionX()-background->getPositionX()) * (_heroPos.x - tower[i]->getPositionX() - background->getPositionX()) + (_heroPos.y - tower[i]->getPositionY() - background->getPositionY()) * (_heroPos.y - tower[i]->getPositionY() - background->getPositionY());
 		float r2 = (hero->position.x - tower[i]->getPositionX() - background->getPositionX()) * (hero->position.x - tower[i]->getPositionX() - background->getPositionX()) + (hero->position.y - tower[i]->getPositionY() - background->getPositionY()) * (hero->position.y - tower[i]->getPositionY() - background->getPositionY());
-
-		if (r2 <= 10000)
+		log("r1 %f", r1);
+		if (r2 <= 10000&&tower[i]->getTag()>0&&hero->HP>0)
 		{
 
 			if (t->getfCurTime() == 0)
@@ -1619,11 +1623,29 @@ void HelloWorld::update(float dt)
 
 				bullet0->setScale(0.4f);
 
-				bullett.push_back(bullet0);
+				_bullett.push_back(bullet0);
 				t->start();
 			}
 		}
+		if (r1 <= 10000 && tower[i]->getTag() <0&&_hero->HP>0)
+		{
 
+			if (t->getfCurTime() == 0)
+				t->start();
+			if (t->getfCurTime() >= 1)
+			{
+				auto bullet0 = Sprite::create("towerbullet.png");
+
+				bullet0->setPosition(tower[i]->getPosition() + background->getPosition());
+
+				this->addChild(bullet0);
+
+				bullet0->setScale(0.4f);
+
+				_bullett.push_back(bullet0);
+				t->start();
+			}
+		}
 	}
 	pos.x = pos.x - (temp.x - hero->position.x) / r;
 
@@ -1786,6 +1808,31 @@ void HelloWorld::update(float dt)
 				this->removeChild(*it);
 
 				it = bullett.erase(it);
+
+			}
+			else
+				it++;
+		}
+	}
+	if (_bullett.size() >= 1)
+	{
+		for (auto it = _bullett.begin(); it != _bullett.end();)
+		{
+
+			Point pos1 = (*it)->getPosition();
+			Point _heroPos=background->convertToWorldSpaceAR(_hero->getPosition()) + Point(2670, 1500);
+			(*it)->setRotation(360 - 180 / 3.14 * atan2((_heroPos.y - (*it)->getPositionY()), (_heroPos.x - (*it)->getPositionX())));
+
+			float r3 = sqrt((pos1.x - _heroPos.x) * (pos1.x - _heroPos.x) + (pos1.y - _heroPos.y) * (pos1.y - _heroPos.y));
+
+			(*it)->setPosition(Point(pos1.x + 20 * (_heroPos.x - pos1.x) / r3, pos1.y + 20 * (_heroPos.y - pos1.y) / r3));
+
+			if (r3 <= 10)
+			{
+				_hero->HP -= 500;
+				this->removeChild(*it);
+
+				it = _bullett.erase(it);
 
 			}
 			else
