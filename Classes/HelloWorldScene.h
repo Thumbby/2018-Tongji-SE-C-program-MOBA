@@ -1,4 +1,4 @@
-#ifndef __HELLOWORLD_SCENE_H__
+﻿#ifndef __HELLOWORLD_SCENE_H__
 
 #define __HELLOWORLD_SCENE_H__
 #include "cocos2d.h"
@@ -41,9 +41,9 @@ public:
 	Hero* soldier_7;
 	Hero* soldier_8;
 	Hero* soldier_9;
-	Hero* soldier_10;
-	Hero* soldier_11;
-	Hero* soldier_12;
+	Hero* _soldier_7;
+	Hero* _soldier_8;
+	Hero* _soldier_9;
 
 	int counter = 0;
 
@@ -60,16 +60,16 @@ public:
 	TimeCounter* Attack_7;
 	TimeCounter* Attack_8;
 	TimeCounter* Attack_9;
-	TimeCounter* Attack_10;
-	TimeCounter* Attack_11;
-	TimeCounter* Attack_12;
+	TimeCounter* _Attack_7;
+	TimeCounter* _Attack_8;
+	TimeCounter* _Attack_9;
 
 	TimeCounter* Death_7;
 	TimeCounter* Death_8;
 	TimeCounter* Death_9;
-	TimeCounter* Death_10;
-	TimeCounter* Death_11;
-	TimeCounter* Death_12;
+	TimeCounter* _Death_7;
+	TimeCounter* _Death_8;
+	TimeCounter* _Death_9;
 
 	int _heroLife;
 
@@ -101,7 +101,7 @@ public:
 
 	ProgressTimer* progress2;
 
-	//AIѪ��
+	//AIÑªÌõ
 	Sprite* _sprBar;
 
 	Sprite* _sprBar2;
@@ -114,43 +114,43 @@ public:
 
 	ProgressTimer* _progress2;
 
-	//С��Ѫ��
-	
+	//Ð¡±øÑªÌõ
+
 	Sprite* sprBar_7;
-	
+
 	Sprite* sprBar_8;
-	
+
 	Sprite* sprBar_9;
-	
-	Sprite* sprBar_10;
-	
-	Sprite* sprBar_11;
-	
-	Sprite* sprBar_12;
+
+	Sprite* _sprBar_7;
+
+	Sprite* _sprBar_8;
+
+	Sprite* _sprBar_9;
 
 	Sprite* sprBlood_7;
-	
+
 	Sprite* sprBlood_8;
-	
+
 	Sprite* sprBlood_9;
-	
-	Sprite* sprBlood_10;
-	
-	Sprite* sprBlood_11;
-	
-	Sprite* sprBlood_12;
+
+	Sprite* _sprBlood_7;
+
+	Sprite* _sprBlood_8;
+
+	Sprite* _sprBlood_9;
 
 	ProgressTimer* progress_7;
-	
+
 	ProgressTimer* progress_8;
-	
+
 	ProgressTimer* progress_9;
-	
-	ProgressTimer* progress_10;
-	
-	ProgressTimer* progress_11;
-	
-	ProgressTimer* progress_12;
+
+	ProgressTimer* _progress_7;
+
+	ProgressTimer* _progress_8;
+
+	ProgressTimer* _progress_9;
 
 	static cocos2d::Scene* createScene(int ID);
 
