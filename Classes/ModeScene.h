@@ -13,5 +13,3 @@ public:
 	void menuSingle2(cocos2d::Ref* pSender);
 };
 #endif
-
-

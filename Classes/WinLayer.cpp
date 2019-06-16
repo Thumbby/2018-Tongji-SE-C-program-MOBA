@@ -11,9 +11,9 @@ Scene* WinLayer::createScene()
 }
 bool WinLayer::init()
 {
-	
+
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-	Sprite* sprite = Sprite::create("win.png");
+	Sprite* sprite = Sprite::create("UI/win.png");
 	sprite->setScale(0.5f);
 	sprite->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
 	this->addChild(sprite);

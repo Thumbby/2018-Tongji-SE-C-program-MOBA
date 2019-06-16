@@ -11,7 +11,7 @@ Scene* HeroSelectScene::createScene()
 }
 bool HeroSelectScene::init()
 {
-	auto sprite = Sprite::create("entrance4.jpg");
+	auto sprite = Sprite::create("UI/entrance4.jpg");
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto spriteSize = sprite->getContentSize();
 	sprite->setScaleX(visibleSize.height * 1.0 / spriteSize.height);
@@ -32,10 +32,10 @@ bool HeroSelectScene::init()
 	menu1->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 4);
 	this->addChild(menu1, 1);
 	auto menu2 = Menu::create(itemArcher, NULL);
-	menu2->setPosition(origin.x + visibleSize.width / 3, origin.y + 2*visibleSize.height / 3);
+	menu2->setPosition(origin.x + visibleSize.width / 3, origin.y + 2 * visibleSize.height / 3);
 	this->addChild(menu2, 1);
 	auto menu3 = Menu::create(itemMage, NULL);
-	menu3->setPosition(origin.x + 2*visibleSize.width / 3, origin.y + 2*visibleSize.height / 3);
+	menu3->setPosition(origin.x + 2 * visibleSize.width / 3, origin.y + 2 * visibleSize.height / 3);
 	this->addChild(menu3, 1);
 	return true;
 }

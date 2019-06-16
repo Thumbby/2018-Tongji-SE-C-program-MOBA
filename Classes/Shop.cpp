@@ -1,4 +1,3 @@
-
 #include "Shop.h"
 #include "SimpleAudioEngine.h"
 #include "cocostudio/CocoStudio.h"
@@ -11,56 +10,56 @@ USING_NS_CC;
 
 Scene* Shop::createScene()
 {
-    return Shop::create();
+	return Shop::create();
 }
 
 // Print useful error message instead of segfaulting when files are not there.
 static void problemLoading(const char* filename)
 {
-    printf("Error while loading: %s\n", filename);
-    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
+	printf("Error while loading: %s\n", filename);
+	printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
 // on "init" you need to initialize your instance
 bool Shop::init()
 {
-    //////////////////////////////
-    // 1. super init first
-    if ( !Scene::init() )
-    {
-        return false;
-    }
+	//////////////////////////////
+	// 1. super init first
+	if (!Scene::init())
+	{
+		return false;
+	}
 	buildScene1();
-    return true;
+	return true;
 }
 void Shop::buildScene1()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-    auto outButton = MenuItemImage::create("MM01.png", "MM07.png", CC_CALLBACK_1(Shop::menuOut, this));
+	auto outButton = MenuItemImage::create("UI/MM01.png", "UI/MM07.png", CC_CALLBACK_1(Shop::menuOut, this));
 	outButton->setRotation(90);
 	outButton->setScale(10);
 	CCLOG("1");
 	outButton->setPosition(visibleSize.width / 80, 2 * visibleSize.height / 3);
-    auto menu = Menu::create(outButton, NULL);
+	auto menu = Menu::create(outButton, NULL);
 	menu->setPosition(Point::ZERO);
 	this->addChild(menu, 1);
 }
 void Shop::buildScene2()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-	auto inButton = MenuItemImage::create("MM01.png", "MM07.png", CC_CALLBACK_1(Shop::menuIn, this));
+	auto inButton = MenuItemImage::create("UI/MM01.png", "UI/MM07.png", CC_CALLBACK_1(Shop::menuIn, this));
 	inButton->setRotation(270);
 	inButton->setScale(10);
 	CCLOG("1");
 	inButton->setPosition(visibleSize.width / 80, 2 * visibleSize.height / 3);
 	auto menu = Menu::create(inButton, NULL);
 	menu->setPosition(Point::ZERO);
-	Sprite* background = Sprite::create("background.png");
+	Sprite* background = Sprite::create("map/background.png");
 	background->setScale(20);
-	background->setPosition(visibleSize.width / 2, 2*visibleSize.height / 3);
+	background->setPosition(visibleSize.width / 2, 2 * visibleSize.height / 3);
 	this->addChild(background, 0);
 	this->addChild(menu, 1);
-	ShopLayer * scrollView = ShopLayer::create();
+	ShopLayer* scrollView = ShopLayer::create();
 	this->addChild(scrollView);
 
 }

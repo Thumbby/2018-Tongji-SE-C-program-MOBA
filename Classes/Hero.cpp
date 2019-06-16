@@ -38,31 +38,32 @@ Animate* Hero::createAnimate(int direction, const char* action, int num,int ID)
 	auto* m_frameCache = SpriteFrameCache::getInstance();
 	if (ID == 1)
 	{
-		m_frameCache->addSpriteFramesWithFile("guanyu.plist", "guanyu.png");
+		m_frameCache->addSpriteFramesWithFile("hero/guanyu.plist", "hero/guanyu.png");
 	}
 	if (ID == 2)
 	{
-		m_frameCache->addSpriteFramesWithFile("zhugeliang.plist", "zhugeliang.png");
+		m_frameCache->addSpriteFramesWithFile("hero/zhugeliang.plist", "hero/zhugeliang.png");
 	}
 	if (ID == 3)
 	{
-		m_frameCache->addSpriteFramesWithFile("huangzhong.plist", "huangzhong.png");
+		m_frameCache->addSpriteFramesWithFile("hero/huangzhong.plist", "hero/huangzhong.png");
 	}
 	if (ID == 4)
 	{
-		m_frameCache->addSpriteFramesWithFile("jinzhanxiaobing.plist", "jinzhanxiaobing.png");
+		m_frameCache->addSpriteFramesWithFile("hero/jinzhanxiaobing.plist", "hero/jinzhanxiaobing.png");
 	}
 	if (ID == 5)
 	{
-		m_frameCache->addSpriteFramesWithFile("yuanchengxiaobing.plist", "yuanchengxiaobing.png");
+		m_frameCache->addSpriteFramesWithFile("hero/yuanchengxiaobing.plist", "hero/yuanchengxiaobing.png");
 	}
 	if(ID==6)
 	{
-		m_frameCache->addSpriteFramesWithFile("paoche.plist", "paoche.png");
+		m_frameCache->addSpriteFramesWithFile("hero/paoche.plist", "hero/paoche.png");
 	}
 	Vector<SpriteFrame*> frameArray;
 	for (int i = 1; i <= num; i++)
 	{
+		
 		auto* frame = m_frameCache->getSpriteFrameByName(String::createWithFormat("%d%s%d%d.png", ID ,action, direction, i)->getCString());
 		frameArray.pushBack(frame);
 	}

@@ -12,7 +12,7 @@ Scene* SecondScene::createScene()
 }
 bool SecondScene::init()
 {
-	Sprite* sprite = Sprite::create("entrance3.jpg");
+	Sprite* sprite = Sprite::create("UI/entrance3.jpg");
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto spriteSize = sprite->getContentSize();
 	sprite->setScaleX(visibleSize.height * 1.0 / spriteSize.height);
@@ -27,23 +27,21 @@ bool SecondScene::init()
 	exit->setColor(Color3B(0, 0, 0));
 	auto exitItem = MenuItemLabel::create(exit, CC_CALLBACK_1(SecondScene::menuCloseCallback, this));
 	auto menu1 = Menu::create(choiceItem, NULL);
-	menu1->setPosition(origin.x+visibleSize.width/2, origin.y + 4*visibleSize.height/5);
+	menu1->setPosition(origin.x + visibleSize.width / 2, origin.y + 4 * visibleSize.height / 5);
 	auto menu2 = Menu::create(exitItem, NULL);
-	menu2->setPosition(origin.x+6*visibleSize.width/7, origin.y+visibleSize.height/7);
+	menu2->setPosition(origin.x + 6 * visibleSize.width / 7, origin.y + visibleSize.height / 7);
 	this->addChild(menu2, 1);
 	this->addChild(menu1, 1);
 	return true;
 }
-void SecondScene::menuModeChoice(cocos2d::Ref * pSender)
+void SecondScene::menuModeChoice(cocos2d::Ref* pSender)
 {
-	SimpleAudioEngine::getInstance()->playEffect("click.mp3");
+	SimpleAudioEngine::getInstance()->playEffect("music/click.mp3");
 	Director::getInstance()->replaceScene(TransitionFade::create(3.0f, ModeScene::createScene()));
 }
 
-void SecondScene::menuCloseCallback(cocos2d::Ref * pSender)
+void SecondScene::menuCloseCallback(cocos2d::Ref* pSender)
 {
-	SimpleAudioEngine::getInstance()->playEffect("click.mp3");
+	SimpleAudioEngine::getInstance()->playEffect("music/click.mp3");
 	Director::getInstance()->end();
 }
-
-

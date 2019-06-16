@@ -13,7 +13,7 @@ Scene* ModeScene::createScene()
 }
 bool ModeScene::init()
 {
-	auto sprite = Sprite::create("entrance4.jpg");
+	auto sprite = Sprite::create("UI/entrance4.jpg");
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto spriteSize = sprite->getContentSize();
 	sprite->setScaleX(visibleSize.height * 1.0 / spriteSize.height);
@@ -39,19 +39,19 @@ bool ModeScene::init()
 	this->addChild(menu2, 1);
 	return true;
 }
-void ModeScene::menuMultiplayer5(cocos2d::Ref * pSender)
+void ModeScene::menuMultiplayer5(cocos2d::Ref* pSender)
 {
-	SimpleAudioEngine::getInstance()->playEffect("click.mp3");
+	SimpleAudioEngine::getInstance()->playEffect("music/click.mp3");
 	Director::getInstance()->end();
 }
 
-void ModeScene::menuSingle1(cocos2d::Ref * pSender)
+void ModeScene::menuSingle2(cocos2d::Ref* pSender)
 {
-	SimpleAudioEngine::getInstance()->playEffect("click.mp3");
+	SimpleAudioEngine::getInstance()->playEffect("music/click.mp3");
 	Director::getInstance()->replaceScene(TransitionFade::create(3.0f, HeroSelectScene::createScene()));
 }
-void ModeScene::menuSingle2(cocos2d::Ref * pSender)
+void ModeScene::menuSingle1(cocos2d::Ref* pSender)
 {
-	SimpleAudioEngine::getInstance()->playEffect("click.mp3");
+	SimpleAudioEngine::getInstance()->playEffect("music/click.mp3");
 	Director::getInstance()->replaceScene(TransitionFade::create(3.0f, ModeScene::createScene()));
 }
