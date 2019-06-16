@@ -2465,7 +2465,7 @@ void HelloWorld::update(float dt)
 
 			if (r3 <= 10)
 			{
-				hero->HP -= 500;
+				hero->HP -= 300;
 				this->removeChild(*it);
 
 				it = bullett.erase(it);
@@ -2491,7 +2491,7 @@ void HelloWorld::update(float dt)
 
 			if (r3 <= 10)
 			{
-				soldier_7->HP -= 500;
+				soldier_7->HP -= 300;
 				this->removeChild(*it);
 
 				it = _bullett7.erase(it);
@@ -2517,7 +2517,7 @@ void HelloWorld::update(float dt)
 
 			if (r3 <= 10)
 			{
-				soldier_8->HP -= 500;
+				soldier_8->HP -= 300;
 				this->removeChild(*it);
 
 				it = _bullett8.erase(it);
@@ -2543,7 +2543,7 @@ void HelloWorld::update(float dt)
 
 			if (r3 <= 10)
 			{
-				soldier_9->HP -= 500;
+				soldier_9->HP -= 300;
 				this->removeChild(*it);
 
 				it = _bullett9.erase(it);
@@ -2570,7 +2570,7 @@ void HelloWorld::update(float dt)
 
 			if (r3 <= 10)
 			{
-				_soldier_7->HP -= 500;
+				_soldier_7->HP -= 300;
 				this->removeChild(*it);
 
 				it = bullett7.erase(it);
@@ -2595,7 +2595,7 @@ void HelloWorld::update(float dt)
 
 			if (r3 <= 10)
 			{
-				_soldier_8->HP -= 500;
+				_soldier_8->HP -= 300;
 				this->removeChild(*it);
 
 				it = bullett8.erase(it);
@@ -2621,7 +2621,7 @@ void HelloWorld::update(float dt)
 
 			if (r3 <= 10)
 			{
-				_soldier_9->HP -= 500;
+				_soldier_9->HP -= 300;
 				this->removeChild(*it);
 
 				it = bullett9.erase(it);
@@ -2646,7 +2646,7 @@ void HelloWorld::update(float dt)
 
 			if (r3 <= 10)
 			{
-				_hero->HP -= 500;
+				_hero->HP -= 300;
 				this->removeChild(*it);
 
 				it = _bullett.erase(it);
