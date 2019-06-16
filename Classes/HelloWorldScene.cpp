@@ -370,7 +370,7 @@ bool HelloWorld::init()
 	this->addChild(_Death_7);
 	_Attack_7 = TimeCounter::create();
 	this->addChild(_Attack_7);
-	_soldier_7 = Hero::createHeroSprite(Vec2(545, 295), 2, "stand", 4);
+	_soldier_7 = Hero::createHeroSprite(Vec2(655, 505), 2, "stand", 4);
 	_soldier_7->life = 0;
 	_soldier_7->Able_To_Attack = 0;
 	_soldier_7->MaxHP = 500;
@@ -435,7 +435,7 @@ bool HelloWorld::init()
 	this->addChild(_Death_8);
 	_Attack_8 = TimeCounter::create();
 	this->addChild(_Attack_8);
-	_soldier_8 = Hero::createHeroSprite(Vec2(535, 285), 2, "stand", 5);
+	_soldier_8 = Hero::createHeroSprite(Vec2(645, 495), 2, "stand", 5);
 	_soldier_8->life = 0;
 	_soldier_8->Able_To_Attack = 0;
 	_soldier_8->MaxHP = 400;
@@ -500,7 +500,7 @@ bool HelloWorld::init()
 	this->addChild(_Death_9);
 	_Attack_9 = TimeCounter::create();
 	this->addChild(_Attack_9);
-	_soldier_9 = Hero::createHeroSprite(Vec2(525, 275), 2, "stand", 6);
+	_soldier_9 = Hero::createHeroSprite(Vec2(635,485), 2, "stand", 6);
 	_soldier_9->life = 0;
 	_soldier_9->Able_To_Attack = 0;
 	_soldier_9->MaxHP = 1000;
@@ -966,7 +966,7 @@ void HelloWorld::update(float dt)
 		if (_Death_7->getfCurTime() >= 5) {
 			_soldier_7->HP = _soldier_7->MaxHP;
 			_soldier_7->life = 0;
-			_soldier_7->setPosition(Vec2(525, 275) + background->getPosition());
+			_soldier_7->setPosition(Vec2(655, 505) + background->getPosition());
 			_soldier_7->setVisible(true);
 		}
 	}
@@ -982,7 +982,7 @@ void HelloWorld::update(float dt)
 		if (_Death_8->getfCurTime() >= 5) {
 			_soldier_8->HP = _soldier_8->MaxHP;
 			_soldier_8->life = 0;
-			_soldier_8->setPosition(Vec2(535, 285) + background->getPosition());
+			_soldier_8->setPosition(Vec2(645, 495) + background->getPosition());
 			_soldier_8->setVisible(true);
 		}
 	}
@@ -998,7 +998,7 @@ void HelloWorld::update(float dt)
 		if (_Death_9->getfCurTime() >= 5) {
 			_soldier_9->HP = _soldier_9->MaxHP;
 			_soldier_9->life = 0;
-			_soldier_9->setPosition(Vec2(545, 295) + background->getPosition());
+			_soldier_9->setPosition(Vec2(635, 485) + background->getPosition());
 			_soldier_9->setVisible(true);
 		}
 	}
@@ -1697,6 +1697,15 @@ void HelloWorld::update(float dt)
 	Point point_7 = soldier_7->getPosition() + Point(2430, 1345);
 	Point point_8 = soldier_8->getPosition() + Point(2440, 1355);
 	Point point_9 = soldier_9->getPosition() + Point(2450, 1365);
+	Point _point_7 = _soldier_7->getPosition() + Point(655, 505);
+	Point _point_8 = _soldier_8->getPosition() + Point(645, 495);
+	Point _point_9 = _soldier_9->getPosition() + Point(635, 485);
+	Point real_point_7 = convertToWorldSpaceAR(soldier_7->getPosition()) + Point(2430, 1345);
+	Point real_point_8 = convertToWorldSpaceAR(soldier_8->getPosition()) + Point(2440, 1355);
+	Point real_point_9 = convertToWorldSpaceAR(soldier_9->getPosition()) + Point(2450, 1365);
+	Point _real_point_7 = convertToWorldSpaceAR(_soldier_7->getPosition()) + Point(655, 505);
+	Point _real_point_8 = convertToWorldSpaceAR(_soldier_8->getPosition()) + Point(645, 495);
+	Point _real_point_9 = convertToWorldSpaceAR(_soldier_9->getPosition()) + Point(635, 485);
 	for (int ix = -2; ix >= -5; ix--) {
 		auto Aim_Tower = (Tower*)background->getChildByTag(ix);
 		if (Aim_Tower->HP <= 0) {
@@ -1705,12 +1714,57 @@ void HelloWorld::update(float dt)
 		else {
 			Point Aim_Position;
 			Aim_Position = Aim_Tower->getPosition();
-
 			float r7 = sqrt((Aim_Position.x - point_7.x) * (Aim_Position.x - point_7.x) + (Aim_Position.y - point_7.y) * (Aim_Position.y - point_7.y));
 			float r8 = sqrt((Aim_Position.x - point_8.x) * (Aim_Position.x - point_8.x) + (Aim_Position.y - point_8.y) * (Aim_Position.y - point_8.y));
 			float r9 = sqrt((Aim_Position.x - point_9.x) * (Aim_Position.x - point_9.x) + (Aim_Position.y - point_9.y) * (Aim_Position.y - point_9.y));
+			int stop_7 = 0;
+			int stop_8 = 0;
+			int stop_9 = 0;
 			if (r7 >= 50) {
-				soldier_7->setPosition(Point(soldier_7->getPosition().x + (Aim_Position.x - point_7.x) / r7, soldier_7->getPosition().y + (Aim_Position.y - point_7.y) / r7));
+				for (int iy = -7; iy >= -9; iy--) {
+					Point Enemy_Position;
+					switch (iy)
+					{
+					case -7: {
+						Enemy_Position = _real_point_7;
+						break;
+					}
+					case -8: {
+						Enemy_Position = _real_point_8;
+						break;
+					}
+					case -9: {
+						Enemy_Position = _real_point_9;
+						break;
+					}
+					}
+					auto enemy = (Hero*)background->getChildByTag(iy);
+					if (enemy->HP <= 0) {
+						continue;
+					}
+					else {
+						float distance = sqrt((Enemy_Position.x - real_point_7.x) * (Enemy_Position.x - real_point_7.x) + (Enemy_Position.y - real_point_7.y) * (Enemy_Position.y - real_point_7.y));
+						if (distance <= 50 && enemy->life == 0) {
+							stop_7++;
+							if (soldier_7->Able_To_Attack == 0 && soldier_7->life == 0) {
+								soldier_7->setAction(1, "attack", 4, 4);
+								enemy->HP -= soldier_7->Attack;
+								soldier_7->Able_To_Attack = 1;
+								Attack_7->start();
+							}
+							else {
+								if (Attack_7->getfCurTime() >= 1) {
+									soldier_7->setAction(1, "run", 4, 4);
+									soldier_7->Able_To_Attack = 0;
+								}
+							}
+							break;
+						}
+					}
+				}
+				if (stop_7 == 0) {
+					soldier_7->setPosition(Point(soldier_7->getPosition().x + (Aim_Position.x - point_7.x) / r7, soldier_7->getPosition().y + (Aim_Position.y - point_7.y) / r7));
+				}
 			}
 			else {
 				if (soldier_7->Able_To_Attack == 0 && soldier_7->life == 0) {
@@ -1728,8 +1782,51 @@ void HelloWorld::update(float dt)
 					}
 				}
 			}
-			if (r8 >= 150) {
-				soldier_8->setPosition(Point(soldier_8->getPosition().x + (Aim_Position.x - point_8.x) / r8, soldier_8->getPosition().y + (Aim_Position.y - point_8.y) / r8));
+			if (r8 >= 80) {
+				for (int iy = -7; iy >= -9; iy--) {
+					Point Enemy_Position;
+					switch (iy)
+					{
+					case -7: {
+						Enemy_Position = _real_point_7;
+						break;
+					}
+					case -8: {
+						Enemy_Position = _real_point_8;
+						break;
+					}
+					case -9: {
+						Enemy_Position = _real_point_9;
+						break;
+					}
+					}
+					auto enemy = (Hero*)background->getChildByTag(iy);
+					if (enemy->HP <= 0) {
+						continue;
+					}
+					else {
+						float distance = sqrt((Enemy_Position.x - real_point_8.x) * (Enemy_Position.x - real_point_8.x) + (Enemy_Position.y - real_point_8.y) * (Enemy_Position.y - real_point_8.y));
+						if (distance <= 80 && enemy->life == 0) {
+							stop_8++;
+							if (soldier_8->Able_To_Attack == 0 && soldier_8->life == 0) {
+								soldier_8->setAction(1, "attack", 4, 5);
+								enemy->HP -= soldier_8->Attack;
+								soldier_8->Able_To_Attack = 1;
+								Attack_8->start();
+							}
+							else {
+								if (Attack_8->getfCurTime() >= 1) {
+									soldier_8->setAction(1, "run", 4, 5);
+									soldier_8->Able_To_Attack = 0;
+								}
+							}
+							break;
+						}
+					}
+				}
+				if (stop_8 == 0) {
+					soldier_8->setPosition(Point(soldier_8->getPosition().x + (Aim_Position.x - point_8.x) / r8, soldier_8->getPosition().y + (Aim_Position.y - point_8.y) / r8));
+				}
 			}
 			else {
 				if (soldier_8->Able_To_Attack == 0 && soldier_8->life == 0) {
@@ -1744,8 +1841,51 @@ void HelloWorld::update(float dt)
 					}
 				}
 			}
-			if (r9 >= 150) {
-				soldier_9->setPosition(Point(soldier_9->getPosition().x + (Aim_Position.x - point_9.x) / r9, soldier_9->getPosition().y + (Aim_Position.y - point_9.y) / r9));
+			if (r9 >= 80) {
+				for (int iy = -7; iy >= -9; iy--) {
+					Point Enemy_Position;
+					switch (iy)
+					{
+					case -7: {
+						Enemy_Position = _real_point_7;
+						break;
+					}
+					case -8: {
+						Enemy_Position = _real_point_8;
+						break;
+					}
+					case -9: {
+						Enemy_Position = _real_point_9;
+						break;
+					}
+					}
+					auto enemy = (Hero*)background->getChildByTag(iy);
+					if (enemy->HP <= 0) {
+						continue;
+					}
+					else {
+						float distance = sqrt((Enemy_Position.x - real_point_9.x) * (Enemy_Position.x - real_point_9.x) + (Enemy_Position.y - real_point_9.y) * (Enemy_Position.y - real_point_9.y));
+						if (distance <= 80 && enemy->life == 0) {
+							stop_9++;
+							if (soldier_9->Able_To_Attack == 0 && soldier_9->life == 0) {
+								soldier_9->setAction(1, "attack", 4, 6);
+								enemy->HP -= soldier_9->Attack;
+								soldier_9->Able_To_Attack = 1;
+								Attack_9->start();
+							}
+							else {
+								if (Attack_9->getfCurTime() >= 1) {
+									soldier_9->setAction(1, "run", 4, 6);
+									soldier_9->Able_To_Attack = 0;
+								}
+							}
+							break;
+						}
+					}
+				}
+				if (stop_9 == 0) {
+					soldier_9->setPosition(Point(soldier_9->getPosition().x + (Aim_Position.x - point_9.x) / r9, soldier_9->getPosition().y + (Aim_Position.y - point_9.y) / r9));
+				}
 			}
 			else {
 				if (soldier_9->Able_To_Attack == 0 && soldier_9->life == 0) {
@@ -1763,10 +1903,6 @@ void HelloWorld::update(float dt)
 			break;
 		}
 	}
-
-	Point _point_7 = _soldier_7->getPosition() + Point(545, 295);
-	Point _point_8 = _soldier_8->getPosition() + Point(535, 285);
-	Point _point_9 = _soldier_9->getPosition() + Point(525, 275);
 	for (int ix = 2; ix <= 5; ix++) {
 		auto Aim_Tower = (Tower*)background->getChildByTag(ix);
 		if (Aim_Tower->HP <= 0) {
@@ -1775,12 +1911,57 @@ void HelloWorld::update(float dt)
 		else {
 			Point Aim_Position;
 			Aim_Position = Aim_Tower->getPosition();
-
 			float _r7 = sqrt((Aim_Position.x - _point_7.x) * (Aim_Position.x - _point_7.x) + (Aim_Position.y - _point_7.y) * (Aim_Position.y - _point_7.y));
 			float _r8 = sqrt((Aim_Position.x - _point_8.x) * (Aim_Position.x - _point_8.x) + (Aim_Position.y - _point_8.y) * (Aim_Position.y - _point_8.y));
 			float _r9 = sqrt((Aim_Position.x - _point_9.x) * (Aim_Position.x - _point_9.x) + (Aim_Position.y - _point_9.y) * (Aim_Position.y - _point_9.y));
+			int _stop_7 = 0;
+			int _stop_8 = 0;
+			int _stop_9 = 0;
 			if (_r7 >= 50) {
-				_soldier_7->setPosition(Point(_soldier_7->getPosition().x + (Aim_Position.x - _point_7.x) / _r7, _soldier_7->getPosition().y + (Aim_Position.y - _point_7.y) / _r7));
+				for (int iy = 7; iy <= 9; iy++) {
+					Point Enemy_Position;
+					switch (iy)
+					{
+					case 7: {
+						Enemy_Position = real_point_7;
+						break;
+					}
+					case 8: {
+						Enemy_Position = real_point_8;
+						break;
+					}
+					case 9: {
+						Enemy_Position = real_point_9;
+						break;
+					}
+					}
+					auto enemy = (Hero*)background->getChildByTag(iy);
+					if (enemy->HP <= 0) {
+						continue;
+					}
+					else {
+						float distance = sqrt((Enemy_Position.x - _real_point_7.x) * (Enemy_Position.x - _real_point_7.x) + (Enemy_Position.y - _real_point_7.y) * (Enemy_Position.y - _real_point_7.y));
+						if (distance <= 50 && enemy->life == 0) {
+							_stop_7++;
+							if (_soldier_7->Able_To_Attack == 0 && _soldier_7->life == 0) {
+								_soldier_7->setAction(4, "attack", 4, 4);
+								enemy->HP -= _soldier_7->Attack;
+								_soldier_7->Able_To_Attack = 1;
+								_Attack_7->start();
+							}
+							else {
+								if (_Attack_7->getfCurTime() >= 1) {
+									_soldier_7->setAction(4, "run", 4, 4);
+									_soldier_7->Able_To_Attack = 0;
+								}
+							}
+							break;
+						}
+					}
+				}
+				if (_stop_7 == 0) {
+					_soldier_7->setPosition(Point(_soldier_7->getPosition().x + (Aim_Position.x - _point_7.x) / _r7, _soldier_7->getPosition().y + (Aim_Position.y - _point_7.y) / _r7));
+				}
 			}
 			else {
 				if (_soldier_7->Able_To_Attack == 0 && _soldier_7->life == 0) {
@@ -1798,8 +1979,51 @@ void HelloWorld::update(float dt)
 					}
 				}
 			}
-			if (_r8 >= 150) {
-				_soldier_8->setPosition(Point(_soldier_8->getPosition().x + (Aim_Position.x - _point_8.x) / _r8, _soldier_8->getPosition().y + (Aim_Position.y - _point_8.y) / _r8));
+			if (_r8 >= 80) {
+				for (int iy = 7; iy <= 9; iy++) {
+					Point Enemy_Position;
+					switch (iy)
+					{
+					case 7: {
+						Enemy_Position = real_point_7;
+						break;
+					}
+					case 8: {
+						Enemy_Position = real_point_8;
+						break;
+					}
+					case 9: {
+						Enemy_Position = real_point_9;
+						break;
+					}
+					}
+					auto enemy = (Hero*)background->getChildByTag(iy);
+					if (enemy->HP <= 0) {
+						continue;
+					}
+					else {
+						float distance = sqrt((Enemy_Position.x - _real_point_8.x) * (Enemy_Position.x - _real_point_8.x) + (Enemy_Position.y - _real_point_8.y) * (Enemy_Position.y - _real_point_8.y));
+						if (distance <= 80 && enemy->life == 0) {
+							_stop_8++;
+							if (_soldier_8->Able_To_Attack == 0 && _soldier_8->life == 0) {
+								_soldier_8->setAction(4, "attack", 4, 5);
+								enemy->HP -= _soldier_8->Attack;
+								_soldier_8->Able_To_Attack = 1;
+								_Attack_8->start();
+							}
+							else {
+								if (_Attack_8->getfCurTime() >= 1) {
+									_soldier_8->setAction(4, "run", 4, 5);
+									_soldier_8->Able_To_Attack = 0;
+								}
+							}
+							break;
+						}
+					}
+				}
+				if (_stop_8 == 0) {
+					_soldier_8->setPosition(Point(_soldier_8->getPosition().x + (Aim_Position.x - _point_8.x) / _r8, _soldier_8->getPosition().y + (Aim_Position.y - _point_8.y) / _r8));
+				}
 			}
 			else {
 				if (_soldier_8->Able_To_Attack == 0 && _soldier_8->life == 0) {
@@ -1814,8 +2038,51 @@ void HelloWorld::update(float dt)
 					}
 				}
 			}
-			if (_r9 >= 150) {
-				_soldier_9->setPosition(Point(_soldier_9->getPosition().x + (Aim_Position.x - _point_9.x) / _r9, _soldier_9->getPosition().y + (Aim_Position.y - _point_9.y) / _r9));
+			if (_r9 >= 80) {
+				for (int iy = 7; iy <= 9; iy++) {
+					Point Enemy_Position;
+					switch (iy)
+					{
+					case 7: {
+						Enemy_Position = real_point_7;
+						break;
+					}
+					case 8: {
+						Enemy_Position = real_point_8;
+						break;
+					}
+					case 9: {
+						Enemy_Position = real_point_9;
+						break;
+					}
+					}
+					auto enemy = (Hero*)background->getChildByTag(iy);
+					if (enemy->HP <= 0) {
+						continue;
+					}
+					else {
+						float distance = sqrt((Enemy_Position.x - _real_point_9.x) * (Enemy_Position.x - _real_point_9.x) + (Enemy_Position.y - _real_point_9.y) * (Enemy_Position.y - _real_point_9.y));
+						if (distance <= 80 && enemy->life == 0) {
+							_stop_9++;
+							if (_soldier_9->Able_To_Attack == 0 && _soldier_9->life == 0) {
+								_soldier_9->setAction(4, "attack", 4, 6);
+								enemy->HP -= _soldier_9->Attack;
+								_soldier_9->Able_To_Attack = 1;
+								_Attack_9->start();
+							}
+							else {
+								if (_Attack_9->getfCurTime() >= 1) {
+									_soldier_9->setAction(4, "run", 4, 6);
+									_soldier_9->Able_To_Attack = 0;
+								}
+							}
+							break;
+						}
+					}
+				}
+				if (_stop_9 == 0) {
+					_soldier_9->setPosition(Point(_soldier_9->getPosition().x + (Aim_Position.x - _point_9.x) / _r9, _soldier_9->getPosition().y + (Aim_Position.y - _point_9.y) / _r9));
+				}
 			}
 			else {
 				if (_soldier_9->Able_To_Attack == 0 && _soldier_9->life == 0) {
@@ -1833,7 +2100,6 @@ void HelloWorld::update(float dt)
 			break;
 		}
 	}
-
 	auto sp1 = this->getChildByTag(200);
 
 	auto effect_w = this->getChildByName("explosion");
@@ -1874,7 +2140,7 @@ void HelloWorld::update(float dt)
 	for (int i = 0; i < tower.size(); i++)
 	{
 		TimeCounter* t = (TimeCounter*)tower[i]->getChildByName("t");
-		tower[i]->progress->setPercentage((((float)tower[i]->HP) / tower[i]->MaxHP) * 100);	
+		tower[i]->progress->setPercentage((((float)tower[i]->HP) / tower[i]->MaxHP) * 100);
 		if (tower[i]->HP <= 0)
 		{
 			if (tower[i]->getTag() == 5)
@@ -1884,35 +2150,36 @@ void HelloWorld::update(float dt)
 			tower[i]->sprBar->setVisible(false);
 			continue;
 		}
-		
-		if (tower[i]->getTag() > 0)
-		{     int flag = 0;
-		auto bullet0 = Sprite::create("towerbullet.png");
 
-		bullet0->setPosition(tower[i]->getPosition() + background->getPosition());
-		
-		bullet0->setScale(0.4f);
-			
-		for (int j = -9; j <= -7; j++)
+		if (tower[i]->getTag() > 0)
+		{
+			int flag = 0;
+			auto bullet0 = Sprite::create("towerbullet.png");
+
+			bullet0->setPosition(tower[i]->getPosition() + background->getPosition());
+
+			bullet0->setScale(0.4f);
+
+			for (int j = -9; j <= -7; j++)
 			{
 				Hero* aim = (Hero*)background->getChildByTag(j);
 				Point point0;
 				switch (j)
 				{
 				case -9:
-					point0 = Point(525, 275);
+					point0 = Point(635, 485);
 					break;
 				case -8:
-					point0 = Point(535, 285);
+					point0 = Point(645, 495);
 					break;
 				case -7:
-					point0 = Point(545, 295);
+					point0 = Point(655, 505);
 					break;
 				}
-				Point _heroPos = background->convertToWorldSpaceAR(aim->getPosition()) + point0;				
+				Point _heroPos = background->convertToWorldSpaceAR(aim->getPosition()) + point0;
 				float r = (_heroPos.x - tower[i]->getPositionX() - background->getPositionX()) * (_heroPos.x - tower[i]->getPositionX() - background->getPositionX()) + (_heroPos.y - tower[i]->getPositionY() - background->getPositionY()) * (_heroPos.y - tower[i]->getPositionY() - background->getPositionY());
-				
-				if (r <= 10000&&aim->HP>0)
+
+				if (r <= 10000 && aim->HP > 0)
 				{
 					flag = 1;
 					if (t->getfCurTime() == 0)
@@ -1939,9 +2206,9 @@ void HelloWorld::update(float dt)
 					}
 				}
 			}
-			if (flag == 0&&hero->HP>0)
+			if (flag == 0 && hero->HP > 0)
 			{
-		
+
 
 				float r = (hero->position.x - tower[i]->getPositionX() - background->getPositionX()) * (hero->position.x - tower[i]->getPositionX() - background->getPositionX()) + (hero->position.y - tower[i]->getPositionY() - background->getPositionY()) * (hero->position.y - tower[i]->getPositionY() - background->getPositionY());
 
@@ -1955,7 +2222,7 @@ void HelloWorld::update(float dt)
 						bullett.push_back(bullet0);
 						t->start();
 					}
-					
+
 				}
 			}
 
@@ -1988,9 +2255,9 @@ void HelloWorld::update(float dt)
 				}
 				Point _heroPos = background->convertToWorldSpaceAR(aim->getPosition()) + point0;
 				float r = (_heroPos.x - tower[i]->getPositionX() - background->getPositionX()) * (_heroPos.x - tower[i]->getPositionX() - background->getPositionX()) + (_heroPos.y - tower[i]->getPositionY() - background->getPositionY()) * (_heroPos.y - tower[i]->getPositionY() - background->getPositionY());
-				
 
-				if (r <= 10000&&aim->HP>0)
+
+				if (r <= 10000 && aim->HP > 0)
 				{
 					flag = 1;
 					if (t->getfCurTime() == 0)
@@ -2017,12 +2284,12 @@ void HelloWorld::update(float dt)
 					}
 				}
 			}
-			if (flag == 0&&_hero->HP>0)
+			if (flag == 0 && _hero->HP > 0)
 			{
 				Point _heroPos = background->convertToWorldSpaceAR(_hero->getPosition()) + Point(2670, 1500);
 				float r = (_heroPos.x - tower[i]->getPositionX() - background->getPositionX()) * (_heroPos.x - tower[i]->getPositionX() - background->getPositionX()) + (_heroPos.y - tower[i]->getPositionY() - background->getPositionY()) * (_heroPos.y - tower[i]->getPositionY() - background->getPositionY());
 
-				if (r <= 10000&&_hero->HP>0)
+				if (r <= 10000 && _hero->HP > 0)
 				{
 					if (t->getfCurTime() == 0)
 						t->start();
@@ -2171,7 +2438,7 @@ void HelloWorld::update(float dt)
 						aim->HP -= 120 * (1 + hero->Skill_Enhance * 0.01 + hero->Level * 0.01);
 					}
 					else if ((*it)->getName() == "burnning_bullet") {
-						aim->HP -= hero->Attack*1.2;
+						aim->HP -= hero->Attack * 1.2;
 					}
 					this->removeChild(*it);
 
@@ -2238,7 +2505,7 @@ void HelloWorld::update(float dt)
 	{
 		for (auto it = _bullett8.begin(); it != _bullett8.end();)
 		{
-		
+
 			Point _heroPos = background->convertToWorldSpaceAR(soldier_8->getPosition()) + Point(2440, 1355);
 			Point pos1 = (*it)->getPosition();
 
@@ -2291,7 +2558,7 @@ void HelloWorld::update(float dt)
 		for (auto it = bullett7.begin(); it != bullett7.end();)
 		{
 
-			Point _heroPos = background->convertToWorldSpaceAR(_soldier_7->getPosition()) + Point(545, 295);
+			Point _heroPos = background->convertToWorldSpaceAR(_soldier_7->getPosition()) + Point(655, 505);
 
 			Point pos1 = (*it)->getPosition();
 
@@ -2317,7 +2584,7 @@ void HelloWorld::update(float dt)
 	{
 		for (auto it = bullett7.begin(); it != bullett8.end();)
 		{
-			Point _heroPos = background->convertToWorldSpaceAR(_soldier_8->getPosition()) + Point(535, 285);
+			Point _heroPos = background->convertToWorldSpaceAR(_soldier_8->getPosition()) + Point(645, 495);
 			Point pos1 = (*it)->getPosition();
 
 			(*it)->setRotation(360 - 180 / 3.14 * atan2((_heroPos.y - (*it)->getPositionY()), (_heroPos.x - (*it)->getPositionX())));
@@ -2343,7 +2610,7 @@ void HelloWorld::update(float dt)
 		for (auto it = bullett9.begin(); it != bullett9.end();)
 		{
 
-			Point _heroPos = background->convertToWorldSpaceAR(_soldier_9->getPosition()) + Point(525, 275);
+			Point _heroPos = background->convertToWorldSpaceAR(_soldier_9->getPosition()) + Point(635, 485);
 			Point pos1 = (*it)->getPosition();
 
 			(*it)->setRotation(360 - 180 / 3.14 * atan2((_heroPos.y - (*it)->getPositionY()), (_heroPos.x - (*it)->getPositionX())));
