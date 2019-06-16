@@ -178,7 +178,21 @@ public:
 
 	vector<Sprite*> bullett;
 
+	vector<Sprite*> bullett7;
+
+	vector<Sprite*> bullett8;
+
+	vector<Sprite*> bullett9;
+
+	vector<Sprite*> _bullett7;
+
+	vector<Sprite*> _bullett8;
+
+	vector<Sprite*> _bullett9;
+
 	vector<Sprite*> _bullett;
+
+
 
 	vector<Tower*> tower;
 

@@ -1694,9 +1694,9 @@ void HelloWorld::update(float dt)
 		}
 	}
 	//Ð¡±øÒÆ¶¯ºÍ¹¥»÷
-	Point point_7 = soldier_7->getPosition()+ Point(2430, 1345);
-	Point point_8= soldier_8->getPosition()+ Point(2440, 1355);
-	Point point_9= soldier_9->getPosition()+ Point(2450, 1365);
+	Point point_7 = soldier_7->getPosition() + Point(2430, 1345);
+	Point point_8 = soldier_8->getPosition() + Point(2440, 1355);
+	Point point_9 = soldier_9->getPosition() + Point(2450, 1365);
 	for (int ix = -2; ix >= -5; ix--) {
 		auto Aim_Tower = (Tower*)background->getChildByTag(ix);
 		if (Aim_Tower->HP <= 0) {
@@ -1705,12 +1705,12 @@ void HelloWorld::update(float dt)
 		else {
 			Point Aim_Position;
 			Aim_Position = Aim_Tower->getPosition();
-			
-			float r7 = sqrt((Aim_Position.x - point_7.x) * (Aim_Position.x - point_7.x ) + (Aim_Position.y - point_7.y) * (Aim_Position.y - point_7.y));
-			float r8 = sqrt((Aim_Position.x - point_8.x) * (Aim_Position.x - point_8.x ) + (Aim_Position.y - point_8.y ) * (Aim_Position.y - point_8.y));
-			float r9 = sqrt((Aim_Position.x - point_9.x) * (Aim_Position.x - point_9.x) + (Aim_Position.y - point_9.y) * (Aim_Position.y - point_9.y ));
+
+			float r7 = sqrt((Aim_Position.x - point_7.x) * (Aim_Position.x - point_7.x) + (Aim_Position.y - point_7.y) * (Aim_Position.y - point_7.y));
+			float r8 = sqrt((Aim_Position.x - point_8.x) * (Aim_Position.x - point_8.x) + (Aim_Position.y - point_8.y) * (Aim_Position.y - point_8.y));
+			float r9 = sqrt((Aim_Position.x - point_9.x) * (Aim_Position.x - point_9.x) + (Aim_Position.y - point_9.y) * (Aim_Position.y - point_9.y));
 			if (r7 >= 50) {
-				soldier_7->setPosition(Point(soldier_7->getPosition().x + (Aim_Position.x - point_7.x) / r7, soldier_7->getPosition().y +  (Aim_Position.y - point_7.y) / r7));
+				soldier_7->setPosition(Point(soldier_7->getPosition().x + (Aim_Position.x - point_7.x) / r7, soldier_7->getPosition().y + (Aim_Position.y - point_7.y) / r7));
 			}
 			else {
 				if (soldier_7->Able_To_Attack == 0 && soldier_7->life == 0) {
@@ -1719,7 +1719,7 @@ void HelloWorld::update(float dt)
 					soldier_7->Able_To_Attack = 1;
 					Attack_7->start();
 				}
-				else{
+				else {
 					if (Attack_7->getfCurTime() >= 1) {
 						soldier_7->setAction(1, "run", 4, 4);
 						soldier_8->setAction(1, "run", 4, 5);
@@ -1833,7 +1833,7 @@ void HelloWorld::update(float dt)
 			break;
 		}
 	}
-	
+
 	auto sp1 = this->getChildByTag(200);
 
 	auto effect_w = this->getChildByName("explosion");
@@ -1874,8 +1874,7 @@ void HelloWorld::update(float dt)
 	for (int i = 0; i < tower.size(); i++)
 	{
 		TimeCounter* t = (TimeCounter*)tower[i]->getChildByName("t");
-		tower[i]->progress->setPercentage((((float)tower[i]->HP) / tower[i]->MaxHP) * 100);
-		Point _heroPos= background->convertToWorldSpaceAR(_hero->getPosition()) + Point(2670, 1500);
+		tower[i]->progress->setPercentage((((float)tower[i]->HP) / tower[i]->MaxHP) * 100);	
 		if (tower[i]->HP <= 0)
 		{
 			if (tower[i]->getTag() == 5)
@@ -1885,47 +1884,162 @@ void HelloWorld::update(float dt)
 			tower[i]->sprBar->setVisible(false);
 			continue;
 		}
-	
-		float r1= (_heroPos.x - tower[i]->getPositionX()-background->getPositionX()) * (_heroPos.x - tower[i]->getPositionX() - background->getPositionX()) + (_heroPos.y - tower[i]->getPositionY() - background->getPositionY()) * (_heroPos.y - tower[i]->getPositionY() - background->getPositionY());
+		
+		if (tower[i]->getTag() > 0)
+		{     int flag = 0;
+		auto bullet0 = Sprite::create("towerbullet.png");
+
+		bullet0->setPosition(tower[i]->getPosition() + background->getPosition());
+		
+		bullet0->setScale(0.4f);
+			
+		for (int j = -9; j <= -7; j++)
+			{
+				Hero* aim = (Hero*)background->getChildByTag(j);
+				Point point0;
+				switch (j)
+				{
+				case -9:
+					point0 = Point(525, 275);
+					break;
+				case -8:
+					point0 = Point(535, 285);
+					break;
+				case -7:
+					point0 = Point(545, 295);
+					break;
+				}
+				Point _heroPos = background->convertToWorldSpaceAR(aim->getPosition()) + point0;				
+				float r = (_heroPos.x - tower[i]->getPositionX() - background->getPositionX()) * (_heroPos.x - tower[i]->getPositionX() - background->getPositionX()) + (_heroPos.y - tower[i]->getPositionY() - background->getPositionY()) * (_heroPos.y - tower[i]->getPositionY() - background->getPositionY());
+				
+				if (r <= 10000&&aim->HP>0)
+				{
+					flag = 1;
+					if (t->getfCurTime() == 0)
+						t->start();
+					if (t->getfCurTime() >= 1)
+					{
+
+						switch (j)
+						{
+						case -9:
+							this->addChild(bullet0);
+							bullett9.push_back(bullet0);
+							break;
+						case -8:
+							this->addChild(bullet0);
+							bullett8.push_back(bullet0);
+							break;
+						case -7:
+							this->addChild(bullet0);
+							bullett7.push_back(bullet0);
+							break;
+						}
+						t->start();
+					}
+				}
+			}
+			if (flag == 0&&hero->HP>0)
+			{
+		
+
+				float r = (hero->position.x - tower[i]->getPositionX() - background->getPositionX()) * (hero->position.x - tower[i]->getPositionX() - background->getPositionX()) + (hero->position.y - tower[i]->getPositionY() - background->getPositionY()) * (hero->position.y - tower[i]->getPositionY() - background->getPositionY());
+
+				if (r <= 10000)
+				{
+					if (t->getfCurTime() == 0)
+						t->start();
+					if (t->getfCurTime() >= 1)
+					{
+						this->addChild(bullet0);
+						bullett.push_back(bullet0);
+						t->start();
+					}
+					
+				}
+			}
+
+		}
+		else
+		{
+			int flag = 0;
+			auto bullet0 = Sprite::create("towerbullet.png");
+
+			bullet0->setPosition(tower[i]->getPosition() + background->getPosition());
+
+			//this->addChild(bullet0);
+
+			bullet0->setScale(0.4f);
+			for (int j = 7; j <= 9; j++)
+			{
+				Hero* aim = (Hero*)background->getChildByTag(j);
+				Point point0;
+				switch (j)
+				{
+				case 9:
+					point0 = Point(2450, 1365);
+					break;
+				case 8:
+					point0 = Point(2440, 1355);
+					break;
+				case 7:
+					point0 = Point(2430, 1345);
+					break;
+				}
+				Point _heroPos = background->convertToWorldSpaceAR(aim->getPosition()) + point0;
+				float r = (_heroPos.x - tower[i]->getPositionX() - background->getPositionX()) * (_heroPos.x - tower[i]->getPositionX() - background->getPositionX()) + (_heroPos.y - tower[i]->getPositionY() - background->getPositionY()) * (_heroPos.y - tower[i]->getPositionY() - background->getPositionY());
+				
+
+				if (r <= 10000&&aim->HP>0)
+				{
+					flag = 1;
+					if (t->getfCurTime() == 0)
+						t->start();
+					if (t->getfCurTime() >= 1)
+					{
+
+						switch (j)
+						{
+						case 9:
+							this->addChild(bullet0);
+							_bullett9.push_back(bullet0);
+							break;
+						case 8:
+							this->addChild(bullet0);
+							_bullett8.push_back(bullet0);
+							break;
+						case 7:
+							this->addChild(bullet0);
+							_bullett7.push_back(bullet0);
+							break;
+						}
+						t->start();
+					}
+				}
+			}
+			if (flag == 0&&_hero->HP>0)
+			{
+				Point _heroPos = background->convertToWorldSpaceAR(_hero->getPosition()) + Point(2670, 1500);
+				float r = (_heroPos.x - tower[i]->getPositionX() - background->getPositionX()) * (_heroPos.x - tower[i]->getPositionX() - background->getPositionX()) + (_heroPos.y - tower[i]->getPositionY() - background->getPositionY()) * (_heroPos.y - tower[i]->getPositionY() - background->getPositionY());
+
+				if (r <= 10000&&_hero->HP>0)
+				{
+					if (t->getfCurTime() == 0)
+						t->start();
+					if (t->getfCurTime() >= 1)
+					{
+						this->addChild(bullet0);
+						_bullett.push_back(bullet0);
+						t->start();
+					}
+				}
+			}
+
+		}
+		Point _heroPos = background->convertToWorldSpaceAR(_hero->getPosition()) + Point(2670, 1500);
+
+		float r1 = (_heroPos.x - tower[i]->getPositionX() - background->getPositionX()) * (_heroPos.x - tower[i]->getPositionX() - background->getPositionX()) + (_heroPos.y - tower[i]->getPositionY() - background->getPositionY()) * (_heroPos.y - tower[i]->getPositionY() - background->getPositionY());
 		float r2 = (hero->position.x - tower[i]->getPositionX() - background->getPositionX()) * (hero->position.x - tower[i]->getPositionX() - background->getPositionX()) + (hero->position.y - tower[i]->getPositionY() - background->getPositionY()) * (hero->position.y - tower[i]->getPositionY() - background->getPositionY());
-		if (r2 <= 10000&&tower[i]->getTag()>0&&hero->HP>0)
-		{
-
-			if (t->getfCurTime() == 0)
-				t->start();
-			if (t->getfCurTime() >= 1)
-			{
-				auto bullet0 = Sprite::create("towerbullet.png");
-
-				bullet0->setPosition(tower[i]->getPosition() + background->getPosition());
-
-				this->addChild(bullet0);
-
-				bullet0->setScale(0.4f);
-
-				bullett.push_back(bullet0);
-				t->start();
-			}
-		}
-		if (r1 <= 10000 && tower[i]->getTag() <0&&_hero->HP>0)
-		{
-
-			if (t->getfCurTime() == 0)
-				t->start();
-			if (t->getfCurTime() >= 1)
-			{
-				auto bullet0 = Sprite::create("towerbullet.png");
-
-				bullet0->setPosition(tower[i]->getPosition() + background->getPosition());
-
-				this->addChild(bullet0);
-
-				bullet0->setScale(0.4f);
-
-				_bullett.push_back(bullet0);
-				t->start();
-			}
-		}
 	}
 	pos.x = pos.x - (temp.x - hero->position.x) / r;
 
@@ -2094,13 +2208,169 @@ void HelloWorld::update(float dt)
 				it++;
 		}
 	}
+	if (_bullett7.size() >= 1)
+	{
+		for (auto it = _bullett7.begin(); it != _bullett7.end();)
+		{
+
+			Point pos1 = (*it)->getPosition();
+			Point _heroPos = background->convertToWorldSpaceAR(soldier_7->getPosition()) + Point(2430, 1345);
+
+			(*it)->setRotation(360 - 180 / 3.14 * atan2((_heroPos.y - (*it)->getPositionY()), (_heroPos.x - (*it)->getPositionX())));
+
+			float r3 = sqrt((pos1.x - _heroPos.x) * (pos1.x - _heroPos.x) + (pos1.y - _heroPos.y) * (pos1.y - _heroPos.y));
+
+			(*it)->setPosition(Point(pos1.x + 20 * (_heroPos.x - pos1.x) / r3, pos1.y + 20 * (_heroPos.y - pos1.y) / r3));
+
+			if (r3 <= 10)
+			{
+				soldier_7->HP -= 500;
+				this->removeChild(*it);
+
+				it = _bullett7.erase(it);
+
+			}
+			else
+				it++;
+		}
+	}
+	if (_bullett8.size() >= 1)
+	{
+		for (auto it = _bullett8.begin(); it != _bullett8.end();)
+		{
+		
+			Point _heroPos = background->convertToWorldSpaceAR(soldier_8->getPosition()) + Point(2440, 1355);
+			Point pos1 = (*it)->getPosition();
+
+			(*it)->setRotation(360 - 180 / 3.14 * atan2((_heroPos.y - (*it)->getPositionY()), (_heroPos.x - (*it)->getPositionX())));
+
+			float r3 = sqrt((pos1.x - _heroPos.x) * (pos1.x - _heroPos.x) + (pos1.y - _heroPos.y) * (pos1.y - _heroPos.y));
+
+			(*it)->setPosition(Point(pos1.x + 20 * (_heroPos.x - pos1.x) / r3, pos1.y + 20 * (_heroPos.y - pos1.y) / r3));
+
+			if (r3 <= 10)
+			{
+				soldier_8->HP -= 500;
+				this->removeChild(*it);
+
+				it = _bullett8.erase(it);
+
+			}
+			else
+				it++;
+		}
+	}
+	if (_bullett9.size() >= 1)
+	{
+		for (auto it = _bullett9.begin(); it != _bullett9.end();)
+		{
+			Point _heroPos = background->convertToWorldSpaceAR(soldier_9->getPosition()) + Point(2450, 1365);
+
+			Point pos1 = (*it)->getPosition();
+
+			(*it)->setRotation(360 - 180 / 3.14 * atan2((_heroPos.y - (*it)->getPositionY()), (_heroPos.x - (*it)->getPositionX())));
+
+			float r3 = sqrt((pos1.x - _heroPos.x) * (pos1.x - _heroPos.x) + (pos1.y - _heroPos.y) * (pos1.y - _heroPos.y));
+
+			(*it)->setPosition(Point(pos1.x + 20 * (_heroPos.x - pos1.x) / r3, pos1.y + 20 * (_heroPos.y - pos1.y) / r3));
+
+			if (r3 <= 10)
+			{
+				soldier_9->HP -= 500;
+				this->removeChild(*it);
+
+				it = _bullett9.erase(it);
+
+			}
+			else
+				it++;
+		}
+	}
+	if (bullett7.size() >= 1)
+	{
+		for (auto it = bullett7.begin(); it != bullett7.end();)
+		{
+
+			Point _heroPos = background->convertToWorldSpaceAR(_soldier_7->getPosition()) + Point(545, 295);
+
+			Point pos1 = (*it)->getPosition();
+
+			(*it)->setRotation(360 - 180 / 3.14 * atan2((_heroPos.y - (*it)->getPositionY()), (_heroPos.x - (*it)->getPositionX())));
+
+			float r3 = sqrt((pos1.x - _heroPos.x) * (pos1.x - _heroPos.x) + (pos1.y - _heroPos.y) * (pos1.y - _heroPos.y));
+
+			(*it)->setPosition(Point(pos1.x + 20 * (_heroPos.x - pos1.x) / r3, pos1.y + 20 * (_heroPos.y - pos1.y) / r3));
+
+			if (r3 <= 10)
+			{
+				_soldier_7->HP -= 500;
+				this->removeChild(*it);
+
+				it = bullett7.erase(it);
+
+			}
+			else
+				it++;
+		}
+	}
+	if (bullett8.size() >= 1)
+	{
+		for (auto it = bullett7.begin(); it != bullett8.end();)
+		{
+			Point _heroPos = background->convertToWorldSpaceAR(_soldier_8->getPosition()) + Point(535, 285);
+			Point pos1 = (*it)->getPosition();
+
+			(*it)->setRotation(360 - 180 / 3.14 * atan2((_heroPos.y - (*it)->getPositionY()), (_heroPos.x - (*it)->getPositionX())));
+
+			float r3 = sqrt((pos1.x - _heroPos.x) * (pos1.x - _heroPos.x) + (pos1.y - _heroPos.y) * (pos1.y - _heroPos.y));
+
+			(*it)->setPosition(Point(pos1.x + 20 * (_heroPos.x - pos1.x) / r3, pos1.y + 20 * (_heroPos.y - pos1.y) / r3));
+
+			if (r3 <= 10)
+			{
+				_soldier_8->HP -= 500;
+				this->removeChild(*it);
+
+				it = bullett8.erase(it);
+
+			}
+			else
+				it++;
+		}
+	}
+	if (bullett9.size() >= 1)
+	{
+		for (auto it = bullett9.begin(); it != bullett9.end();)
+		{
+
+			Point _heroPos = background->convertToWorldSpaceAR(_soldier_9->getPosition()) + Point(525, 275);
+			Point pos1 = (*it)->getPosition();
+
+			(*it)->setRotation(360 - 180 / 3.14 * atan2((_heroPos.y - (*it)->getPositionY()), (_heroPos.x - (*it)->getPositionX())));
+
+			float r3 = sqrt((pos1.x - _heroPos.x) * (pos1.x - _heroPos.x) + (pos1.y - _heroPos.y) * (pos1.y - _heroPos.y));
+
+			(*it)->setPosition(Point(pos1.x + 20 * (_heroPos.x - pos1.x) / r3, pos1.y + 20 * (_heroPos.y - pos1.y) / r3));
+
+			if (r3 <= 10)
+			{
+				_soldier_9->HP -= 500;
+				this->removeChild(*it);
+
+				it = bullett9.erase(it);
+
+			}
+			else
+				it++;
+		}
+	}
 	if (_bullett.size() >= 1)
 	{
 		for (auto it = _bullett.begin(); it != _bullett.end();)
 		{
 
 			Point pos1 = (*it)->getPosition();
-			Point _heroPos=background->convertToWorldSpaceAR(_hero->getPosition()) + Point(2670, 1500);
+			Point _heroPos = background->convertToWorldSpaceAR(_hero->getPosition()) + Point(2670, 1500);
 			(*it)->setRotation(360 - 180 / 3.14 * atan2((_heroPos.y - (*it)->getPositionY()), (_heroPos.x - (*it)->getPositionX())));
 
 			float r3 = sqrt((pos1.x - _heroPos.x) * (pos1.x - _heroPos.x) + (pos1.y - _heroPos.y) * (pos1.y - _heroPos.y));
