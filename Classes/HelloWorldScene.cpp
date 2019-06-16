@@ -397,6 +397,7 @@ bool HelloWorld::init()
 	_progress_7->setPosition(Point(_soldier_7->position.x, _soldier_7->position.y + 45));
 	_soldier_7->setTag(-7);
 	background->addChild(_soldier_7);
+	_soldier_7->setAction(4, "stand", 4, 4);
 
 	//远程小兵
 	Death_8 = TimeCounter::create();
@@ -462,6 +463,7 @@ bool HelloWorld::init()
 	_progress_8->setPosition(Point(_soldier_8->position.x, _soldier_8->position.y + 45));
 	_soldier_8->setTag(-8);
 	background->addChild(_soldier_8);
+	_soldier_8->setAction(4, "stand", 4, 5);
 
 	//炮
 	Death_9 = TimeCounter::create();
@@ -500,7 +502,7 @@ bool HelloWorld::init()
 	this->addChild(_Death_9);
 	_Attack_9 = TimeCounter::create();
 	this->addChild(_Attack_9);
-	_soldier_9 = Hero::createHeroSprite(Vec2(635,485), 2, "stand", 6);
+	_soldier_9 = Hero::createHeroSprite(Vec2(635, 485), 2, "stand", 6);
 	_soldier_9->life = 0;
 	_soldier_9->Able_To_Attack = 0;
 	_soldier_9->MaxHP = 1000;
@@ -527,6 +529,7 @@ bool HelloWorld::init()
 	_progress_9->setPosition(Point(_soldier_9->position.x, _soldier_9->position.y + 45));
 	_soldier_9->setTag(-9);
 	background->addChild(_soldier_9);
+	_soldier_9->setAction(4, "stand", 4, 6);
 	//英雄技能
 	if (hero->ID == 1) {
 
@@ -812,6 +815,8 @@ bool HelloWorld::init()
 	label->setPosition(Point(hero->position.x - 35, hero->position.y + 43));
 
 	label->setScale(0.3f);
+
+	label->setName("lab");
 
 	hero->addChild(label);
 
@@ -1672,18 +1677,59 @@ void HelloWorld::update(float dt)
 
 	float n = background->getPositionY();
 
-
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
 	//AI移动和攻击
 	Vec2 point = _hero->getParent()->convertToWorldSpaceAR(_hero->getPosition()) + Point(2670, 1500);
+
 	float r4 = sqrt((point.x - hero->position.x) * (point.x - hero->position.x) + (point.y - hero->position.y) * (point.y - hero->position.y));
-	if (r4 >= 50)
-	{
-		_hero->setPosition(Point(_hero->getPosition().x + 2 * (hero->position.x - point.x) / r4, _hero->getPosition().y + 2 * (hero->position.y - point.y) / r4));
-	}
-	else
-	{
+	int flag1 = 0;//是否打小兵
+	int flag2 = 0;//是否打英雄
+
+	
+		for (int i = -9; i <= -7; i++)
+	  {
+		Hero* aim = (Hero*)background->getChildByTag(i);
+		Point point0;
+		switch (i)
+		{
+		case -9:
+			point0 = Point(635, 485);
+			break;
+		case -8:
+			point0 = Point(645, 495);
+			break;
+		case -7:
+			point0 = Point(655, 505);
+			break;
+		}
+		Point _heroPos = background->convertToWorldSpaceAR(_hero->getPosition()) + Point(2670, 1500);
+		Point points= background->convertToWorldSpaceAR(aim->getPosition()) + point0;
+		float r = (_heroPos.x - points.x) * (_heroPos.x - points.x) + (_heroPos.y - points.y) * (_heroPos.y - points.y);
+		CCLOG("r %f", r);
+		if (r <= 10000 && aim->HP > 0)
+		{flag1 = 1;
+			if (_heroAttack->getfCurTime() == 0)
+				_heroAttack->start();
+			if (_heroAttack->getfCurTime() >= 1 && _heroLife == 0)
+			{
+				_hero->setAction(1, "attack", 4, _hero->ID);
+				aim->HP -= _hero->Attack;
+				_heroAttack->start();
+				
+				break;
+			}
+		}
+	  }
+		
+		if (r4>=50&&flag1 == 0&&hero->HP>0)
+		{
+			_hero->setPosition(Point(_hero->getPosition().x + 2 * (hero->position.x - point.x) / r4, _hero->getPosition().y + 2 * (hero->position.y - point.y) / r4));
+		}
+
+	
+	else if(flag1==0)
+	{   
 		if (_heroAttack->getfCurTime() == 0)
 			_heroAttack->start();
 		if (_heroAttack->getfCurTime() >= 1 && _heroLife == 0)
@@ -1691,8 +1737,11 @@ void HelloWorld::update(float dt)
 			_hero->setAction(1, "attack", 4, _hero->ID);
 			hero->HP -= _hero->Attack;
 			_heroAttack->start();
+			
 		}
 	}
+
+
 	//小兵移动和攻击
 	Point point_7 = soldier_7->getPosition() + Point(2430, 1345);
 	Point point_8 = soldier_8->getPosition() + Point(2440, 1355);
@@ -2181,6 +2230,7 @@ void HelloWorld::update(float dt)
 
 				if (r <= 10000 && aim->HP > 0)
 				{
+					tower[i]->isAttack = 1;
 					flag = 1;
 					if (t->getfCurTime() == 0)
 						t->start();
@@ -2259,6 +2309,7 @@ void HelloWorld::update(float dt)
 
 				if (r <= 10000 && aim->HP > 0)
 				{
+					tower[i]->isAttack = 1;
 					flag = 1;
 					if (t->getfCurTime() == 0)
 						t->start();
@@ -2582,7 +2633,7 @@ void HelloWorld::update(float dt)
 	}
 	if (bullett8.size() >= 1)
 	{
-		for (auto it = bullett7.begin(); it != bullett8.end();)
+		for (auto it = bullett8.begin(); it != bullett8.end();)
 		{
 			Point _heroPos = background->convertToWorldSpaceAR(_soldier_8->getPosition()) + Point(645, 495);
 			Point pos1 = (*it)->getPosition();
