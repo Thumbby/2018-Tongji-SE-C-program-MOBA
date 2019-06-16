@@ -45,7 +45,6 @@ bool HelloWorld::init()
 {
 
 	//////////////////////////////
-	log("ID %d", ID1);
 	// 1. super init first
 
 	if (!Layer::init())
@@ -174,7 +173,7 @@ bool HelloWorld::init()
 
 	hero->life = 1;
 
-	hero->Level = 6;
+	hero->Level = 1;
 
 	hero->MaxExp = 600;
 
@@ -1589,24 +1588,16 @@ void HelloWorld::update(float dt)
 	}
 
 	else if (temp.x - hero->position.x < 0 && temp.y - hero->position.y > 0) {
-
 		if ((-(temp.x - hero->position.x)) >= temp.y - hero->position.y)
-
 		{
-
 			hero->direction = LEFT;
-
 		}
-
 		else {
 
 			hero->direction = BACK;
 
 		}
-
 	}
-
-	CCLOG("%f  %f", temp.x - hero->position.x, temp.y - hero->position.y);
 
 	if (pos == Point::ZERO)
 
@@ -1686,9 +1677,9 @@ void HelloWorld::update(float dt)
 	int flag1 = 0;//是否打小兵
 	int flag2 = 0;//是否打英雄
 
-	
-		for (int i = -9; i <= -7; i++)
-	  {
+
+	for (int i = -9; i <= -7; i++)
+	{
 		Hero* aim = (Hero*)background->getChildByTag(i);
 		Point point0;
 		switch (i)
@@ -1704,11 +1695,11 @@ void HelloWorld::update(float dt)
 			break;
 		}
 		Point _heroPos = background->convertToWorldSpaceAR(_hero->getPosition()) + Point(2670, 1500);
-		Point points= background->convertToWorldSpaceAR(aim->getPosition()) + point0;
+		Point points = background->convertToWorldSpaceAR(aim->getPosition()) + point0;
 		float r = (_heroPos.x - points.x) * (_heroPos.x - points.x) + (_heroPos.y - points.y) * (_heroPos.y - points.y);
-		CCLOG("r %f", r);
 		if (r <= 10000 && aim->HP > 0)
-		{flag1 = 1;
+		{
+			flag1 = 1;
 			if (_heroAttack->getfCurTime() == 0)
 				_heroAttack->start();
 			if (_heroAttack->getfCurTime() >= 1 && _heroLife == 0)
@@ -1716,20 +1707,20 @@ void HelloWorld::update(float dt)
 				_hero->setAction(1, "attack", 4, _hero->ID);
 				aim->HP -= _hero->Attack;
 				_heroAttack->start();
-				
+
 				break;
 			}
 		}
-	  }
-		
-		if (r4>=50&&flag1 == 0&&hero->HP>0)
-		{
-			_hero->setPosition(Point(_hero->getPosition().x + 2 * (hero->position.x - point.x) / r4, _hero->getPosition().y + 2 * (hero->position.y - point.y) / r4));
-		}
+	}
 
-	
-	else if(flag1==0)
-	{   
+	if (r4 >= 50 && flag1 == 0 && hero->HP > 0)
+	{
+		_hero->setPosition(Point(_hero->getPosition().x + 2 * (hero->position.x - point.x) / r4, _hero->getPosition().y + 2 * (hero->position.y - point.y) / r4));
+	}
+
+
+	else if (flag1 == 0)
+	{
 		if (_heroAttack->getfCurTime() == 0)
 			_heroAttack->start();
 		if (_heroAttack->getfCurTime() >= 1 && _heroLife == 0)
@@ -1737,7 +1728,7 @@ void HelloWorld::update(float dt)
 			_hero->setAction(1, "attack", 4, _hero->ID);
 			hero->HP -= _hero->Attack;
 			_heroAttack->start();
-			
+
 		}
 	}
 
@@ -2363,8 +2354,6 @@ void HelloWorld::update(float dt)
 
 	pos.y = pos.y - (temp.y - hero->position.y) / r;
 
-
-	log("bullet %d", bullet.size());
 	if (bullet.size() >= 1)
 	{
 		for (auto it = bullet.begin(); it != bullet.end();)
@@ -2738,8 +2727,6 @@ void HelloWorld::update(float dt)
 	weapon0->setPosition(3 * visibleSize.width / 4, visibleSize.height - 60);
 	weapon0->setName("weapon0");
 	this->addChild(weapon0);
-	log("%d", choice);
-
 }
 
 Color4B HelloWorld::getColor(int x, int y)
@@ -2754,8 +2741,6 @@ Color4B HelloWorld::getColor(int x, int y)
 	//y = 1690 - y;
 
 	unsigned char* m_pData = image->getData();
-
-
 
 	//int x = (int)posx;
 
@@ -2775,11 +2760,7 @@ Color4B HelloWorld::getColor(int x, int y)
 
 	c.a = (*pixel >> 24) & 0xff;
 
-	CCLOG("color r:%d g:%d b:%d a:%d ", c.r, c.g, c.b, c.a);
-
 	return c;
-
-
 
 }
 
@@ -2848,8 +2829,6 @@ bool HelloWorld::onTouchBegan(Touch* touch, Event* unused_event)
 			spritePoint = background->convertToWorldSpaceAR(sprite->getPosition()) + Point(2450, 1365);
 			break;
 		}
-		log("touch %f %f", touchLocation.x, touchLocation.y);
-		log("sprite %f %f", spritePoint.x, spritePoint.y);
 		float r2 = sqrt((touchLocation.x - spritePoint.x) * (touchLocation.x - spritePoint.x) + (touchLocation.y - spritePoint.y) * (touchLocation.y - spritePoint.y));
 
 		if (r2 <= 50)
